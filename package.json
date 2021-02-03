@@ -26,6 +26,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "rsdi": "^1.0.10",
-    "sequelize": "^6.5.0"
+    "sequelize": "^6.5.0",
+    "sqlite3": "^5.0.0"
   }
 }
