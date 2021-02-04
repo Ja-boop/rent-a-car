@@ -1,0 +1,39 @@
+{% extends "./layout/template.njk" %}
+
+{% block contenido %}
+
+{# NAVBAR #}
+{% include "./layout/navbar.njk" %}
+{# NAVBAR #}
+
+
+{# FONDO #}
+<div class="contain">
+    {# CUADRO PARA ALQUILAR AUTO #}
+    <div class="slidershow middle">
+        
+        <div class="slides">
+            <input type="radio" name="r" id="r1" checked>
+            <input type="radio" name="r" id="r2">
+            <input type="radio" name="r" id="r3">
+
+            <div class="slide">
+            <img src="/images/cars/Audi-R8-V10-Plus-Strasse-Wheels-8.jpg"}}/>
+            </div>
+
+        </div>
+        
+
+        <div class="navigation">
+            <label for="r1" class="bar"></label>
+            <label for="r2" class="bar"></label>
+            <label for="r3" class="bar"></label>
+        </div>
+    </div>
+    {# CUADRO PARA ALQUILAR AUTO #}
+</div>
+{# FONDO #}
+
+
+
+{% endblock %}

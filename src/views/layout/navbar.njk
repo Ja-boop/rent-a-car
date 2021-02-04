@@ -1,0 +1,70 @@
+{% block navbar %}
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io" target="_blank">
+      <img src={{ logo }} width="112" height="28">
+    </a>
+
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a href="http://localhost:8080" class="navbar-item">
+        Home
+      </a>
+
+      <a href="http://localhost:8080/agency/{{user.id}}/list" class="navbar-item">
+        Mis vehículos
+      </a>
+
+      <a href="http://localhost:8080/agency/rent/car/list" class="navbar-item">
+        Reservar Vehículo
+      </a>      
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <a href={{ github }} target="_blank" class="navbar-item">
+            Github
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Report an issue
+          </a>
+          <hr class="navbar-divider">
+          <a href="http://localhost:8080/agency/create/car" class="navbar-item">
+            Crear Vehículo
+          </a>
+          <hr class="navbar-divider">
+          <a href="http://localhost:8080/agency/car/list" class="navbar-item">
+            Lista de vehículos
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a href="http://localhost:8080/agency/signup" class="button">
+            <strong>Sign Up</strong>
+          </a>
+          <a href="http://localhost:8080/agency/login" class="button is-light">
+            Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>     
+
+{% endblock %}
