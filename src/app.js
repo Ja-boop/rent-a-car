@@ -7,23 +7,25 @@ const multer = require('multer');
 const session = require('express-session');
 
 const app = express();
+require('./passport/local-auth');
+
 const port = process.env.PORT || 8080;
 app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({extended: true}))
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(express.urlencoded({extended: true}));
+
 
 nunjucks.configure('src/views', {
     autoescape: true,
     express: app
 });
 
-//Routes
-app.use('/', require('./routes/index'));
-//Routes
-
 //Configurar dependencias
-//session
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+// passport
+// session
 const ONE_WEEK_IN_SECONDS = 604800000;
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -31,9 +33,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: { maxAge: ONE_WEEK_IN_SECONDS }
 }));
-//session
+// session
 
-//multer
+// multer
 const storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, process.env.CARIMAGE_UPLOAD_DIR);
@@ -44,10 +46,13 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage })
-//multer
+// multer
 
+// Configurar dependencias
 
-//Configurar dependencias
+// Routes
+app.use('/', require('./routes/index'));
+// Routes
 
 app.listen(port, () => {
     console.log(`Aplicacion escuchando en el puerto http://localhost:${port}/`);
