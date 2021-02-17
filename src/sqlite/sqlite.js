@@ -2,6 +2,7 @@ const Sqlite3Database = require('better-sqlite3');
 const db = new Sqlite3Database(process.env.USER_DB_PATH, { verbose: console.log });
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const Integer = require('better-sqlite3').Integer;
 
 async function saveUser(user) {
     let id;
@@ -17,7 +18,6 @@ async function saveUser(user) {
     const results = stmt.run(
         user.email,
         user.password = hashedPassword
-        
     );
 
     id = results.lastInsertRowid;
@@ -42,4 +42,19 @@ async function getUserById(id) {
     return user;
 }
 
-module.exports = saveUser, getUserById;
+async function getUserByEmail(email) {
+    const stmt = db.prepare(
+        `SELECT email FROM user_database WHERE email = ?`
+    )
+
+    const userEmail = stmt.get(email);
+
+    if (stmt===undefined) {
+        throw new Error(`No se encontro el usuario con el Email: ${email}`);
+    }
+
+    return userEmail;
+
+}
+
+module.exports = { getUserByEmail, saveUser };
