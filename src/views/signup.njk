@@ -10,6 +10,10 @@
       {% include "./layout/navbar.njk" %}
       {# NAVBAR #}
 
+      {% if identEmailMessage %}
+        <div>{{ identEmailMessage }}</div>
+      {% endif %}
+
       <div id="register-form">
         <form action="/agency/signup" method="POST">
 

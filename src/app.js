@@ -5,6 +5,7 @@ const passport = require('passport');
 const path = require('path');
 const multer = require('multer');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const app = express();
 require('./passport/local-auth');
@@ -19,23 +20,7 @@ nunjucks.configure('src/views', {
     express: app
 });
 
-//Configurar dependencias
-
-// passport
-app.use(passport.initialize());
-app.use(passport.session());
-// passport
-// session
-const ONE_WEEK_IN_SECONDS = 604800000;
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: ONE_WEEK_IN_SECONDS }
-}));
-// session
-
-// multer
+// Middleware
 const storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, process.env.CARIMAGE_UPLOAD_DIR);
@@ -46,9 +31,23 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage })
-// multer
 
-// Configurar dependencias
+const ONE_WEEK_IN_SECONDS = 604800000;
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: ONE_WEEK_IN_SECONDS }
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res, next) => {
+    app.locals.identEmailMessage = req.flash('identEmailMessage');
+    next();
+});
 
 // Routes
 app.use('/', require('./routes/index'));

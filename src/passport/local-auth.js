@@ -15,11 +15,11 @@ passport.use('local-signup', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
-}, async (req, email, password, done) => {
+}, async (req, password, email, done) => {
     const user = req.body;
     const userEmail = await getUserByEmail(user.email);
     if(userEmail) {
-        done(null, false, 'El correo ya ha sido registrado');
+        done(null, false, req.flash('identEmailMessage', 'El email ya ha sido registrado'));
     } else {
         await saveUser(user);
         done(null, user);
