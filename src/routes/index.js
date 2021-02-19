@@ -25,13 +25,15 @@ router.post('/agency/signup', passport.authenticate('local-signup', {
     passReqToCallback: true
 }));
 
-router.get('/login', (req, res, next) => {
-
+router.get('/agency/login', (req, res, next) => {
+    res.render('login.njk', { logo: "/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
 });
 
-router.post('/login', (req, res, next) => {
-    
-});
+router.post('/agency/login', passport.authenticate('local-login', {
+    successRedirect: '/agency/profile',
+    failureRedirect: '/agency/login',
+    passReqToCallback: true
+}));
 // user authentication
 // profile
 router.get('/agency/profile', (req, res, next) => {

@@ -3,6 +3,7 @@ const db = new Sqlite3Database(process.env.USER_DB_PATH, { verbose: console.log 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const Integer = require('better-sqlite3').Integer;
+const passport = require('passport');
 
 async function saveUser(user) {
     let id;
@@ -44,17 +45,22 @@ async function getUserById(id) {
 
 async function getUserByEmail(email) {
     const stmt = db.prepare(
-        `SELECT email FROM user_database WHERE email = ?`
+        `SELECT email, password FROM user_database WHERE email = ?`
     )
 
     const userEmail = stmt.get(email);
 
-    if (stmt===undefined) {
-        throw new Error(`No se encontro el usuario con el Email: ${email}`);
+    if(userEmail == null || userEmail === undefined) {
+        return false;
     }
 
     return userEmail;
-
+    
 }
 
-module.exports = { getUserByEmail, saveUser };
+async function comparePasswords(password, hash) {
+    let results = await bcrypt.compare(password, hash);
+    return results
+}
+
+module.exports = { getUserByEmail, saveUser, comparePasswords };
