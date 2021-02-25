@@ -1,6 +1,6 @@
 {% block navbar %}
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io" target="_blank">
       <img src={{ logo }} width="112" height="28">
@@ -52,18 +52,39 @@
       </div>
     </div>
 
+    {% if user %}
+
     <div class="navbar-end">
       <div class="navbar-item">
+        <div class="welcome-message">
+          <h1 class="title-strong-color white is-5">¡Bienvenido, {{user.email}}!</div>
+        </div>
         <div class="buttons">
-          <a href="http://localhost:8080/agency/signup" class="button">
+          <a href="http://localhost:8080/agency/profile" class="button is-dark">
+            <strong>Profile</strong>
+          </a>
+          <a href="http://localhost:8080/agency/logout" class="button is-dark">
+            Exit
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {%else%}
+        <div class="navbar-end">
+        <div class="navbar-item">
+        <div class="buttons">
+          <a href="http://localhost:8080/agency/signup" class="button is-dark">
             <strong>Sign Up</strong>
           </a>
-          <a href="http://localhost:8080/agency/login" class="button is-light">
+          <a href="http://localhost:8080/agency/login" class="button is-dark">
             Log in
           </a>
         </div>
       </div>
     </div>
+    {% endif %}
+    
   </div>
 </nav>     
 
