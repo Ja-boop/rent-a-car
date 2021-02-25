@@ -10,7 +10,7 @@
       {% include "./layout/navbar.njk" %}
       {# NAVBAR #}
 
-      {% if identEmailMessage %}
+      {% if identEmailMessage|length %}
         <div>{{ identEmailMessage }}</div>
       {% endif %}
 

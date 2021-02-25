@@ -35,10 +35,23 @@ router.post('/agency/login', passport.authenticate('local-login', {
     passReqToCallback: true
 }));
 // user authentication
+
 // profile
-router.get('/agency/profile', (req, res, next) => {
+router.get('/agency/profile', isAuthenticated, (req, res, next) => {
     res.render('profile.njk', { logo: "/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
-})
+});
+
+router.get('/agency/logout', (req, res, next) => {
+    req.logOut();
+    res.redirect('/')
+});
+
+function isAuthenticated(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    } 
+    res.redirect('/agency/login')
+};
 // profile
 
 // rent a car

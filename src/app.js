@@ -48,6 +48,7 @@ app.use((req, res, next) => {
     app.locals.identEmailMessage = req.flash('identEmailMessage');
     app.locals.userNotDefinedMessage = req.flash('userNotDefinedMessage');
     app.locals.passwordMessage = req.flash('passwordMessage');
+    app.locals.user = req.user;
     next();
 });
 
