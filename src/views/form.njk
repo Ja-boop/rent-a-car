@@ -1,0 +1,101 @@
+{% extends "./layout/template.njk" %}
+
+{% block contenido %}
+{% set car = data.car %}
+
+{# NAVBAR #}
+{% include "./layout/navbar.njk" %}
+{# NAVBAR #}
+
+    {# FONDO #}
+    <div class="contain">
+
+        <div class="cuadro-opciones-form">
+            <form action="/agency/create/car" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{{car.id}}" readonly />
+                <div class="field">
+                    <label class="label">Brand</label>
+                    <div class="control">
+                        <input class="input" type="text" name="brand" placeholder="Fiat" value="{{car.brand}}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Model</label>
+                    <div class="control">
+                        <input class="input" type="text" name="model" placeholder="Duna" value="{{car.model}}">
+                    </div>
+                </div>
+                <label class="label">Car Picture</label>
+                <div class="file has-name is-fullwidth">
+                    <label class="file-label">
+                        <input class="file-input" type="file" name="image_url">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                            Upload a picture of the car
+                        </span>
+                        </span>
+                        <span class="file-name">
+                        Screen Shot 2017-07-29 at 15.54.25.png
+                    </span>
+                    </label>
+                </div>
+                <br>
+                <div class="field">
+                    <label class="label">Year Manufactured</label>
+                    <div class="control">
+                        <input class="input" type="number" name="year_manufactured" placeholder="1994" value="{{car.yearManufactured}}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Kilometers</label>
+                    <div class="control">
+                        <input class="input" type="number" name="kms" placeholder="150000" value="{{car.kms}}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Color</label>
+                    <div class="control">
+                        <input class="input" type="text" name="color" placeholder="Red" value="{{car.color}}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Air Conditioner</label>
+                    <div class="control">
+                        <div class="select">
+                            <select name="air_conditioner" value="{{car.airConditioner}}">
+                                <option>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Passengers/Doors</label>
+                    <div class="control">
+                        <input class="input" type="number" name="passengers" placeholder="4" value="{{car.passengers}}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Transmission</label>
+                    <div class="control">
+                        <input class="input" type="text" name="transmission" placeholder="Manual, Automatic, etc" value="{{car.transmission}}">
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-light">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {# FONDO #}
+
+{% endblock %}
