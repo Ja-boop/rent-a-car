@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const { saveUser, getUserByEmail, comparePasswords } = require('../sqlite/sqlite')
+const { saveUser, getUserByEmail, comparePasswords } = require('../sqlite/userSqlite')
 
 
 passport.serializeUser((user, done) => {

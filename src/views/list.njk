@@ -1,0 +1,76 @@
+{% extends "./layout/template.njk" %}
+
+{% block contenido %}
+
+{# NAVBAR #}
+{% include "./layout/navbar.njk" %}
+{# NAVBAR #}
+
+{% if carCreationErrorMessage %}
+  <div>{{ carCreationErrorMessage }}</div>
+{% endif %}
+
+<div class="contain">
+<div class="container">
+    <div class="lista-vehiculos"> 
+    <table class="table is-fullwidth">
+
+    <thead>
+    <tr>
+      <th><abbr title="Id">Id</abbr></th>
+      <th>Image</th>
+      <th><abbr title="Brand">Brand</abbr></th>
+      <th><abbr title="Model">Model</abbr></th>
+      <th><abbr title="Year">Year</abbr></th>
+      <th><abbr title="Kilometers">Kms</abbr></th>
+      <th><abbr title="Colors">Colors</abbr></th>
+      <th><abbr title="AirConditioner">AC</abbr></th>
+      <th><abbr title="Passengers">Pass</abbr></th>
+      <th><abbr title="Transmission">Trans</abbr></th>
+      <th><abbr title="Actions">Actions</abbr></th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+      <th><abbr title="Id">Id</abbr></th>
+      <th>Image</th>
+      <th><abbr title="Brand">Brand</abbr></th>
+      <th><abbr title="Model">Model</abbr></th>
+      <th><abbr title="Year">Year</abbr></th>
+      <th><abbr title="Kilometers">Kms</abbr></th>
+      <th><abbr title="Colors">Colors</abbr></th>
+      <th><abbr title="AirConditioner">AC</abbr></th>
+      <th><abbr title="Passengers">Pass</abbr></th>
+      <th><abbr title="Transmission">Trans</abbr></th>
+      <th><abbr title="Actions">Actions</abbr></th>
+    </tr>
+    </tfoot>
+    <tbody>
+        {%for car in data.car%}
+        <tr>
+        <th>{{car.id}}</th>
+        <td><img src="\{{car.imageUrl}}" width="150" height="250"/></td>
+        <td>{{car.brand}}</td>
+        <td>{{car.model}}</td>
+        <td>{{car.yearManufactured}}</td>
+        <td>{{car.kms}}</td>
+        <td>{{car.color}}</td>
+        <td>{{car.airConditioner}}</td>
+        <td>{{car.passengers}}</td>
+        <td>{{car.transmission}}</td>
+        <td>
+          <br>
+          <a href="/agency/view/car/{{car.id}}">View</a>
+          <br>
+          <a href="/agency/delete/car/{{car.id}}">Delete</a>
+        </td>
+        </tr>
+        {%endfor%}
+    </tbody>
+
+    </table>
+    </div>
+</div>
+</div>
+
+{% endblock %}

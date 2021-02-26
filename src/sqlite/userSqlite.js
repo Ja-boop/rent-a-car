@@ -2,8 +2,6 @@ const Sqlite3Database = require('better-sqlite3');
 const db = new Sqlite3Database(process.env.USER_DB_PATH, { verbose: console.log });
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const Integer = require('better-sqlite3').Integer;
-const passport = require('passport');
 
 async function saveUser(user) {
     let id;
