@@ -1,0 +1,41 @@
+{% extends "./layout/template.njk" %}
+
+{% block contenido %}
+    {% set car = data.car %}
+
+    {# NAVBAR #}
+    {% include "./layout/navbar.njk" %}
+    {# NAVBAR #}
+
+    <div class="container">
+        <div class="rent-options">
+        <form action="/agency/create/car" method="POST"
+            <input type="hidden" name="id" value="{{car.id}}" readonly/>
+            <h3 class="title is-5 title-block">Vehiculo</h3>
+            <div>
+                <img src="/{{car.imageUrl}}" width="256" height="256"/>
+            </div>
+            <h3 class="title is-5 title-block">Selecciona la fecha</h3>
+
+            <div>
+                <p>Fecha de salida</p>
+                <input type="date" id="start-date" name="trip-start" min={{ currentDate }}>
+                <p>Fecha de devolución</p>
+                <input type="date" id="start-date" name="trip-start" min={{ currentDate }}>
+            </div>
+
+            <div class="confirmation-options">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-light">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+
+{% endblock %}
