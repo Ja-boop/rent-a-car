@@ -43,7 +43,7 @@ async function getUserById(id) {
 
 async function getUserByEmail(email) {
     const stmt = db.prepare(
-        `SELECT email, password FROM user_database WHERE email = ?`
+        `SELECT id, email, password FROM user_database WHERE email = ?`
     )
 
     const userEmail = stmt.get(email);
