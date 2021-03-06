@@ -1,0 +1,52 @@
+{% extends "./layout/template.njk" %}
+
+{% block contenido %}
+
+{# NAVBAR #}
+{% include "./layout/navbar.njk" %}
+{# NAVBAR #}
+
+<div class="contain">
+<div class="container">
+    <div class="lista-vehiculos"> 
+    <table class="table is-fullwidth">
+
+    <thead>
+    <tr>
+      <th><abbr title="Id">Reserve Number</abbr></th>
+      <th>Image</th>
+      <th><abbr title="TakeDay">Retire</abbr></th>
+      <th><abbr title="ReturnDay">Return</abbr></th>
+      <th><abbr title="Cost">Final Cost</abbr></th>
+      <th><abbr title="Actions">Actions</abbr></th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+      <th><abbr title="Id">Reserve Number</abbr></th>
+      <th>Image</th>
+      <th><abbr title="TakeDay">Retire</abbr></th>
+      <th><abbr title="ReturnDay">Return</abbr></th>
+      <th><abbr title="Cost">Final Cost</abbr></th>
+      <th><abbr title="Actions">Actions</abbr></th>
+    </tr>
+    </tfoot>
+    <tbody>
+        {%set reserve = data.reserve%}
+        <tr>
+        <th>{{reserve.id}}</th>
+        <td><img src="\{{carImage}}" width="150" height="250"/></td>
+        <td>{{reserve.takeDay}}</td>
+        <td>{{reserve.returnDay}}</td>
+        <td>{{reserve.cost}}</td>
+        <td>
+        </td>
+        </tr>
+    </tbody>
+
+    </table>
+    </div>
+</div>
+</div>
+
+{% endblock %}
