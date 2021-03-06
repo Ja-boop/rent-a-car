@@ -20,7 +20,8 @@ async function saveCar(car) {
                 color = ?,
                 air_conditioner = ?,
                 passengers = ?,
-                transmission = ?
+                transmission = ?,
+                cost = ?
             WHERE id = ?`
         );
 
@@ -33,6 +34,7 @@ async function saveCar(car) {
             car.airConditioner,
             car.passengers,
             car.transmission,
+            car.cost,
             car.id,
         ];
 
@@ -52,8 +54,9 @@ async function saveCar(car) {
                 color,
                 air_conditioner,
                 passengers,
-                transmission
-            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+                transmission,
+                cost
+            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
 
         const result = stmt.run(
@@ -65,7 +68,8 @@ async function saveCar(car) {
             car.color,
             car.airConditioner,
             car.passengers,
-            car.transmission
+            car.transmission,
+            car.cost
         );
 
         id = result.lastInsertRowid;
@@ -96,7 +100,8 @@ async function getCarById(id) {
             color,
             air_conditioner,
             passengers,
-            transmission
+            transmission,
+            cost
         FROM lista_vehiculos WHERE id = ?
     `)
     .get(id);
@@ -120,7 +125,8 @@ async function getAllCars() {
             color,
             air_conditioner,
             passengers,
-            transmission
+            transmission,
+            cost
         FROM lista_vehiculos`
     )
     .all();

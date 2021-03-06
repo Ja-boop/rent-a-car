@@ -10,7 +10,7 @@ module.exports = class Car {
         airConditioner,
         passengers,
         transmission,
-
+        cost,
     }) {
         this.id = id;
         this.brand = brand;
@@ -22,5 +22,6 @@ module.exports = class Car {
         this.airConditioner = airConditioner;
         this.passengers = passengers;
         this.transmission = transmission;
+        this.cost = cost;
     }
 };

@@ -11,6 +11,7 @@ CREATE TABLE lista_vehiculos (
     air_conditioner BOOLEAN NOT NULL,
     passengers INTEGER NOT NULL,
     transmission TEXT NOT NULL,
+    cost INTEGER NOT NULL,
     created_at DATE DEFAULT (datetime('now')) NOT NULL,
     updated_at DATE DEFAULT (datetime('now')) NOT NULL
 );
