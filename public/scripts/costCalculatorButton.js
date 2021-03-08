@@ -14,5 +14,10 @@ button.addEventListener('click', () => {
     
     const daysDistance = diff/msInDays + 1;
    
-    cost.innerText = integer * daysDistance;
+    if (daysDistance <= 0) {
+        alert('La fecha de retiro es mayor a la fecha de entrega')
+    } else {
+        cost.innerText = integer * daysDistance;
+    }
+    
 });
