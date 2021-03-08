@@ -141,7 +141,7 @@ router.get(`${ROUTE}/rent/car/list`, async (req, res) => { // list
     res.render('rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
-router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
+router.get(`${ROUTE}/rent/checkout/date/car/:id`, async (req, res) => { // form
     const { id } = req.params;
     if(!id) {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
@@ -149,7 +149,7 @@ router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
     try {
         let currentDate = getCurrentDate();
         const car = await getCarById(id);
-        res.render('rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos"})
+        res.render('rentCarDateCheckout.njk', {currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos"})
     } catch (e) {
         console.log(e);
         req.flash('rentCarErrorMessage', `${e}`);

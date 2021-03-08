@@ -19,9 +19,15 @@
 
             <div>
                 <p>Fecha de salida</p>
-                <input type="date" id="start-date" name="trip-start" min={{ currentDate }}>
+                <input type="date" id="take-date" name="take-date" min={{ currentDate }} value={{ currentDate }}>
                 <p>Fecha de devolución</p>
-                <input type="date" id="start-date" name="trip-start" min={{ currentDate }}>
+                <input type="date" id="return-date" name="return-date" min={{ currentDate }} value={{ currentDate }}>
+                <button type="button" id="cost-calculator">Calcular Costo</button>
+            </div>
+            <h3 class="title is-5 title-block">Costo final</h3>
+
+            <div>
+                <p>Cost: <p id="rent-cost">{{car.cost}}</p></p>   
             </div>
 
             <div class="confirmation-options">
@@ -37,5 +43,5 @@
         </form>
         </div>
     </div>
-
+<script src="/public/scripts/costCalculatorButton.js"></script>
 {% endblock %}
