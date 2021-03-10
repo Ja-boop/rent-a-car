@@ -9,8 +9,12 @@
 
     <div class="container">
         <div class="rent-options">
-        <form action="/agency/create/car" method="POST"
+        <form action="/agency/rent/car/{{car.id}}" method="POST"
             <input type="hidden" name="id" value="{{car.id}}" readonly/>
+            {% if user %}
+                <input type="hidden" name="user_email" id="user_email" value={{user.email}}>
+            {% endif %}
+            <input type="hidden" name="car_id" id="car_id" value={{car.id}}
             <h3 class="title is-5 title-block">Vehiculo</h3>
             <div>
                 <img src="/{{car.imageUrl}}" width="256" height="256"/>
@@ -19,17 +23,17 @@
 
             <div>
                 <p>Fecha de salida</p>
-                <input type="date" id="take-date" name="take-date" min={{ currentDate }} value={{ currentDate }}>
+                <input type="date" id="take_day" name="take_day" min={{ currentDate }} value={{ currentDate }}>
                 <p>Fecha de devolución</p>
-                <input type="date" id="return-date" name="return-date" min={{ currentDate }} value={{ currentDate }}>
+                <input type="date" id="return_day" name="return_day" min={{ currentDate }} value={{ currentDate }}>
                 <button type="button" id="cost-calculator">Calcular Costo</button>
-            </div>
-            <h3 class="title is-5 title-block">Costo final</h3>
-
-            <div>
-                <p>Cost: <p id="rent-cost">{{car.cost}}</p></p>   
+                <h3 class="title is-5 title-block">Costo final</h3>
+                <p>Cost: </p> 
+                <input type="text" id="cost"  name="cost" value={{car.cost}} readonly> 
             </div>
 
+
+            
             <div class="confirmation-options">
                 <div class="field is-grouped">
                     <div class="control">

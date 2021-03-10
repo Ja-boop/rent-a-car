@@ -1,6 +1,6 @@
 const button = document.querySelector('#cost-calculator');
 let cost = document.querySelector('#rent-cost');
-let integer = parseInt(cost.innerText, 10);
+let integer = parseInt(cost.value, 10);
 
 button.addEventListener('click', () => {
     const takeDay = document.querySelector('#take-date').value;
@@ -17,7 +17,7 @@ button.addEventListener('click', () => {
     if (daysDistance <= 0) {
         alert('La fecha de retiro es mayor a la fecha de entrega')
     } else {
-        cost.innerText = integer * daysDistance;
+        cost.value = integer * daysDistance;
     }
     
 });

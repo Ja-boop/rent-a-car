@@ -5,17 +5,18 @@ const path = require('path');
 const multer = require('multer');
 const ROUTE = '/agency';
 const { fromDataToEntity } = require('../mapper/carMapper');
+const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
 const { saveCar, deleteCar, getCarById, getAllCars } = require('../sqlite/crudCarSqlite');
-const { getUserReserve } = require('../sqlite/rentSqlite');
+const { rentCar, getUserReserve } = require('../sqlite/rentSqlite');
 
 function isAuthenticated(req, res, next) {
-    if(req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         return next();
-    } 
+    }
     res.redirect(`${ROUTE}/login`)
 };
 
-function getCurrentDate () {
+function getCurrentDate() {
     let today = new Date();
 
     let year = today.getFullYear();
@@ -84,7 +85,7 @@ router.get(`${ROUTE}/create/car`, (req, res) => { // Form para creación de veh�
     res.render('form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
-router.post(`${ROUTE}/create/car`, upload.single('image_url'), async (req, res) => { 
+router.post(`${ROUTE}/create/car`, upload.single('image_url'), async (req, res) => {
     try {
         const car = fromDataToEntity(req.body);
         console.log(req.body);
@@ -121,7 +122,7 @@ router.get(`${ROUTE}/delete/car/:id`, async (req, res) => { // Eliminar el vehí
 
 router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
     const { id } = req.params;
-    if(!id) {
+    if (!id) {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
     }
     try {
@@ -135,7 +136,7 @@ router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
 });
 
 // rent-a-car
-router.get(`${ROUTE}/rent/car/list`, async (req, res) => { // list
+router.get(`${ROUTE}/rent/car/list`, isAuthenticated, async (req, res) => { // list
     const car = await getAllCars();
     console.log(car)
     res.render('rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
@@ -143,17 +144,34 @@ router.get(`${ROUTE}/rent/car/list`, async (req, res) => { // list
 
 router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
     const { id } = req.params;
-    if(!id) {
+    if (!id) {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
     }
     try {
         let currentDate = getCurrentDate();
         const car = await getCarById(id);
-        res.render('rentCar.njk', {currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos"})
+        res.render('rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e) {
         console.log(e);
         req.flash('rentCarErrorMessage', `${e}`);
         res.redirect(`${ROUTE}/rent/car/list`);
+    }
+});
+
+router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
+    try {
+        const reserve = fromDataToEntityReserve(req.body);
+        const savedReserve = await rentCar(reserve);
+        if (car.id) {
+            req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
+        } else {
+            req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
+        }
+        res.redirect(`${ROUTE}/:email/reserve/list`);
+    } catch (e) {
+        console.log(e);
+        req.flash('reserveCreationErrorMessage', `${e}`);
+        res.redirect(`${ROUTE}/car/list`);
     }
 });
 
