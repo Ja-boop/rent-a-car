@@ -20,7 +20,8 @@ async function saveCar(car) {
                 color = ?,
                 air_conditioner = ?,
                 passengers = ?,
-                transmission = ?
+                transmission = ?,
+                cost = ?
             WHERE id = ?`
         );
 
@@ -33,6 +34,7 @@ async function saveCar(car) {
             car.airConditioner,
             car.passengers,
             car.transmission,
+            car.cost,
             car.id,
         ];
 
@@ -52,8 +54,9 @@ async function saveCar(car) {
                 color,
                 air_conditioner,
                 passengers,
-                transmission
-            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+                transmission,
+                cost
+            ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
 
         const result = stmt.run(
@@ -65,7 +68,8 @@ async function saveCar(car) {
             car.color,
             car.airConditioner,
             car.passengers,
-            car.transmission
+            car.transmission,
+            car.cost
         );
 
         id = result.lastInsertRowid;
@@ -96,7 +100,8 @@ async function getCarById(id) {
             color,
             air_conditioner,
             passengers,
-            transmission
+            transmission,
+            cost
         FROM lista_vehiculos WHERE id = ?
     `)
     .get(id);
@@ -120,11 +125,18 @@ async function getAllCars() {
             color,
             air_conditioner,
             passengers,
-            transmission
+            transmission,
+            cost
         FROM lista_vehiculos`
     )
     .all();
     return cars.map((carData) => fromDataToEntity(carData));
 };
 
-module.exports = { saveCar, deleteCar, getCarById, getAllCars };
+async function getUserCars (id) {
+    const stmt = db.prepare(`SELECT * FROM lista_vehiculos WHERE id = ?`);
+    const cars = stmt.all(id);
+    return cars.map((carData) => fromDataToEntity(carData));
+}
+
+module.exports = { saveCar, deleteCar, getCarById, getAllCars, getUserCars };

@@ -6,10 +6,6 @@
 {% include "./layout/navbar.njk" %}
 {# NAVBAR #}
 
-{% if carCreationErrorMessage %}
-  <div>{{ carCreationErrorMessage }}</div>
-{% endif %}
-
 <div class="contain">
 <div class="container">
     <div class="lista-vehiculos"> 
@@ -63,9 +59,7 @@
         <td>{{car.cost}}</td>
         <td>
           <br>
-          <a href="/agency/view/car/{{car.id}}">View</a>
-          <br>
-          <a href="/agency/delete/car/{{car.id}}">Delete</a>
+          <a href="http://localhost:8080/agency/rent/car/{{car.id}}">Rent!</a>
         </td>
         </tr>
         {%endfor%}
