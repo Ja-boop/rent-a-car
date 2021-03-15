@@ -6,7 +6,7 @@ const multer = require('multer');
 const ROUTE = '/agency';
 const { fromDataToEntity } = require('../mapper/carMapper');
 const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
-const { saveCar, deleteCar, getCarById, getAllCars } = require('../sqlite/crudCarSqlite');
+const { saveCar, deleteCar, getCarById, getAllCars, getUserCars } = require('../sqlite/crudCarSqlite');
 const { rentCar, getUserReserve } = require('../sqlite/rentSqlite');
 
 function isAuthenticated(req, res, next) {
@@ -78,6 +78,7 @@ router.get(`${ROUTE}/logout`, (req, res, next) => {
 // crud-cars
 router.get(`${ROUTE}/car/list`, async (req, res) => { // Lista de vehículos
     const car = await getAllCars();
+    console.log(car)
     res.render('list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
@@ -160,6 +161,7 @@ router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
 
 router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
     try {
+        console.log(req.body);
         const reserve = fromDataToEntityReserve(req.body);
         const savedReserve = await rentCar(reserve);
         if (car.id) {
@@ -177,9 +179,14 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
 
 // user cars
 router.get(`${ROUTE}/:email/reserve/list`, isAuthenticated, async (req, res) => {
-    const { email } = req.params;
-    const reserve = await getUserReserve(email);
-    const car = await getCarById(reserve.carId);
-    res.render('userCars.njk', { data: { reserve }, carImage: car.imageUrl, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    try {
+        const { email } = req.params;
+        const reserve = await getUserReserve(email);
+
+        res.render('userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    } catch (e){
+        console.log(e);
+    }
+    
 });
 module.exports = router;

@@ -35,12 +35,15 @@ CREATE TABLE reserve_cars (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     user_email INTEGER NOT NULL,
     car_id INTEGER NOT NULL,
+    car_image TEXT NOT NULL,
     take_day TEXT NOT NULL,
     return_day TEXT NOT NULL,
     cost NUMBER NOT NULL,
     created_at DATE DEFAULT (datetime('now')) NOT NULL,
     updated_at DATE DEFAULT (datetime('now')) NOT NULL
 );
+
+UPDATE reserve_cars SET car_id = 2 WHERE id = 2;
 
 INSERT INTO reserve_cars (user_email, car_id, take_day, return_day, cost) VALUES('viktor@hotmail.com', '3', '06/03/2021', '10/03/2021', 20000);
 

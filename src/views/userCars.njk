@@ -32,16 +32,16 @@
     </tr>
     </tfoot>
     <tbody>
-        {%set reserve = data.reserve%}
+        {% for reserve in data.reserve %} 
         <tr>
         <th>{{reserve.id}}</th>
-        <td><img src="\{{carImage}}" width="150" height="250"/></td>
+        <td><img src="\{{reserve.carImage}}" width="150" height="250"/></td>
         <td>{{reserve.takeDay}}</td>
         <td>{{reserve.returnDay}}</td>
         <td>{{reserve.cost}}</td>
-        <td>
-        </td>
         </tr>
+        {% endfor %} 
+        
     </tbody>
 
     </table>

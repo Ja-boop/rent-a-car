@@ -133,4 +133,10 @@ async function getAllCars() {
     return cars.map((carData) => fromDataToEntity(carData));
 };
 
-module.exports = { saveCar, deleteCar, getCarById, getAllCars };
+async function getUserCars (id) {
+    const stmt = db.prepare(`SELECT * FROM lista_vehiculos WHERE id = ?`);
+    const cars = stmt.all(id);
+    return cars.map((carData) => fromDataToEntity(carData));
+}
+
+module.exports = { saveCar, deleteCar, getCarById, getAllCars, getUserCars };

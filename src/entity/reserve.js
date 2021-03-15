@@ -3,6 +3,7 @@ module.exports = class Reserve {
         id,
         userEmail,
         carId,
+        carImage,
         takeDay,
         returnDay,
         cost,
@@ -10,6 +11,7 @@ module.exports = class Reserve {
         this.id = id;
         this.userEmail = userEmail;
         this.carId = carId;
+        this.carImage = carImage;
         this.takeDay = takeDay;
         this.returnDay = returnDay;
         this.cost = cost;
