@@ -164,12 +164,12 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
         console.log(req.body);
         const reserve = fromDataToEntityReserve(req.body);
         const savedReserve = await rentCar(reserve);
-        if (car.id) {
+        if (savedReserve.id) {
             req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
         } else {
             req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
         }
-        res.redirect(`${ROUTE}/:email/reserve/list`);
+        res.redirect(`${ROUTE}/user/:id/reserve/list`);
     } catch (e) {
         console.log(e);
         req.flash('reserveCreationErrorMessage', `${e}`);
@@ -178,10 +178,11 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
 });
 
 // user cars
-router.get(`${ROUTE}/:email/reserve/list`, isAuthenticated, async (req, res) => {
+router.get(`${ROUTE}/user/:id/reserve/list`, isAuthenticated, async (req, res) => {
     try {
-        const { email } = req.params;
-        const reserve = await getUserReserve(email);
+        const { id } = req.params;
+        console.log(id);
+        const reserve = await getUserReserve(id);
 
         res.render('userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e){

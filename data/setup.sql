@@ -33,7 +33,7 @@ INSERT INTO user_database (email, password) VALUES('viktor@hotmail.com', '1234')
 DROP TABLE IF EXISTS reserve_cars; 
 CREATE TABLE reserve_cars (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    user_email INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
     car_id INTEGER NOT NULL,
     car_image TEXT NOT NULL,
     take_day TEXT NOT NULL,

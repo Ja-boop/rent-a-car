@@ -1,13 +1,13 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const { saveUser, getUserByEmail, comparePasswords } = require('../sqlite/userSqlite')
+const { saveUser, getUserByEmail, getUserById, comparePasswords } = require('../sqlite/userSqlite')
 
 
 passport.serializeUser((user, done) => {
-    done(null, user.email);
+    done(null, user.id);
 });
-passport.deserializeUser(async (email, done) => {
-   const user = await getUserByEmail(email);
+passport.deserializeUser(async (id, done) => {
+   const user = await getUserById(id);
    done(null, user);
 });
 
@@ -17,12 +17,13 @@ passport.use('local-signup', new LocalStrategy({
     passReqToCallback: true
 }, async (req, password, email, done) => {
     const user = req.body;
+    console.log(user);
     const userEmail = await getUserByEmail(user.email);
     if(userEmail) {
         done(null, false, req.flash('identEmailMessage', 'El email ya ha sido registrado'));
     } else {
-        await saveUser(user);
-        done(null, user);
+        const savedUser = await saveUser(user);
+        done(null, savedUser);
     }
     
 }));
