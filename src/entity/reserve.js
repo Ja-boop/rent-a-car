@@ -1,7 +1,7 @@
 module.exports = class Reserve {
     constructor({
         id,
-        userEmail,
+        userId,
         carId,
         carImage,
         takeDay,
@@ -9,7 +9,7 @@ module.exports = class Reserve {
         cost,
     }) {
         this.id = id;
-        this.userEmail = userEmail;
+        this.userId = userId;
         this.carId = carId;
         this.carImage = carImage;
         this.takeDay = takeDay;

@@ -25,20 +25,18 @@ async function saveUser(user) {
 }
 
 async function getUserById(id) {
-    const user = db.prepare(
-        `SELECT 
-        id,
-        email,
-        password
-        FROM user_database WHERE id = ?`
+    const stmt = db.prepare(
+        `SELECT id, email, password FROM user_database WHERE id = ?`
     )
-    .get(id);
 
-    if (user===undefined) {
-        throw new Error(`No se encontro el usuario con el ID: ${id}`);
+    const userId = stmt.get(id);
+
+    if(userId == null || userId === undefined) {
+        return false;
     }
 
-    return user;
+    return userId;
+    
 }
 
 async function getUserByEmail(email) {
@@ -61,4 +59,4 @@ async function comparePasswords(password, hash) {
     return results
 }
 
-module.exports = { getUserByEmail, saveUser, comparePasswords };
+module.exports = { getUserByEmail, getUserById, saveUser, comparePasswords };

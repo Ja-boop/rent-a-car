@@ -8,7 +8,7 @@ async function rentCar (reserve) {
         id = reserve.id;
         const stmt = db.prepare(
             `UPDATE reserve_cars SET
-                user_email = ?,
+                user_id = ?,
                 car_id = ?,
                 car_image = ?,
                 take_day = ?.
@@ -18,7 +18,7 @@ async function rentCar (reserve) {
         );
 
         const params = [
-            reserve.userEmail,
+            reserve.userId,
             reserve.carId,
             reserve.carImage,
             reserve.takeDay,
@@ -31,7 +31,7 @@ async function rentCar (reserve) {
     } else {
         const stmt = db.prepare(
             `INSERT INTO reserve_cars(
-                user_email,
+                user_id,
                 car_id,
                 car_image,
                 take_day,
@@ -41,7 +41,7 @@ async function rentCar (reserve) {
         );
 
         const result = stmt.run(
-            reserve.userEmail,
+            reserve.userId,
             reserve.carId,
             reserve.carImage,
             reserve.takeDay,
@@ -56,9 +56,9 @@ async function rentCar (reserve) {
 
 };
 
-async function getUserReserve (email) {
-    const stmt = db.prepare(`SELECT * FROM reserve_cars WHERE user_email = ?`)
-    const reserve = stmt.all(email);
+async function getUserReserve (id) {
+    const stmt = db.prepare(`SELECT * FROM reserve_cars WHERE user_id = ?`)
+    const reserve = stmt.all(id);
     return reserve.map((reserveData) => fromDataToEntityReserve(reserveData));
 }
 
