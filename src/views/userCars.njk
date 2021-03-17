@@ -39,6 +39,12 @@
         <td>{{reserve.takeDay}}</td>
         <td>{{reserve.returnDay}}</td>
         <td>{{reserve.cost}}</td>
+        <td>
+          <br>
+          <a href="/agency/reserve/{{reserve.id}}/view">View</a>
+          <br>
+          <a href="/agency/reserve/{{reserve.id}}/delete">Delete</a>
+        </td>
         </tr>
         {% endfor %} 
         

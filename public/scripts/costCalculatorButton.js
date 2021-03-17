@@ -3,8 +3,8 @@ let cost = document.querySelector('#rent-cost');
 let integer = parseInt(cost.value, 10);
 
 button.addEventListener('click', () => {
-    const takeDay = document.querySelector('#take-date').value;
-    const returnDay = document.querySelector('#return-date').value;
+    const takeDay = document.querySelector('#take-day').value;
+    const returnDay = document.querySelector('#return-day').value;
 
     const newTekeDate = new Date(takeDay)
     const newReturnDate = new Date(returnDay)

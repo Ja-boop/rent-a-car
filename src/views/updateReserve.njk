@@ -1,7 +1,7 @@
 {% extends "./layout/template.njk" %}
 
 {% block contenido %}
-    {% set car = data.car %}
+    {% set reserve = data.reserve %}
 
     {# NAVBAR #}
     {% include "./layout/navbar.njk" %}
@@ -9,31 +9,31 @@
 
     <div class="container">
         <div class="rent-options">
-        <form action="/agency/rent/car/{{car.id}}" method="POST"
+        <form action="/agency/reserve/{{reserve.id}}/view" method="POST"
             <input type="hidden"readonly>
 
             {% if user %}
                 <input type="hidden" name="user_id" id="user_id" value={{user.id}}>
             {% endif %}
-
-            <input type="hidden" name="car_id" value={{car.id}} readonly>
+            <input type="hidden" name="id" value={{reserve.id}} readonly>
+            <input type="hidden" name="car_id" value={{reserve.carId}} readonly>
 
             <h3 class="title is-5 title-block">Vehiculo</h3>
             <div>
-                <img src="/{{car.imageUrl}}" width="256" height="256"/>
-                <input type="hidden" name="car_image" value="{{car.imageUrl}}" readonly/>
+                <img src="/{{reserve.carImage}}" width="256" height="256"/>
+                <input type="hidden" name="car_image" value="{{reserve.carImage}}" readonly/>
             </div>
             <h3 class="title is-5 title-block">Selecciona la fecha</h3>
 
             <div>
                 <p>Fecha de salida</p>
-                <input type="date" id="take-day" name="take_day" min={{ currentDate }} value={{ currentDate }}>
+                <input type="date" id="take-day" name="take_day" min={{ currentDate }} value={{ reserve.takeDay }}>
                 <p>Fecha de devolución</p>
-                <input type="date" id="return-day" name="return_day" min={{ currentDate }} value={{ currentDate }}>
+                <input type="date" id="return-day" name="return_day" min={{ currentDate }} value={{ reserve.returnDay }}>
                 <button type="button" id="cost-calculator">Calcular Costo</button>
                 <h3 class="title is-5 title-block">Costo final</h3>
                 <p>Cost: </p> 
-                <input type="text" id="rent-cost"  name="cost" value={{car.cost}} readonly> 
+                <input type="text" id="rent-cost"  name="cost" value={{reserve.cost}} readonly> 
             </div>
 
 

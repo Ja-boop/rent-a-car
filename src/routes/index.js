@@ -6,8 +6,8 @@ const multer = require('multer');
 const ROUTE = '/agency';
 const { fromDataToEntity } = require('../mapper/carMapper');
 const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
-const { saveCar, deleteCar, getCarById, getAllCars, getUserCars } = require('../sqlite/crudCarSqlite');
-const { rentCar, getUserReserve } = require('../sqlite/rentSqlite');
+const { saveCar, deleteCar, getCarById, getAllCars } = require('../sqlite/crudCarSqlite');
+const { rentCar, getUserReserve, deleteReserve, getReserveById } = require('../sqlite/rentSqlite');
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -78,7 +78,6 @@ router.get(`${ROUTE}/logout`, (req, res, next) => {
 // crud-cars
 router.get(`${ROUTE}/car/list`, async (req, res) => { // Lista de vehículos
     const car = await getAllCars();
-    console.log(car)
     res.render('list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
@@ -89,7 +88,6 @@ router.get(`${ROUTE}/create/car`, (req, res) => { // Form para creación de veh�
 router.post(`${ROUTE}/create/car`, upload.single('image_url'), async (req, res) => {
     try {
         const car = fromDataToEntity(req.body);
-        console.log(req.body);
         if (req.file) {
             const { path } = req.file;
             car.imageUrl = path;
@@ -112,7 +110,6 @@ router.get(`${ROUTE}/delete/car/:id`, async (req, res) => { // Eliminar el vehí
     try {
         const { id } = req.params;
         const car = await getCarById(id);
-        console.log(car);
         await deleteCar(car);
         req.flash('carDeletedMessage', `El vehículo con ID: ${car.id} (${car.brand}, ${car.model}) fue eliminado correctamente`);
     } catch (e) {
@@ -128,7 +125,6 @@ router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
     }
     try {
         const car = await getCarById(id);
-        console.log(car);
         res.render('form.njk', { data: { car } });
     } catch (e) {
         req.flash('viewCarErrorMessage', e);
@@ -139,11 +135,10 @@ router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
 // rent-a-car
 router.get(`${ROUTE}/rent/car/list`, isAuthenticated, async (req, res) => { // list
     const car = await getAllCars();
-    console.log(car)
     res.render('rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
-router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
+router.get(`${ROUTE}/user/:user/rent/car/:id`, isAuthenticated, async (req, res) => { // form
     const { id } = req.params;
     if (!id) {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
@@ -151,6 +146,7 @@ router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
     try {
         let currentDate = getCurrentDate();
         const car = await getCarById(id);
+        console.log(car)
         res.render('rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e) {
         console.log(e);
@@ -161,7 +157,6 @@ router.get(`${ROUTE}/rent/car/:id`, async (req, res) => { // form
 
 router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
     try {
-        console.log(req.body);
         const reserve = fromDataToEntityReserve(req.body);
         const savedReserve = await rentCar(reserve);
         if (savedReserve.id) {
@@ -169,7 +164,7 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
         } else {
             req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
         }
-        res.redirect(`${ROUTE}/user/:id/reserve/list`);
+        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`);
     } catch (e) {
         console.log(e);
         req.flash('reserveCreationErrorMessage', `${e}`);
@@ -181,13 +176,58 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
 router.get(`${ROUTE}/user/:id/reserve/list`, isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
         const reserve = await getUserReserve(id);
-
+        console.log(fromDataToEntityReserve(reserve));
         res.render('userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e){
         console.log(e);
     }
     
 });
+
+router.get(`${ROUTE}/reserve/:id/delete`, isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const reserve = await getReserveById(id);
+        await deleteReserve(reserve);
+        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`)
+    } catch (e) {
+        req.flash('carDeletedErrorMessage', e);
+    }
+    
+});
+
+router.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        throw new Error(`No se encontro el vehículo con el ID: ${id}`)
+    }
+    try {
+        let currentDate = getCurrentDate();
+        const reserve = await getReserveById(id);
+        res.render('updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+    } catch (e) {
+        req.flash('viewCarErrorMessage', e);
+        res.redirect(`${ROUTE}/car/list`);
+    }
+});
+
+router.post(`${ROUTE}/reserve/:id/view`, async (req, res) => {
+    try {
+        const reserve = fromDataToEntityReserve(req.body);
+        console.log(reserve)
+        const savedReserve = await rentCar(reserve);
+        if (savedReserve.id) {
+            req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
+        } else {
+            req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
+        }
+        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`);
+    } catch (e) {
+        console.log(e);
+        req.flash('reserveCreationErrorMessage', `${e}`);
+        res.redirect(`${ROUTE}/car/list`);
+    }
+});
+
 module.exports = router;

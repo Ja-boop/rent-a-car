@@ -11,7 +11,7 @@ async function rentCar (reserve) {
                 user_id = ?,
                 car_id = ?,
                 car_image = ?,
-                take_day = ?.
+                take_day = ?,
                 return_day = ?,
                 cost = ?
             WHERE id = ?`
@@ -60,8 +60,26 @@ async function getUserReserve (id) {
     const stmt = db.prepare(`SELECT * FROM reserve_cars WHERE user_id = ?`)
     const reserve = stmt.all(id);
     return reserve.map((reserveData) => fromDataToEntityReserve(reserveData));
-}
+};
+
+async function getReserveById (id) {
+    const stmt = db.prepare(`SELECT * FROM reserve_cars WHERE id = ?`)
+    const reserve = stmt.get(id);
+    return fromDataToEntityReserve(reserve);
+};
+
+async function deleteReserve (reserve) {
+    if(!reserve || !reserve.id) {
+        throw new Error('Reserve ID not defined');
+    };
+
+    db.prepare('DELETE FROM reserve_cars WHERE id = ?').run(reserve.id);
+
+    return true;
+};
 
 
 
-module.exports = { rentCar, getUserReserve };
+
+
+module.exports = { deleteReserve, rentCar, getUserReserve, getReserveById };

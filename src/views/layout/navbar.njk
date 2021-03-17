@@ -19,13 +19,16 @@
         Home
       </a>
 
+      {% if user %}
       <a href="http://localhost:8080/agency/user/{{user.id}}/reserve/list" class="navbar-item">
         Mis vehículos
       </a>
+      
 
-      <a href="http://localhost:8080/agency/rent/car/list" class="navbar-item">
+      <a href="http://localhost:8080/agency/user/{{user.id}}/rent/car/list" class="navbar-item">
         Reservar Vehículo
-      </a>      
+      </a>
+      {% endif %}      
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
