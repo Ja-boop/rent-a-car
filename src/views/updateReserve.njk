@@ -12,9 +12,7 @@
         <form action="/agency/reserve/{{reserve.id}}/view" method="POST"
             <input type="hidden"readonly>
 
-            {% if user %}
-                <input type="hidden" name="user_id" id="user_id" value={{user.id}}>
-            {% endif %}
+            <input type="hidden" name="user_id" id="user_id" value={{user.id}}>
             <input type="hidden" name="id" value={{reserve.id}} readonly>
             <input type="hidden" name="car_id" value={{reserve.carId}} readonly>
 

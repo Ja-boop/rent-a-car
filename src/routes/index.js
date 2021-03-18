@@ -138,7 +138,7 @@ router.get(`${ROUTE}/rent/car/list`, isAuthenticated, async (req, res) => { // l
     res.render('rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
-router.get(`${ROUTE}/user/:user/rent/car/:id`, isAuthenticated, async (req, res) => { // form
+router.get(`${ROUTE}/rent/car/:id`, isAuthenticated, async (req, res) => { // form
     const { id } = req.params;
     if (!id) {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
@@ -164,7 +164,7 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
         } else {
             req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
         }
-        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`);
+        res.redirect(`${ROUTE}/reserve/list`);
     } catch (e) {
         console.log(e);
         req.flash('reserveCreationErrorMessage', `${e}`);
@@ -173,11 +173,10 @@ router.post(`${ROUTE}/rent/car/:id`, async (req, res) => {
 });
 
 // user cars
-router.get(`${ROUTE}/user/:id/reserve/list`, isAuthenticated, async (req, res) => {
+router.get(`${ROUTE}/reserve/list`, isAuthenticated, async (req, res) => {
     try {
-        const { id } = req.params;
-        const reserve = await getUserReserve(id);
-        console.log(fromDataToEntityReserve(reserve));
+        const user = req.user;
+        const reserve = await getUserReserve(user.id);
         res.render('userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e){
         console.log(e);
@@ -190,7 +189,7 @@ router.get(`${ROUTE}/reserve/:id/delete`, isAuthenticated, async (req, res) => {
         const { id } = req.params;
         const reserve = await getReserveById(id);
         await deleteReserve(reserve);
-        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`)
+        res.redirect(`${ROUTE}/reserve/list`)
     } catch (e) {
         req.flash('carDeletedErrorMessage', e);
     }
@@ -215,14 +214,13 @@ router.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, async (req, res) => {
 router.post(`${ROUTE}/reserve/:id/view`, async (req, res) => {
     try {
         const reserve = fromDataToEntityReserve(req.body);
-        console.log(reserve)
         const savedReserve = await rentCar(reserve);
         if (savedReserve.id) {
             req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
         } else {
             req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
         }
-        res.redirect(`${ROUTE}/user/${reserve.userId}/reserve/list`);
+        res.redirect(`${ROUTE}/reserve/list`);
     } catch (e) {
         console.log(e);
         req.flash('reserveCreationErrorMessage', `${e}`);
