@@ -202,9 +202,15 @@ router.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, async (req, res) => {
         throw new Error(`No se encontro el vehículo con el ID: ${id}`)
     }
     try {
+        const user = req.user;
         let currentDate = getCurrentDate();
         const reserve = await getReserveById(id);
-        res.render('updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        
+        if(reserve.userId === user.id) {
+            res.render('updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        } else {
+            res.status(404).send('Esa reserva no esta registrada para este usuario')
+        }
     } catch (e) {
         req.flash('viewCarErrorMessage', e);
         res.redirect(`${ROUTE}/car/list`);
