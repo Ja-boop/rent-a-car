@@ -6,14 +6,14 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const app = express();
-require('./passport/local-auth');
+require('./module/agency/passport/local-auth');
 
 const port = process.env.PORT || 8080;
 app.use('/public', express.static('public'));
 app.use(express.urlencoded({extended: true}));
 
 
-nunjucks.configure('src/views', {
+nunjucks.configure('src/module', {
     autoescape: true,
     express: app
 });
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/', require('./routes/index'));
+app.use('/', require('./module/agency/routes/index'));
 // Routes
 
 app.listen(port, () => {

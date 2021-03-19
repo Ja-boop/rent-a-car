@@ -38,13 +38,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 router.get('/', (req, res, next) => {
-    res.render('home.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    res.render('views/home.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
 });
 
 
 // user authentication
 router.get(`${ROUTE}/signup`, (req, res, next) => {
-    res.render('signup.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    res.render('views/signup.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
 });
 
 router.post(`${ROUTE}/signup`, passport.authenticate('local-signup', {
@@ -54,7 +54,7 @@ router.post(`${ROUTE}/signup`, passport.authenticate('local-signup', {
 }));
 
 router.get(`${ROUTE}/login`, (req, res, next) => {
-    res.render('login.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    res.render('views/login.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
 });
 
 router.post(`${ROUTE}/login`, passport.authenticate('local-login', {
@@ -66,7 +66,7 @@ router.post(`${ROUTE}/login`, passport.authenticate('local-login', {
 
 // profile
 router.get(`${ROUTE}/profile`, isAuthenticated, (req, res, next) => {
-    res.render('profile.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    res.render('views/profile.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
 });
 
 router.get(`${ROUTE}/logout`, (req, res, next) => {
@@ -78,11 +78,11 @@ router.get(`${ROUTE}/logout`, (req, res, next) => {
 // crud-cars
 router.get(`${ROUTE}/car/list`, async (req, res) => { // Lista de vehículos
     const car = await getAllCars();
-    res.render('list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+    res.render('views/list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
 router.get(`${ROUTE}/create/car`, (req, res) => { // Form para creación de vehículos
-    res.render('form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+    res.render('views/form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
 router.post(`${ROUTE}/create/car`, upload.single('image_url'), async (req, res) => {
@@ -125,7 +125,7 @@ router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
     }
     try {
         const car = await getCarById(id);
-        res.render('form.njk', { data: { car } });
+        res.render('views/form.njk', { data: { car } });
     } catch (e) {
         req.flash('viewCarErrorMessage', e);
         res.redirect(`${ROUTE}/car/list`);
@@ -135,7 +135,7 @@ router.get(`${ROUTE}/view/car/:id`, async (req, res) => {
 // rent-a-car
 router.get(`${ROUTE}/rent/car/list`, isAuthenticated, async (req, res) => { // list
     const car = await getAllCars();
-    res.render('rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+    res.render('views/rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
 });
 
 router.get(`${ROUTE}/rent/car/:id`, isAuthenticated, async (req, res) => { // form
@@ -147,7 +147,7 @@ router.get(`${ROUTE}/rent/car/:id`, isAuthenticated, async (req, res) => { // fo
         let currentDate = getCurrentDate();
         const car = await getCarById(id);
         console.log(car)
-        res.render('rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+        res.render('views/rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e) {
         console.log(e);
         req.flash('rentCarErrorMessage', `${e}`);
@@ -177,7 +177,7 @@ router.get(`${ROUTE}/reserve/list`, isAuthenticated, async (req, res) => {
     try {
         const user = req.user;
         const reserve = await getUserReserve(user.id);
-        res.render('userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+        res.render('views/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     } catch (e){
         console.log(e);
     }
@@ -207,7 +207,7 @@ router.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, async (req, res) => {
         const reserve = await getReserveById(id);
         
         if(reserve.userId === user.id) {
-            res.render('updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+            res.render('views/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
         } else {
             res.status(404).send('Esa reserva no esta registrada para este usuario')
         }
