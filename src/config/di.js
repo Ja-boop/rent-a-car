@@ -35,7 +35,7 @@ function addCommonDefinitions(container) {
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        AgencyController: object(AgencyController).construct(get('Passport', 'CarsRepository')),
+        AgencyController: object(AgencyController).construct(get('Passport', 'CarsService')),
         CarsService: object(CarsService).construct(get('CarsRepository')),
         CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter'))
     });
