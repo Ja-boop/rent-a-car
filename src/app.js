@@ -2,13 +2,16 @@ require('dotenv').config()
 const express = require('express');
 const nunjucks = require('nunjucks');
 const passport = require('passport');
-const session = require('express-session');
 const flash = require('connect-flash');
 
+const configureDependecyInjection = require('./config/di'); 
+const { init: initAgencyModule } = require('./module/agency/module');
+
 const app = express();
+const port = process.env.PORT || 8080;
+
 require('./module/agency/passport/local-auth');
 
-const port = process.env.PORT || 8080;
 app.use('/public', express.static('public'));
 app.use(express.urlencoded({extended: true}));
 
@@ -19,15 +22,8 @@ nunjucks.configure('src/module', {
 });
 
 // Middleware
-
-
-const ONE_WEEK_IN_SECONDS = 604800000;
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: ONE_WEEK_IN_SECONDS }
-}));
+const container = configureDependecyInjection(app);
+app.use(container.get('Session'));
 
 app.use(flash());
 app.use(passport.initialize());
@@ -42,9 +38,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
-app.use('/', require('./module/agency/routes/index'));
-// Routes
+initAgencyModule(app, container);
+
+const agencyController = container.get('AgencyController');
+app.get('/', agencyController.index.bind(agencyController));
 
 app.listen(port, () => {
     console.log(`Aplicacion escuchando en el puerto http://localhost:${port}/`);

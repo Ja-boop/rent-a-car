@@ -6,8 +6,7 @@ const multer = require('multer');
 const ROUTE = '/agency';
 const { fromDataToEntity } = require('../mapper/carMapper');
 const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
-const { saveCar, deleteCar, getCarById, getAllCars } = require('../sqlite/crudCarSqlite');
-const { rentCar, getUserReserve, deleteReserve, getReserveById } = require('../sqlite/rentSqlite');
+const { rentCar, getUserReserve, deleteReserve, getReserveById } = require('../repository/sqlite/rentSqlite');
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

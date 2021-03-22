@@ -1,6 +1,6 @@
 const Sqlite3Database = require('better-sqlite3');
 const db = new Sqlite3Database(process.env.RESERVE_DB_PATH, { verbose: console.log });
-const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
+const { fromDataToEntityReserve } = require('../../mapper/reserveMapper');
 
 async function rentCar (reserve) {
     let id;
