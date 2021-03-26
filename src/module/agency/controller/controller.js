@@ -7,16 +7,14 @@ module.exports = class AgencyController extends AbstractController {
     /**
      * @param {import('../service/carsService')} carsService
      * @param {import('../service/rentService')} rentService
-     * @param {import('../service/userService')} userService
      */
-    constructor(authStrategy, uploadMiddleware, carsService, rentService, userService) {
+    constructor(authStrategy, uploadMiddleware, carsService, rentService) {
         super();
         this.ROUTE_BASE = '/agency';
         this.authStrategy = authStrategy;
         this.uploadMiddleware = uploadMiddleware;
         this.carsService = carsService;
         this.rentService = rentService;
-        this.userService = userService;
     }
 
     /**
