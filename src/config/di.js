@@ -3,8 +3,9 @@ const { default: DIContainer, object, get, factory } = require('rsdi');
 const multer = require('multer');
 const session = require('express-session');
 const passport = require('passport');
+const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
-const { CarsRepository, CarsService, AgencyController } = require('../module/agency/module');   
+const { UserRepository, RentRepository, CarsRepository, UserService, CarsService, RentService, AgencyController } = require('../module/agency/module');   
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -19,8 +20,33 @@ function configureSession() {
     return session(sessionOptions);
 }
 
+function configureMulter() {
+    const storage = multer.diskStorage({
+        destination(req, file, cb) {
+            cb(null, process.env.CARIMAGE_UPLOAD_DIR);
+        },
+        filename(req, file, cb) {
+            cb(null, Date.now() + path.extname(file.originalname));
+        },
+    });
+
+    return multer({ storage });
+}
+
 function configureCarsMainDatabaseAdapter() {
     return new Sqlite3Database(process.env.CAR_DB_PATH, {
+        verbose: console.log,
+    });
+}
+
+function configureRentMainDatabaseAdapter() {
+    return new Sqlite3Database(process.env.RESERVE_DB_PATH, {
+        verbose: console.log,
+    });
+}
+
+function configureUserMainDatabaseAdapter() {
+    return new Sqlite3Database(process.env.USER_DB_PATH, {
         verbose: console.log,
     });
 }
@@ -29,15 +55,23 @@ function addCommonDefinitions(container) {
     container.addDefinitions({
         Session: factory(configureSession),
         Passport: passport,
+        Bcrypt: bcrypt,
+        Multer: factory(configureMulter),
         CarsMainDatabaseAdapter: factory(configureCarsMainDatabaseAdapter),
+        RentMainDatabaseAdapter: factory(configureRentMainDatabaseAdapter),
+        UserMainDatabaseAdapter: factory(configureUserMainDatabaseAdapter),
     });
 }
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        AgencyController: object(AgencyController).construct(get('Passport', 'CarsService')),
+        AgencyController: object(AgencyController).construct(get('Passport'), get('Multer'), get('CarsService'), get('RentService'), get('UserService')),
         CarsService: object(CarsService).construct(get('CarsRepository')),
-        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter'))
+        RentService: object(RentService).construct(get('RentRepository')),
+        UserService: object(UserService).construct(get('UserRepository')),
+        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter')),
+        RentRepository: object(RentRepository).construct(get('RentMainDatabaseAdapter')),
+        UserRepository: object(UserRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
     });
 }
 

@@ -1,5 +1,5 @@
 const { fromDataToEntity } = require('../../mapper/carMapper');
-const AbstractCarsRepository = require('../sqlite/carsRepositoryAbstract');
+const AbstractCarsRepository = require('./abstract/abstractCarsRepository');
 
 module.exports = class CarsRepository extends AbstractCarsRepository {
     /**
@@ -83,7 +83,7 @@ module.exports = class CarsRepository extends AbstractCarsRepository {
             id = result.lastInsertRowid;
         }
 
-        return getCarById(id);
+        return this.getCarById(id);
     };
 
     deleteCar(car) {
