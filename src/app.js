@@ -5,12 +5,12 @@ const passport = require('passport');
 const flash = require('connect-flash');
 
 const configureDependecyInjection = require('./config/di'); 
-const { init: initAgencyModule } = require('./module/agency/module');
+const { init: initAgencyModule } = require('./module/rents/module');
 
 const app = express();
 const port = process.env.PORT || 8080;
 
-require('./module/agency/passport/local-auth');
+require('./module/rents/passport/local-auth');
 
 app.use('/public', express.static('public'));
 app.use(express.urlencoded({extended: true}));

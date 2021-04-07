@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
-const { UserRepository, RentRepository, CarsRepository, UserService, CarsService, RentService, AgencyController } = require('../module/agency/module');   
+const { UserRepository, RentRepository, CarsRepository, UserService, CarsService, RentService, AgencyController } = require('../module/rents/module');   
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
