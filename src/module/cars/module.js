@@ -1,6 +1,6 @@
 const CarsController = require('./controller/carsController');
 const CarsService = require('./service/carsService');
-const CarsRepository = require('./repository/sqlite/crudCarSqlite');
+const CarsRepository = require('./repository/sqlite/carsRepository');
 
 function init(app, container) {
     const controller = container.get('CarsController');
@@ -9,6 +9,7 @@ function init(app, container) {
 
 module.exports = {
     init,
+    CarsController,
     CarsService,
     CarsRepository,
 };

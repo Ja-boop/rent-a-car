@@ -1,20 +1,18 @@
-const { fromDataToEntity } = require('../mapper/carMapper');
 const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
 const getCurrentDate = require('../service/functions')
 const AbstractController = require('../controller/abstractController');
 
 module.exports = class AgencyController extends AbstractController {
     /**
-     * @param {import('../service/carsService')} carsService
      * @param {import('../service/rentService')} rentService
+     * @param {import('../../cars/service/carsService')} carsService
      */
-    constructor(authStrategy, uploadMiddleware, carsService, rentService) {
+    constructor(authStrategy, rentService, carsService) {
         super();
         this.ROUTE_BASE = '/agency';
         this.authStrategy = authStrategy;
-        this.uploadMiddleware = uploadMiddleware;
-        this.carsService = carsService;
         this.rentService = rentService;
+        this.carsService = carsService;
     }
 
     /**
@@ -50,13 +48,6 @@ module.exports = class AgencyController extends AbstractController {
         // profile
         app.get(`${ROUTE}/profile`, this.profile.bind(this));
         app.get(`${ROUTE}/logout`, this.logout.bind(this));
-
-        // crud-cars
-        app.get(`${ROUTE}/car/list`, this.car_list.bind(this));
-        app.get(`${ROUTE}/create/car`, this.car_form.bind(this));
-        app.post(`${ROUTE}/create/car`, this.uploadMiddleware.single('image_url'), this.save_car.bind(this));
-        app.get(`${ROUTE}/delete/car/:id`, this.delete_car.bind(this));
-        app.get(`${ROUTE}/view/car/:id`, this.update_car.bind(this));
 
         // rent-a-car
         app.get(`${ROUTE}/rent/car/list`, isAuthenticated, this.rent_car_list.bind(this));
@@ -110,84 +101,6 @@ module.exports = class AgencyController extends AbstractController {
         req.logOut();
         res.redirect('/')
     };
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async car_list(req, res) {
-
-        const car = await this.carsService.getAllCars();
-
-        res.render('views/list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async car_form(req, res) {
-        res.render('views/form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async save_car(req, res) {
-        try {
-            const car = fromDataToEntity(req.body);
-            if (req.file) {
-                const { path } = req.file;
-                car.imageUrl = path;
-            }
-            const savedCar = await this.carsService.saveCar(car);
-            if (car.id) {
-                req.flash('updateCarMessage', `El vehículo con el ID: ${car.id} se actualizo correctamente`);
-            } else {
-                req.flash('newCarCreatedMessage', `Se creo el vehículo con ID: ${savedCar.id} (${savedCar.brand}, ${savedCar.model})`);
-            }
-            res.redirect(`${this.ROUTE_BASE}/car/list`);
-        } catch (e) {
-            console.log(e);
-            req.flash('carCreationErrorMessage', `${e}`);
-            res.redirect(`${this.ROUTE_BASE}/car/list`);
-        }
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async delete_car(req, res) {
-        try {
-            const { id } = req.params;
-            const car = await this.carsService.getCarById(id);
-            await this.carsService.deleteCar(car);
-            req.flash('carDeletedMessage', `El vehículo con ID: ${car.id} (${car.brand}, ${car.model}) fue eliminado correctamente`);
-        } catch (e) {
-            req.flash('carDeletedErrorMessage', e);
-        }
-        res.redirect(`${this.ROUTE_BASE}/car/list`)
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async update_car(req, res) {
-        const { id } = req.params;
-        if (!id) {
-            throw new Error(`No se encontro el vehículo con el ID: ${id}`)
-        }
-        try {
-            const car = await this.carsService.getCarById(id);
-            res.render('views/form.njk', { data: { car } });
-        } catch (e) {
-            req.flash('viewCarErrorMessage', e);
-            res.redirect(`${this.ROUTE_BASE}/car/list`);
-        }
-    }
 
     /**
      * @param {import('express').Request} req

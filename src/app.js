@@ -6,6 +6,7 @@ const flash = require('connect-flash');
 
 const configureDependecyInjection = require('./config/di'); 
 const { init: initAgencyModule } = require('./module/rents/module');
+const { init: initCarsModule } = require('./module/cars/module');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 initAgencyModule(app, container);
+initCarsModule(app, container);
 
 const agencyController = container.get('AgencyController');
 app.get('/', agencyController.index.bind(agencyController));

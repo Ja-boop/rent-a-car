@@ -1,14 +1,13 @@
 const { fromDataToEntity } = require('../mapper/carMapper');
 const AbstractController = require('./abstractController');
 
-module.exports = class AgencyController extends AbstractController {
+module.exports = class CarsController extends AbstractController {
     /**
      * @param {import('../service/carsService')} carsService
      */
-    constructor(authStrategy, uploadMiddleware, carsService) {
+    constructor(uploadMiddleware, carsService) {
         super();
         this.ROUTE_BASE = '/agency';
-        this.authStrategy = authStrategy;
         this.uploadMiddleware = uploadMiddleware;
         this.carsService = carsService;
     }
