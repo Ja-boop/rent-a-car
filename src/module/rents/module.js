@@ -1,15 +1,15 @@
-const AgencyController = require('./controller/controller');
-const RentService = require('./service/rentService');
-const RentRepository = require('./repository/sqlite/rentSqlite');
+const RentsController = require('./controller/rentsController');
+const RentService = require('./service/rentsService');
+const RentsRepository = require('./repository/sqlite/rentsRepository');
 
 function init(app, container) {
-    const controller = container.get('AgencyController');
+    const controller = container.get('RentsController');
     controller.configureRoutes(app);
 }
 
 module.exports = {
     init,
-    AgencyController,
+    RentsController,
     RentService,
-    RentRepository,
+    RentsRepository,
 };

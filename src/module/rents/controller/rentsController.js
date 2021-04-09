@@ -1,10 +1,10 @@
 const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
 const getCurrentDate = require('../service/functions')
-const AbstractController = require('../controller/abstractController');
+const AbstractController = require('./abstractController');
 
-module.exports = class AgencyController extends AbstractController {
+module.exports = class RentsController extends AbstractController {
     /**
-     * @param {import('../service/rentService')} rentService
+     * @param {import('../service/rentsService')} rentService
      * @param {import('../../cars/service/carsService')} carsService
      */
     constructor(rentService, carsService) {
