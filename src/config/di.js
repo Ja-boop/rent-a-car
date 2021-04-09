@@ -5,8 +5,9 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
-const { UserRepository, RentRepository, UserService, RentService, AgencyController } = require('../module/rents/module');   
+const { RentRepository, RentService, AgencyController } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController } = require('../module/cars/module');
+const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -67,14 +68,11 @@ function addCommonDefinitions(container) {
 function addModuleDefinitions(container) {
     container.addDefinitions({
         AgencyController: object(AgencyController).construct(
-            get('Passport'),
             get('RentService'),
-            get('CarsService')
+            get('CarsService'),
             ),
         RentService: object(RentService).construct(get('RentRepository')),
-        UserService: object(UserService).construct(get('UserRepository')),
         RentRepository: object(RentRepository).construct(get('RentMainDatabaseAdapter')),
-        UserRepository: object(UserRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
     });
 }
 
@@ -86,10 +84,19 @@ function addCarsModuleDefinitions(container) {
     });
 }
 
+function addUsersModuleDefinitions(container) {
+    container.addDefinitions({
+        UsersController: object(UsersController).construct(get('Passport')),
+        UserService: object(UsersService).construct(get('UserRepository')),
+        UserRepository: object(UsersRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
+    });
+}
+
 module.exports = function configureDI() {
     const container = new DIContainer();
     addCommonDefinitions(container);
     addModuleDefinitions(container);
     addCarsModuleDefinitions(container);
+    addUsersModuleDefinitions(container);
     return container;
 };

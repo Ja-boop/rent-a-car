@@ -7,11 +7,12 @@ const flash = require('connect-flash');
 const configureDependecyInjection = require('./config/di'); 
 const { init: initAgencyModule } = require('./module/rents/module');
 const { init: initCarsModule } = require('./module/cars/module');
+const { init: initUsersModule } = require('./module/users/module');
 
 const app = express();
 const port = process.env.PORT || 8080;
 
-require('./module/rents/passport/local-auth');
+require('./module/users/passport/local-auth');
 
 app.use('/public', express.static('public'));
 app.use(express.urlencoded({extended: true}));
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 
 initAgencyModule(app, container);
 initCarsModule(app, container);
+initUsersModule(app, container);
 
 const agencyController = container.get('AgencyController');
 app.get('/', agencyController.index.bind(agencyController));

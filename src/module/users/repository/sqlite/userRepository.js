@@ -2,7 +2,7 @@
 //const saltRounds = 10;
 const AbstractUserRepository = require('../sqlite/abstract/abstractUserRepository');
 
-module.exports = class UserRepository extends AbstractUserRepository {
+module.exports = class UsersRepository extends AbstractUserRepository {
     /**
      * @param {import('better-sqlite3').Database} databaseAdapter 
      */
