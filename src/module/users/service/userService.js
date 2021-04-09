@@ -4,7 +4,7 @@
 
 const User = require('../entity/user');
 
-module.exports = class UserService {
+module.exports = class UsersService {
     /**
      * @param {AbstractUserRepository} userRepository
      */

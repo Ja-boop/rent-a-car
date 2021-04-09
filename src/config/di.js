@@ -5,7 +5,9 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
-const { UserRepository, RentRepository, CarsRepository, UserService, CarsService, RentService, AgencyController } = require('../module/agency/module');   
+const { RentRepository, RentService, AgencyController } = require('../module/rents/module');   
+const { CarsRepository, CarsService, CarsController } = require('../module/cars/module');
+const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -65,13 +67,28 @@ function addCommonDefinitions(container) {
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        AgencyController: object(AgencyController).construct(get('Passport'), get('Multer'), get('CarsService'), get('RentService'), get('UserService')),
-        CarsService: object(CarsService).construct(get('CarsRepository')),
+        AgencyController: object(AgencyController).construct(
+            get('RentService'),
+            get('CarsService'),
+            ),
         RentService: object(RentService).construct(get('RentRepository')),
-        UserService: object(UserService).construct(get('UserRepository')),
-        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter')),
         RentRepository: object(RentRepository).construct(get('RentMainDatabaseAdapter')),
-        UserRepository: object(UserRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
+    });
+}
+
+function addCarsModuleDefinitions(container) {
+    container.addDefinitions({
+        CarsController: object(CarsController).construct(get('Multer'), get('CarsService')),
+        CarsService: object(CarsService).construct(get('CarsRepository')),
+        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter')),
+    });
+}
+
+function addUsersModuleDefinitions(container) {
+    container.addDefinitions({
+        UsersController: object(UsersController).construct(get('Passport')),
+        UserService: object(UsersService).construct(get('UserRepository')),
+        UserRepository: object(UsersRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
     });
 }
 
@@ -79,5 +96,7 @@ module.exports = function configureDI() {
     const container = new DIContainer();
     addCommonDefinitions(container);
     addModuleDefinitions(container);
+    addCarsModuleDefinitions(container);
+    addUsersModuleDefinitions(container);
     return container;
 };
