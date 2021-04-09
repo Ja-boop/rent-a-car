@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
-const { RentRepository, RentService, AgencyController } = require('../module/rents/module');   
+const { RentsRepository, RentsService, RentsController } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController } = require('../module/cars/module');
 const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
 
@@ -67,12 +67,12 @@ function addCommonDefinitions(container) {
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        AgencyController: object(AgencyController).construct(
+        RentsController: object(RentsController).construct(
             get('RentService'),
             get('CarsService'),
             ),
-        RentService: object(RentService).construct(get('RentRepository')),
-        RentRepository: object(RentRepository).construct(get('RentMainDatabaseAdapter')),
+        RentService: object(RentsService).construct(get('RentRepository')),
+        RentRepository: object(RentsRepository).construct(get('RentMainDatabaseAdapter')),
     });
 }
 

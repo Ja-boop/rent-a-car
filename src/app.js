@@ -44,8 +44,8 @@ initRentsModule(app, container);
 initCarsModule(app, container);
 initUsersModule(app, container);
 
-const agencyController = container.get('AgencyController');
-app.get('/', agencyController.index.bind(agencyController));
+const rentsController = container.get('RentsController');
+app.get('/', rentsController.index.bind(rentsController));
 
 app.listen(port, () => {
     console.log(`Aplicacion escuchando en el puerto http://localhost:${port}/`);
