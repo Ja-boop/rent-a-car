@@ -1,6 +1,7 @@
 const RentsController = require('./controller/rentsController');
 const RentsService = require('./service/rentsService');
-const RentsRepository = require('./repository/sqlite/rentsRepository');
+const RentsRepository = require('./repository/orm/rentsRepository');
+const RentModel = require('./model/rentModel');
 
 function init(app, container) {
     const controller = container.get('RentsController');
@@ -12,4 +13,5 @@ module.exports = {
     RentsController,
     RentsService,
     RentsRepository,
+    RentModel,
 };

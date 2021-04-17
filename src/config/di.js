@@ -6,7 +6,7 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
 const { Sequelize } = require('sequelize');
-const { RentsRepository, RentsService, RentsController } = require('../module/rents/module');   
+const { RentsRepository, RentsService, RentsController, RentModel } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
 const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
 
@@ -51,10 +51,18 @@ function configureCarModel(container) {
 }
 
 
-function configureRentMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.RESERVE_DB_PATH, {
-        verbose: console.log,
+function configureRentMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.RESERVE_DB_PATH,
     });
+
+    return sequelize;
+}
+
+function configureRentModel(container) {
+    RentModel.setup(container.get('RentsSequelize'));
+    return RentModel;
 }
 
 function configureUserMainDatabaseAdapter() {
@@ -65,12 +73,12 @@ function configureUserMainDatabaseAdapter() {
 
 function addCommonDefinitions(container) {
     container.addDefinitions({
-        CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
         Session: factory(configureSession),
         Passport: passport,
         Bcrypt: bcrypt,
         Multer: factory(configureMulter),
-        RentMainDatabaseAdapter: factory(configureRentMainDatabaseAdapter),
+        CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
+        RentsSequelize: factory(configureRentMainDatabaseAdapterORM),
         UserMainDatabaseAdapter: factory(configureUserMainDatabaseAdapter),
     });
 }
@@ -82,7 +90,8 @@ function addModuleDefinitions(container) {
             get('CarsService'),
             ),
         RentService: object(RentsService).construct(get('RentRepository')),
-        RentRepository: object(RentsRepository).construct(get('RentMainDatabaseAdapter')),
+        RentRepository: object(RentsRepository).construct(get('RentModel')),
+        RentModel: factory(configureRentModel),
     });
 }
 

@@ -33,7 +33,6 @@ function fromDataToEntity({
  * @returns {import('../../entity/car')}
  */
 function fromModelToEntity(model) {
-    
     return new Car(model.toJSON());
 }
 

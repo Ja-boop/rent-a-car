@@ -1,12 +1,12 @@
 const { Sequelize, Model, DataTypes, } = require('sequelize')
 
-module.exports = class CarModel extends Model {
+module.exports = class RentModel extends Model {
     /**
      * @param {import('sequelize').Sequelize} sequelizeInstance
-     * @returns {typeof CarModel}
+     * @returns {typeof RentModel}
     */
     static setup(sequelizeInstance) {
-        CarModel.init(
+        RentModel.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -15,38 +15,23 @@ module.exports = class CarModel extends Model {
                     autoIncrement: true,
                     unique: true,
                 },
-                brand: {
-                    type: DataTypes.STRING,
-                    allowNull: false,
-                },
-                model: {
-                    type: DataTypes.STRING,
-                    allowNull: false,
-                },
-                imageUrl: {
-                    type: DataTypes.STRING,
-                    allowNull: false,
-                },
-                yearManufactured: {
+                userId: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },
-                kms: {
+                carId: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },
-                color: {
+                carImage: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                airConditioner: {
-                    type: DataTypes.BOOLEAN,
-                },
-                passengers: {
+                takeDay: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                transmission: {
+                returnDay: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
@@ -65,11 +50,11 @@ module.exports = class CarModel extends Model {
             },
             {
                 sequelize: sequelizeInstance,
-                modelName: 'cars',
+                modelName: 'reserves',
                 timestamps: false,
             }   
         );
 
-        return CarModel;
+        return RentModel;
     }
 }
