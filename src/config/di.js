@@ -5,8 +5,9 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const Sqlite3Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const { RentsRepository, RentsService, RentsController } = require('../module/rents/module');   
-const { CarsRepository, CarsService, CarsController } = require('../module/cars/module');
+const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
 const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
 
 function configureSession() {
@@ -35,11 +36,20 @@ function configureMulter() {
     return multer({ storage });
 }
 
-function configureCarsMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.CAR_DB_PATH, {
-        verbose: console.log,
+function configureCarsMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.CAR_DB_PATH,
     });
+
+    return sequelize;
 }
+
+function configureCarModel(container) {
+    CarModel.setup(container.get('CarsSequelize'));
+    return CarModel;
+}
+
 
 function configureRentMainDatabaseAdapter() {
     return new Sqlite3Database(process.env.RESERVE_DB_PATH, {
@@ -55,11 +65,11 @@ function configureUserMainDatabaseAdapter() {
 
 function addCommonDefinitions(container) {
     container.addDefinitions({
+        CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
         Session: factory(configureSession),
         Passport: passport,
         Bcrypt: bcrypt,
         Multer: factory(configureMulter),
-        CarsMainDatabaseAdapter: factory(configureCarsMainDatabaseAdapter),
         RentMainDatabaseAdapter: factory(configureRentMainDatabaseAdapter),
         UserMainDatabaseAdapter: factory(configureUserMainDatabaseAdapter),
     });
@@ -80,7 +90,8 @@ function addCarsModuleDefinitions(container) {
     container.addDefinitions({
         CarsController: object(CarsController).construct(get('Multer'), get('CarsService')),
         CarsService: object(CarsService).construct(get('CarsRepository')),
-        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter')),
+        CarsRepository: object(CarsRepository).construct(get('CarModel')),
+        CarModel: factory(configureCarModel),
     });
 }
 
