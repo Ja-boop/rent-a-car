@@ -38,7 +38,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async signup(req, res) {
-        res.render('views/signup.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+        res.render('users/view/signup.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     }
 
     /**
@@ -46,7 +46,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async login(req, res) {
-        res.render('views/login.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        res.render('users/view/login.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -54,7 +54,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async profile(req, res) {
-        res.render('views/profile.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+        res.render('users/view/profile.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     };
 
     /**

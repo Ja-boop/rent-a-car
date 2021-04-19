@@ -51,7 +51,7 @@ module.exports = class RentsController extends AbstractController {
 
     async rent_car_list(req, res) {
         const car = await this.carsService.getAllCars();
-        res.render('views/rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        res.render('rents/view/rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -66,7 +66,7 @@ module.exports = class RentsController extends AbstractController {
         try {
             let currentDate = getCurrentDate();
             const car = await this.carsService.getCarById(id);
-            res.render('views/rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+            res.render('rents/view/rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
             req.flash('rentCarErrorMessage', `${e}`);
@@ -103,7 +103,7 @@ module.exports = class RentsController extends AbstractController {
         try {
             const user = req.user;
             const reserve = await this.rentService.getUserReserve(user.id);
-            res.render('views/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+            res.render('rents/view/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
         }
@@ -139,7 +139,7 @@ module.exports = class RentsController extends AbstractController {
             const reserve = await this.rentService.getReserveById(id);
 
             if (reserve.userId === user.id) {
-                res.render('views/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+                res.render('rents/view/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
             } else {
                 res.status(404).send('Esa reserva no esta registrada para este usuario')
             }

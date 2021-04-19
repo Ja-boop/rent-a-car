@@ -35,7 +35,7 @@ module.exports = class CarsController extends AbstractController {
 
         const car = await this.carsService.getAllCars();
 
-        res.render('views/list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        res.render('cars/view/list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -43,7 +43,7 @@ module.exports = class CarsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async car_form(req, res) {
-        res.render('views/form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
+        res.render('cars/view/form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -99,7 +99,7 @@ module.exports = class CarsController extends AbstractController {
         }
         try {
             const car = await this.carsService.getCarById(id);
-            res.render('views/form.njk', { data: { car } });
+            res.render('cars/view/form.njk', { data: { car } });
         } catch (e) {
             console.log(e);
             req.flash('viewCarErrorMessage', e);

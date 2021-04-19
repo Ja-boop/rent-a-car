@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% include "./layout/head.njk" %}
+    {% include "../../views/layout/head.njk" %}
   </head>
   <body>
     {% block contenido %}
 
       {# NAVBAR #}
-      {% include "./layout/navbar.njk" %}
+      {% include "../../views/layout/navbar.njk" %}
       {# NAVBAR #}
 
       {% if identEmailMessage|length %}
