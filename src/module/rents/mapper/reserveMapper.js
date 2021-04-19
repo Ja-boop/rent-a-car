@@ -20,6 +20,15 @@ function fromDataToEntityReserve({
     });
 }
 
+/**
+ * @param {import('../model/rentModel')} model
+ * @returns {import('../../entity/rent')}
+ */
+function fromModelToEntity(model) {
+    return new Reserve(model.toJSON());
+}
+
 module.exports = {
     fromDataToEntityReserve,
+    fromModelToEntity,
 };

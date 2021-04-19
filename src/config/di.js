@@ -4,10 +4,10 @@ const multer = require('multer');
 const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const Sqlite3Database = require('better-sqlite3');
-const { RentRepository, RentService, AgencyController } = require('../module/rents/module');   
-const { CarsRepository, CarsService, CarsController } = require('../module/cars/module');
-const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
+const { Sequelize } = require('sequelize');
+const { RentsRepository, RentsService, RentsController, RentModel } = require('../module/rents/module');   
+const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
+const { UsersRepository, UsersService, UsersController, UserModel } = require('../module/users/module');
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -35,22 +35,47 @@ function configureMulter() {
     return multer({ storage });
 }
 
-function configureCarsMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.CAR_DB_PATH, {
-        verbose: console.log,
+function configureCarsMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.CAR_DB_PATH,
     });
+
+    return sequelize;
 }
 
-function configureRentMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.RESERVE_DB_PATH, {
-        verbose: console.log,
-    });
+function configureCarModel(container) {
+    CarModel.setup(container.get('CarsSequelize'));
+    return CarModel;
 }
 
-function configureUserMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.USER_DB_PATH, {
-        verbose: console.log,
+
+function configureRentMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.RESERVE_DB_PATH,
     });
+
+    return sequelize;
+}
+
+function configureRentModel(container) {
+    RentModel.setup(container.get('RentsSequelize'));
+    return RentModel;
+}
+
+function configureUserMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.USER_DB_PATH,
+    });
+
+    return sequelize;
+}
+
+function configureUserModel(container) {
+    UserModel.setup(container.get('UsersSequelize'));
+    return UserModel;
 }
 
 function addCommonDefinitions(container) {
@@ -59,20 +84,21 @@ function addCommonDefinitions(container) {
         Passport: passport,
         Bcrypt: bcrypt,
         Multer: factory(configureMulter),
-        CarsMainDatabaseAdapter: factory(configureCarsMainDatabaseAdapter),
-        RentMainDatabaseAdapter: factory(configureRentMainDatabaseAdapter),
-        UserMainDatabaseAdapter: factory(configureUserMainDatabaseAdapter),
+        CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
+        RentsSequelize: factory(configureRentMainDatabaseAdapterORM),
+        UsersSequelize: factory(configureUserMainDatabaseAdapterORM),
     });
 }
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        AgencyController: object(AgencyController).construct(
+        RentsController: object(RentsController).construct(
             get('RentService'),
             get('CarsService'),
             ),
-        RentService: object(RentService).construct(get('RentRepository')),
-        RentRepository: object(RentRepository).construct(get('RentMainDatabaseAdapter')),
+        RentService: object(RentsService).construct(get('RentRepository')),
+        RentRepository: object(RentsRepository).construct(get('RentModel')),
+        RentModel: factory(configureRentModel),
     });
 }
 
@@ -80,7 +106,8 @@ function addCarsModuleDefinitions(container) {
     container.addDefinitions({
         CarsController: object(CarsController).construct(get('Multer'), get('CarsService')),
         CarsService: object(CarsService).construct(get('CarsRepository')),
-        CarsRepository: object(CarsRepository).construct(get('CarsMainDatabaseAdapter')),
+        CarsRepository: object(CarsRepository).construct(get('CarModel')),
+        CarModel: factory(configureCarModel),
     });
 }
 
@@ -88,7 +115,8 @@ function addUsersModuleDefinitions(container) {
     container.addDefinitions({
         UsersController: object(UsersController).construct(get('Passport')),
         UserService: object(UsersService).construct(get('UserRepository')),
-        UserRepository: object(UsersRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
+        UserRepository: object(UsersRepository).construct(get('UserModel'), get('Bcrypt')),
+        UserModel: factory(configureUserModel),
     });
 }
 

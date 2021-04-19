@@ -1,6 +1,7 @@
 const UsersController = require('./controller/userController');
 const UsersService = require('./service/userService');
-const UsersRepository = require('./repository/sqlite/userRepository');
+const UsersRepository = require('./repository/orm/usersRepository');
+const UserModel = require('./model/userModel');
 
 function init(app, container) {
     const controller = container.get('UsersController');
@@ -12,4 +13,5 @@ module.exports = {
     UsersController,
     UsersService,
     UsersRepository,
+    UserModel,
 };

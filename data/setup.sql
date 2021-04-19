@@ -1,3 +1,4 @@
+-- This file isn't useful anymore, for the implementation of the orm "sequelize"
 -- SQLite
 DROP TABLE IF EXISTS lista_vehiculos;
 CREATE TABLE lista_vehiculos (

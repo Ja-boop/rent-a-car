@@ -20,7 +20,7 @@ module.exports = class CarsController extends AbstractController {
 
         app.get(`${ROUTE}/car/list`, this.car_list.bind(this));
         app.get(`${ROUTE}/create/car`, this.car_form.bind(this));
-        app.post(`${ROUTE}/create/car`, this.uploadMiddleware.single('image_url'), this.save_car.bind(this));
+        app.post(`${ROUTE}/create/car`, this.uploadMiddleware.single('image-url'), this.save_car.bind(this));
         app.get(`${ROUTE}/delete/car/:id`, this.delete_car.bind(this));
         app.get(`${ROUTE}/view/car/:id`, this.update_car.bind(this));
 
@@ -82,6 +82,7 @@ module.exports = class CarsController extends AbstractController {
             await this.carsService.deleteCar(car);
             req.flash('carDeletedMessage', `El vehículo con ID: ${car.id} (${car.brand}, ${car.model}) fue eliminado correctamente`);
         } catch (e) {
+            console.log(e);
             req.flash('carDeletedErrorMessage', e);
         }
         res.redirect(`${this.ROUTE_BASE}/car/list`)
@@ -100,6 +101,7 @@ module.exports = class CarsController extends AbstractController {
             const car = await this.carsService.getCarById(id);
             res.render('views/form.njk', { data: { car } });
         } catch (e) {
+            console.log(e);
             req.flash('viewCarErrorMessage', e);
             res.redirect(`${this.ROUTE_BASE}/car/list`);
         }

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --inspect -e js,njk,css ./src/app.js"
+    "dev": "nodemon --inspect -e js,njk,css ./src/app.js",
+    "schema:sync": "node src/cli/init.db.js"
   },
   "repository": {
     "type": "git",

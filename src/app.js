@@ -5,7 +5,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 
 const configureDependecyInjection = require('./config/di'); 
-const { init: initAgencyModule } = require('./module/rents/module');
+const { init: initRentsModule } = require('./module/rents/module');
 const { init: initCarsModule } = require('./module/cars/module');
 const { init: initUsersModule } = require('./module/users/module');
 
@@ -40,12 +40,12 @@ app.use((req, res, next) => {
     next();
 });
 
-initAgencyModule(app, container);
+initRentsModule(app, container);
 initCarsModule(app, container);
 initUsersModule(app, container);
 
-const agencyController = container.get('AgencyController');
-app.get('/', agencyController.index.bind(agencyController));
+const rentsController = container.get('RentsController');
+app.get('/', rentsController.index.bind(rentsController));
 
 app.listen(port, () => {
     console.log(`Aplicacion escuchando en el puerto http://localhost:${port}/`);
