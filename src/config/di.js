@@ -4,11 +4,10 @@ const multer = require('multer');
 const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const Sqlite3Database = require('better-sqlite3');
 const { Sequelize } = require('sequelize');
 const { RentsRepository, RentsService, RentsController, RentModel } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
-const { UsersRepository, UsersService, UsersController } = require('../module/users/module');
+const { UsersRepository, UsersService, UsersController, UserModel } = require('../module/users/module');
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -65,10 +64,18 @@ function configureRentModel(container) {
     return RentModel;
 }
 
-function configureUserMainDatabaseAdapter() {
-    return new Sqlite3Database(process.env.USER_DB_PATH, {
-        verbose: console.log,
+function configureUserMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.USER_DB_PATH,
     });
+
+    return sequelize;
+}
+
+function configureUserModel(container) {
+    UserModel.setup(container.get('UsersSequelize'));
+    return UserModel;
 }
 
 function addCommonDefinitions(container) {
@@ -79,7 +86,7 @@ function addCommonDefinitions(container) {
         Multer: factory(configureMulter),
         CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
         RentsSequelize: factory(configureRentMainDatabaseAdapterORM),
-        UserMainDatabaseAdapter: factory(configureUserMainDatabaseAdapter),
+        UsersSequelize: factory(configureUserMainDatabaseAdapterORM),
     });
 }
 
@@ -108,7 +115,8 @@ function addUsersModuleDefinitions(container) {
     container.addDefinitions({
         UsersController: object(UsersController).construct(get('Passport')),
         UserService: object(UsersService).construct(get('UserRepository')),
-        UserRepository: object(UsersRepository).construct(get('UserMainDatabaseAdapter'), get('Bcrypt')),
+        UserRepository: object(UsersRepository).construct(get('UserModel'), get('Bcrypt')),
+        UserModel: factory(configureUserModel),
     });
 }
 

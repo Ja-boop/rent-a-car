@@ -10,9 +10,12 @@ const container = configureDI(app);
  */
 const mainCarsDb = container.get('CarsSequelize');
 const mainRentsDb = container.get('RentsSequelize');
+const mainUsersDb = container.get('UsersSequelize');
 
 container.get('CarModel');
 container.get('RentModel');
+container.get('UserModel');
 
 mainCarsDb.sync();
 mainRentsDb.sync();
+mainUsersDb.sync();

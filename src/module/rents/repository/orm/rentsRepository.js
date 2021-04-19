@@ -37,7 +37,7 @@ module.exports = class rentsRepository extends AbstractRentRepository {
 
     /**
      * @param {Number} id
-     * @returns {Promise<import('../../entity/car')>}
+     * @returns {Promise<import('../../entity/rent')>}
      */
     async getUserReserve(id) {
         const reserves = await this.rentModel.findAll({
@@ -53,7 +53,7 @@ module.exports = class rentsRepository extends AbstractRentRepository {
 
     /**
      * @param {Number} id
-     * @returns {Promise<import('../../entity/car')>}
+     * @returns {Promise<import('../../entity/rent')>}
      */
     async getReserveById(id) {
         const rentModel = await this.rentModel.findOne({
