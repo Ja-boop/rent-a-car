@@ -11,22 +11,22 @@
         <div class="rent-options">
             <form action="/agency/rent/car/{{car.id}}" method="POST"
                 <input type="hidden"readonly/>
-                <input type="hidden" name="user_id" id="user_id" value="{{user.id}}"/>
+                <input type="hidden" name="user-id" id="user-id" value="{{user.id}}"/>
            
-                <input type="hidden" name="car_id" value={{car.id}} readonly/>
+                <input type="hidden" name="car-id" value={{car.id}} readonly/>
 
                 <h3 class="title is-5 title-block">Vehiculo</h3>
                 <div>
                     <img src="/{{car.imageUrl}}" width="256" height="256"/>
-                    <input type="hidden" name="car_image" value="{{car.imageUrl}}" readonly/>
+                    <input type="hidden" name="car-image" value="{{car.imageUrl}}" readonly/>
                 </div>
                 <h3 class="title is-5 title-block">Selecciona la fecha</h3>
 
                 <div>
                     <p>Fecha de salida</p>
-                    <input type="date" id="take-day" name="take_day" min={{ currentDate }} value={{ currentDate }}>
+                    <input type="date" id="take-day" name="take-day" min={{ currentDate }} value={{ currentDate }}>
                     <p>Fecha de devolución</p>
-                    <input type="date" id="return-day" name="return_day" min={{ currentDate }} value={{ currentDate }}>
+                    <input type="date" id="return-day" name="return-day" min={{ currentDate }} value={{ currentDate }}>
                     <button type="button" id="cost-calculator">Calcular Costo</button>
                     <h3 class="title is-5 title-block">Costo final</h3>
                     <p>Cost: </p>
