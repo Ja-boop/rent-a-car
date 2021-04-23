@@ -8,6 +8,7 @@ const { Sequelize } = require('sequelize');
 const { RentsRepository, RentsService, RentsController, RentModel } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
 const { UsersRepository, UsersService, UsersController, UserModel } = require('../module/users/module');
+const { ClientsRepository, ClientsService, ClientsController, ClientModel } = require('../module/clients/module');
 
 function configureSession() {
     const ONE_WEEK_IN_SECONDS = 604800000;
@@ -78,6 +79,20 @@ function configureUserModel(container) {
     return UserModel;
 }
 
+function configureClientsMainDatabaseAdapterORM() {
+    const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: process.env.CLIENT_DB_PATH,
+    });
+
+    return sequelize;
+} 
+
+function configureClientModel(container) {
+    UserModel.setup(container.get('ClientsSequelize'));
+    return ClientModel;
+}
+
 function addCommonDefinitions(container) {
     container.addDefinitions({
         Session: factory(configureSession),
@@ -87,6 +102,7 @@ function addCommonDefinitions(container) {
         CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
         RentsSequelize: factory(configureRentMainDatabaseAdapterORM),
         UsersSequelize: factory(configureUserMainDatabaseAdapterORM),
+        ClientsSequelize: factory(configureClientsMainDatabaseAdapterORM)
     });
 }
 
@@ -120,11 +136,21 @@ function addUsersModuleDefinitions(container) {
     });
 }
 
+function addClientsModuleDefinitions(container) {
+    container.addDefinitions({
+        ClientsController: object(ClientsController).construct(get('ClientsService')),
+        ClientsService: object(ClientsService).construct(get('ClientsRepository')),
+        ClientsRepository: object(ClientsRepository).construct(get('ClientModel')),
+        ClientModel: factory(configureClientModel),
+    })
+}
+
 module.exports = function configureDI() {
     const container = new DIContainer();
     addCommonDefinitions(container);
     addModuleDefinitions(container);
     addCarsModuleDefinitions(container);
     addUsersModuleDefinitions(container);
+    addClientsModuleDefinitions(container);
     return container;
 };
