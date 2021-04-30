@@ -2,11 +2,11 @@ const Reserve = require('../entity/reserve');
 
 function fromDataToEntityReserve({
     id,
-    user_id: userId,
-    car_id: carId,
-    car_image: carImage,
-    take_day: takeDay,
-    return_day: returnDay,
+    'user-id': userId,
+    'car-id': carId,
+    'car-image': carImage,
+    'take-day': takeDay,
+    'return-day': returnDay,
     cost,
 }) {
     return new Reserve({

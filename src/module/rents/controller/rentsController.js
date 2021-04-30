@@ -6,12 +6,14 @@ module.exports = class RentsController extends AbstractController {
     /**
      * @param {import('../service/rentsService')} rentService
      * @param {import('../../cars/service/carsService')} carsService
+     * @param {import('../../clients/service/clientsService')} clientsService
      */
-    constructor(rentService, carsService) {
+    constructor(rentService, carsService, clientsService) {
         super();
         this.ROUTE_BASE = '/agency';
         this.rentService = rentService;
         this.carsService = carsService;
+        this.clientsService = clientsService
     }
 
     /**
@@ -30,8 +32,8 @@ module.exports = class RentsController extends AbstractController {
         app.get(`${ROUTE}/`, this.index.bind(this));
 
         // rent-a-car
-        app.get(`${ROUTE}/rent/car/list`, isAuthenticated, this.rent_car_list.bind(this));
-        app.get(`${ROUTE}/rent/car/:id`, isAuthenticated, this.rent_form.bind(this));
+        app.get(`${ROUTE}/rent/car/list`, this.rent_car_list.bind(this));
+        app.get(`${ROUTE}/rent/car/:id`, this.rent_form.bind(this));
         app.post(`${ROUTE}/rent/car/:id`, this.save_rent.bind(this));
 
         // user-reserves
@@ -66,7 +68,8 @@ module.exports = class RentsController extends AbstractController {
         try {
             let currentDate = getCurrentDate();
             const car = await this.carsService.getCarById(id);
-            res.render('rents/view/rentCar.njk', { currentDate, data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+            const client = await this.clientsService.getAllClients();
+            res.render('rents/view/rentCar.njk', { currentDate, data: { car, client }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
             req.flash('rentCarErrorMessage', `${e}`);
@@ -80,6 +83,7 @@ module.exports = class RentsController extends AbstractController {
      */
     async save_rent(req, res) {
         try {
+            console.log(req.body)
             const reserve = fromDataToEntityReserve(req.body);
             const savedReserve = await this.rentService.rentCar(reserve);
             if (savedReserve.id) {
@@ -168,6 +172,6 @@ module.exports = class RentsController extends AbstractController {
             req.flash('reserveCreationErrorMessage', `${e}`);
             res.redirect(`${this.ROUTE_BASE}/car/list`);
         }
-    }    
+    }
 }
 

@@ -1,7 +1,7 @@
 const AbstractRentRepository = require('../sqlite/abstract/abstractRentRepository');
 const { fromModelToEntity } = require('../../mapper/reserveMapper');
 
-module.exports = class rentsRepository extends AbstractRentRepository {
+module.exports = class RentsRepository extends AbstractRentRepository {
     /**
      * @param {typeof import('../../model/rentModel')} rentModel
      */
@@ -21,7 +21,7 @@ module.exports = class rentsRepository extends AbstractRentRepository {
         rentModel = this.rentModel.build(reserve, buildOptions);
         rentModel = await rentModel.save();
 
-        return fromModelToEntity(reserve);
+        return fromModelToEntity(rentModel);
     }
 
     /**

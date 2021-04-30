@@ -21,7 +21,7 @@ module.exports = class CarsRepository extends AbstractCarsRepository {
         carModel = this.carModel.build(car, buildOptions);
         carModel = await carModel.save();
 
-        return fromModelToEntity(car);
+        return fromModelToEntity(carModel);
     }
 
     /**

@@ -8,6 +8,7 @@ const configureDependecyInjection = require('./config/di');
 const { init: initRentsModule } = require('./module/rents/module');
 const { init: initCarsModule } = require('./module/cars/module');
 const { init: initUsersModule } = require('./module/users/module');
+const { init: initClientsModule } = require('./module/clients/module');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 initRentsModule(app, container);
 initCarsModule(app, container);
 initUsersModule(app, container);
+initClientsModule(app, container);
 
 const rentsController = container.get('RentsController');
 app.get('/', rentsController.index.bind(rentsController));
