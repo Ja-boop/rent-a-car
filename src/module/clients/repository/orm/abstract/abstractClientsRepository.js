@@ -25,4 +25,6 @@ module.exports = class AbstractClientsRepository {
      * @returns {import('../entity/car')}
      */
     async getClientById(id) {}
+
+    async getAllClients() {}
 };

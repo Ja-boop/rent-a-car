@@ -89,7 +89,7 @@ function configureClientsMainDatabaseAdapterORM() {
 } 
 
 function configureClientModel(container) {
-    UserModel.setup(container.get('ClientsSequelize'));
+    ClientModel.setup(container.get('ClientsSequelize'));
     return ClientModel;
 }
 
@@ -111,6 +111,7 @@ function addModuleDefinitions(container) {
         RentsController: object(RentsController).construct(
             get('RentService'),
             get('CarsService'),
+            get('ClientsService'),
             ),
         RentService: object(RentsService).construct(get('RentRepository')),
         RentRepository: object(RentsRepository).construct(get('RentModel')),

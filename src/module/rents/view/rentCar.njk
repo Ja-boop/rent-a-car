@@ -9,42 +9,102 @@
 
     <div class="container">
         <div class="rent-options">
-            <form action="/agency/rent/car/{{car.id}}" method="POST"
-                <input type="hidden"readonly/>
-                <input type="hidden" name="user-id" id="user-id" value="{{user.id}}"/>
-           
+            <form action="/agency/rent/car/{{car.id}}" method="POST">
                 <input type="hidden" name="car-id" value={{car.id}} readonly/>
 
-                <h3 class="title is-5 title-block">Vehiculo</h3>
-                <div>
-                    <img src="/{{car.imageUrl}}" width="256" height="256"/>
-                    <input type="hidden" name="car-image" value="{{car.imageUrl}}" readonly/>
-                </div>
-                <h3 class="title is-5 title-block">Selecciona la fecha</h3>
+                <div class="content">
+                    <div class"search-client">
+                        <h3>Search Client</h3>
+                        
+                        <div class="contain">
+                            <div class="container">
+                                <div class="clients"> 
+                                <table class="table is-fullwidth">
 
-                <div>
-                    <p>Fecha de salida</p>
-                    <input type="date" id="take-day" name="take-day" min={{ currentDate }} value={{ currentDate }}>
-                    <p>Fecha de devolución</p>
-                    <input type="date" id="return-day" name="return-day" min={{ currentDate }} value={{ currentDate }}>
-                    <button type="button" id="cost-calculator">Calcular Costo</button>
-                    <h3 class="title is-5 title-block">Costo final</h3>
-                    <p>Cost: </p>
-                    <input type="text" id="rent-cost"  name="cost" value={{car.cost}} readonly>
+                                <thead>
+                                <tr>
+                                <th><abbr title="Select">Select</abbr></th>
+                                <th><abbr title="Id">Id</abbr></th>
+                                <th><abbr title="Name">Name</abbr></th>
+                                <th><abbr title="LastName">Last Name</abbr></th>
+                                <th><abbr title="IdentifierType">Identifier Type</abbr></th>
+                                <th><abbr title="Identifier Number">Identifier Number</abbr></th>
+                                <th><abbr title="Nationality">Nationality</abbr></th>
+                                <th><abbr title="Address">Address</abbr></th>
+                                <th><abbr title="Phone">Phone</abbr></th>
+                                <th><abbr title="Email">Email</abbr></th>
+                                <th><abbr title="Birthday">Birthday</abbr></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {%for client in data.client%}
+                                    <tr>    
+                                    <th>
+                                        <div class="control">
+                                        <label class="radio">
+                                            <input type="radio" name="user-id" value={{client.id}}>
+                                        </label>
+                                    </div>
+                                    </th>                               
+                                    <td>{{client.id}}</td>
+                                    <td>{{client.name}}</td>
+                                    <td>{{client.lastName}}</td>
+                                    <td>{{client.identifierType}}</td>
+                                    <td>{{client.identifierNumber}}</td>
+                                    <td>{{client.nationality}}</td>
+                                    <td>{{client.address}}</td>
+                                    <td>{{client.phone}}</td>
+                                    <td>{{client.email}}</td>
+                                    <td>{{client.birthday}}</td>
+                                    <td>
+                                    </td>
+                                    </tr>
+                                    {%endfor%}
+                                </tbody>
+
+                                </table>
+                                </div>
+                            </div>
+
+
+                            <h3 class="title is-5 title-block">Vehiculo</h3>
+                            <div>
+                                <img src="/{{car.imageUrl}}" width="256" height="256"/>
+                                <input type="hidden" name="car-image" value="{{car.imageUrl}}" readonly/>
+                            </div>
+                            <h3 class="title is-5 title-block">Selecciona la fecha</h3>
+
+                            <div>
+                                <p>Fecha de salida</p>
+                                <input type="date" id="take-day" name="take-day" min={{ currentDate }} value={{ currentDate }}>
+                                <p>Fecha de devolución</p>
+                                <input type="date" id="return-day" name="return-day" min={{ currentDate }} value={{ currentDate }}>
+                                <button type="button" id="cost-calculator">Calcular Costo</button>
+                                <h3 class="title is-5 title-block">Costo final</h3>
+                                <p>Cost: </p>
+                                <input type="text" id="rent-cost"  name="cost" value={{car.cost}} readonly>
+                            </div>
+
+                            <div class="confirmation-options">
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <button class="button is-link">Submit</button>
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-link is-light">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>      
                 </div>
 
-                <div class="confirmation-options">
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button class="button is-link">Submit</button>
-                        </div>
-                        <div class="control">
-                            <button class="button is-link is-light">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+                
             </form>
         </div>
     </div>
     <script src="/public/scripts/costCalculatorButton.js"></script>
+    <script src="/public/scripts/clientFinder.js"></script>
 {% endblock %}

@@ -1,44 +1,91 @@
 {% block navbar %}
 
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io" target="_blank">
-      <img src={{ logo }} width="112" height="28">
-    </a>
+  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://bulma.io" target="_blank">
+        <img src={{ logo }} width="112" height="28">
+      </a>
 
-    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a href="http://localhost:8080" class="navbar-item">
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a href="http://localhost:8080" class="navbar-item">
         Home
       </a>
 
-      <a href="http://localhost:8080/agency/create/client" class="navbar-item">
-        Add Client
-      </a>
+        {# CLIENTS DROPDOWN #}
 
-      {% if user %}
-      
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+          Clients
+        </a>
 
-      <a href="http://localhost:8080/agency/reserve/list" class="navbar-item">
-        Mis vehículos
-      </a>
-      
+          <div class="navbar-dropdown">
+            <a href="http://localhost:8080/agency/create/client" class="navbar-item">
+            Add Client
+          </a>
+            <hr class="navbar-divider">
+            <a class="navbar-item">
+            Delete Client
+          </a>
+            <hr class="navbar-divider">
+            <a href="http://localhost:8080/agency/create/car" class="navbar-item">
+            Clients List
+          </a>
+          </div>
+        </div>
 
-      <a href="http://localhost:8080/agency/rent/car/list" class="navbar-item">
-        Reservar Vehículo
-      </a>
+        {# CLIENTS DROPDOWN #}
 
-      <a href="http://localhost:8080/agency/staff/reserve/cancel" class="navbar-item">
-        Cancelar Reserva
-      </a>
-      {% endif %}      
+        {# CARS DROPDOWN #}
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+          Cars
+          </a>
+
+          <div class="navbar-dropdown">
+          <a href="http://localhost:8080/agency/create/car" class="navbar-item">
+          Add Car
+          </a>
+          <hr class="navbar-divider">
+          <a href="http://localhost:8080/agency/car/list" class="navbar-item">
+          Cars List
+          </a>
+        </div>
+      </div>
+
+      {# CARS DROPDOWN #}
+
+      {# RESERVES DROPDOWN #}
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Rents
+        </a>
+
+        <div class="navbar-dropdown">
+          <a href="http://localhost:8080/agency/rent/car/list" class="navbar-item">
+            Add reserve
+          </a>
+          <hr class="navbar-divider">
+          <a href="http://localhost:8080/agency/reserve/list" class="navbar-item"> 
+            List of reserves
+          </a>
+          <hr class="navbar-divider">
+          <a href="http://localhost:8080/agency/staff/reserve/cancel" class="navbar-item">
+            Cancel reserve
+          </a>
+        </div>
+      </div>
+
+      {# RESERVES DROPDOWN #}
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
@@ -53,52 +100,45 @@
           <a class="navbar-item">
             Report an issue
           </a>
-          <hr class="navbar-divider">
-          <a href="http://localhost:8080/agency/create/car" class="navbar-item">
-            Crear Vehículo
-          </a>
-          <hr class="navbar-divider">
-          <a href="http://localhost:8080/agency/car/list" class="navbar-item">
-            Lista de vehículos
-          </a>
         </div>
       </div>
+
     </div>
 
     {% if user %}
 
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="welcome-message">
-          <h1 class="title-strong-color white is-5">¡Bienvenido, {{user.email}}!</div>
-        </div>
-        <div class="buttons">
-          <a href="http://localhost:8080/agency/profile" class="button is-dark">
-            <strong>Perfil</strong>
-          </a>
-          <a href="http://localhost:8080/agency/logout" class="button is-dark">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="welcome-message">
+            <h1 class="title-strong-color white is-5">¡Bienvenido, {{user.email}}!</div>
+          </div>
+          <div class="buttons">
+            <a href="http://localhost:8080/agency/profile" class="button is-dark">
+              <strong>Perfil</strong>
+            </a>
+            <a href="http://localhost:8080/agency/logout" class="button is-dark">
             Salir
           </a>
+          </div>
         </div>
       </div>
-    </div>
 
-    {%else%}
-        <div class="navbar-end">
+      {%else%}
+      <div class="navbar-end">
         <div class="navbar-item">
-        <div class="buttons">
-          <a href="http://localhost:8080/agency/signup" class="button is-dark">
-            <strong>Registrarse</strong>
-          </a>
-          <a href="http://localhost:8080/agency/login" class="button is-dark">
+          <div class="buttons">
+            <a href="http://localhost:8080/agency/signup" class="button is-dark">
+              <strong>Registrarse</strong>
+            </a>
+            <a href="http://localhost:8080/agency/login" class="button is-dark">
             Iniciar Sesión
           </a>
+          </div>
         </div>
       </div>
-    </div>
     {% endif %}
-    
+
   </div>
-</nav>     
+</nav>
 
 {% endblock %}

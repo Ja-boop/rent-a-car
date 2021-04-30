@@ -41,7 +41,9 @@ module.exports = class ClientsController extends AbstractController {
      */
     async save(req, res) {
         try {
+            console.log( req.body );
             const client = fromDataToEntity(req.body);
+            console.log(client)
             const savedClient = await this.clientsService.saveClient(client);
             if (client.id) {
                 req.flash('updateClientMessage', `El cliente con el ID: ${client.id} se actualizo correctamente`);

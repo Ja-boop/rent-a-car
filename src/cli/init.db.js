@@ -18,8 +18,8 @@ container.get('RentModel');
 container.get('UserModel');
 container.get('ClientModel');
 
-mainClientsDb.sync();
 mainCarsDb.sync();
 mainRentsDb.sync();
 mainUsersDb.sync();
+mainClientsDb.sync();
 

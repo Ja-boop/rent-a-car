@@ -41,4 +41,8 @@ module.exports = class ClientsService {
         return this.clientsRepository.deleteClient(client);
     }
 
+    async getAllClients() {
+        return this.clientsRepository.getAllClients();
+    }
+
 }

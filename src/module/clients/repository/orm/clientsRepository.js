@@ -40,14 +40,19 @@ module.exports = class ClientsRepository extends AbstractClientsRepository {
      * @returns {Promise<import('../../entity/rent')>}
      */
     async getClientById(id) {
-        const client = await this.clientModel.findOne({
+        const clientModel = await this.clientModel.findOne({
             where: { id },
         });
 
-        if (!client) {
+        if (!clientModel) {
             throw new Error(`Reserve with id: ${id} was not found`)
         }
 
-        return client.map(fromModelToEntity);
+        return fromModelToEntity(clientModel);
+    }
+
+    async getAllClients() {
+        const clients = await this.clientModel.findAll();
+        return clients.map(fromModelToEntity);
     }
 }
