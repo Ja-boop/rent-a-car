@@ -37,7 +37,8 @@ module.exports = class RentsController extends AbstractController {
         app.post(`${ROUTE}/rent/car/:id`, this.save_rent.bind(this));
 
         // user-reserves
-        app.get(`${ROUTE}/reserve/list`, isAuthenticated, this.user_reserves.bind(this));
+        app.get(`${ROUTE}/reserve/user/selector`, this.user_selector.bind(this));
+        app.get(`${ROUTE}/reserve/:id/list`, isAuthenticated, this.user_reserves.bind(this));
         app.get(`${ROUTE}/reserve/:id/delete`, isAuthenticated, this.delete_reserve.bind(this));
         app.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, this.view_reserve.bind(this));
         app.post(`${ROUTE}/reserve/:id/view`, this.update_reserve.bind(this));
@@ -103,10 +104,19 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
+    async user_selector(req, res) {
+        const client = await this.clientsService.getAllClients();
+        res.render('rents/view/userSelector.njk', { data: { client }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    }
+
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
     async user_reserves(req, res) {
         try {
-            const user = req.user;
-            const reserve = await this.rentService.getUserReserve(user.id);
+            const { id } = req.params;
+            const reserve = await this.rentService.getUserReserve(id);
             res.render('rents/view/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
