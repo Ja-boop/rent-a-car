@@ -92,7 +92,7 @@ module.exports = class RentsController extends AbstractController {
             } else {
                 req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
             }
-            res.redirect(`${this.ROUTE_BASE}/reserve/list`);
+            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.userId}/list`);
         } catch (e) {
             console.log(e);
             req.flash('reserveCreationErrorMessage', `${e}`);

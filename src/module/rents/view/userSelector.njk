@@ -5,10 +5,13 @@
     {% include "../../views/layout/navbar.njk" %}
     {# NAVBAR #}
 
+<div class="user-table">
 <table class="table is-fullwidth">
-
     <thead>
         <tr>
+            <th>
+                <abbr title="Options">Select</abbr>
+            </th>
             <th>
                 <abbr title="Id">Id</abbr>
             </th>
@@ -39,14 +42,12 @@
             <th>
                 <abbr title="Birthday">Birthday</abbr>
             </th>
-            <th>
-                <abbr title="Options">Select</abbr>
-            </th>
         </tr>
     </thead>
     <tbody>
         {%for client in data.client%}
             <tr>
+                <td><a href="http://localhost:8080/agency/reserve/{{client.id}}/list">Select</a></td>
                 <td>{{client.id}}</td>
                 <td>{{client.name}}</td>
                 <td>{{client.lastName}}</td>
@@ -57,11 +58,11 @@
                 <td>{{client.phone}}</td>
                 <td>{{client.email}}</td>
                 <td>{{client.birthday}}</td>
-                <td><a href="http://localhost:8080/agency/reserve/{{client.id}}/list">Select</a></td>
                 <td></td>
             </tr>
         {%endfor%}
     </tbody>
 
 </table>
+</div>
 {% endblock %}
