@@ -36,60 +36,34 @@ function configureMulter() {
     return multer({ storage });
 }
 
-function configureCarsMainDatabaseAdapterORM() {
+function configureMainDatabaseAdapterORM() {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
-        storage: process.env.CAR_DB_PATH,
+        storage: process.env.DB_PATH,
     });
 
     return sequelize;
 }
 
 function configureCarModel(container) {
-    CarModel.setup(container.get('CarsSequelize'));
+    CarModel.setup(container.get('Sequelize'));
     return CarModel;
 }
 
-
-function configureRentMainDatabaseAdapterORM() {
-    const sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: process.env.RESERVE_DB_PATH,
-    });
-
-    return sequelize;
-}
-
 function configureRentModel(container) {
-    RentModel.setup(container.get('RentsSequelize'));
+    RentModel.setup(container.get('Sequelize'));
+    RentModel.setupCarAssociations(container.get('CarModel'));
+    RentModel.setupClientAssociations(container.get('ClientModel'))
     return RentModel;
 }
 
-function configureUserMainDatabaseAdapterORM() {
-    const sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: process.env.USER_DB_PATH,
-    });
-
-    return sequelize;
-}
-
 function configureUserModel(container) {
-    UserModel.setup(container.get('UsersSequelize'));
+    UserModel.setup(container.get('Sequelize'));
     return UserModel;
 }
 
-function configureClientsMainDatabaseAdapterORM() {
-    const sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: process.env.CLIENT_DB_PATH,
-    });
-
-    return sequelize;
-} 
-
 function configureClientModel(container) {
-    ClientModel.setup(container.get('ClientsSequelize'));
+    ClientModel.setup(container.get('Sequelize'));
     return ClientModel;
 }
 
@@ -99,10 +73,7 @@ function addCommonDefinitions(container) {
         Passport: passport,
         Bcrypt: bcrypt,
         Multer: factory(configureMulter),
-        CarsSequelize: factory(configureCarsMainDatabaseAdapterORM),
-        RentsSequelize: factory(configureRentMainDatabaseAdapterORM),
-        UsersSequelize: factory(configureUserMainDatabaseAdapterORM),
-        ClientsSequelize: factory(configureClientsMainDatabaseAdapterORM)
+        Sequelize: factory(configureMainDatabaseAdapterORM)
     });
 }
 
@@ -114,7 +85,7 @@ function addModuleDefinitions(container) {
             get('ClientsService'),
             ),
         RentService: object(RentsService).construct(get('RentRepository')),
-        RentRepository: object(RentsRepository).construct(get('RentModel')),
+        RentRepository: object(RentsRepository).construct(get('RentModel'), get('CarModel'), get('ClientModel')),
         RentModel: factory(configureRentModel),
     });
 }
