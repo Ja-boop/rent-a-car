@@ -8,7 +8,9 @@ const container = configureDependecyInjection();
  */
 const userService = container.get('UserService');
 
-passport.serializeUser((user, done) => {
+passport.serializeUser(async (data, done) => {
+    const user = await userService.getUserByEmail(data.email);
+    console.log(user);
     done(null, user.id);
 });
 passport.deserializeUser(async (id, done) => {
@@ -22,7 +24,6 @@ passport.use('local-signup', new LocalStrategy({
     passReqToCallback: true
 }, async (req, password, email, done) => {
     const user = req.body;
-    console.log(user);
     const userEmail = await userService.getUserByEmail(user.email);
     if (userEmail) {
         done(null, false, req.flash('identEmailMessage', 'El email ya ha sido registrado'));
