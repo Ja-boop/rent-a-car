@@ -1,22 +1,26 @@
 const Reserve = require('../entity/reserve');
+const Client = require('../../clients/entity/client');
+const Car = require('../../Cars/entity/car');
 
 function fromDataToEntityReserve({
     id,
-    'user-id': userId,
-    'car-id': carId,
-    'car-image': carImage,
     'take-day': takeDay,
     'return-day': returnDay,
-    cost,
+    'final-cost': finalCost,
+    payment,
+    status,
+    car_id,
+    client_id,
 }) {
     return new Reserve({
         id: Number(id),
-        userId,
-        carId,
-        carImage,
         takeDay,
         returnDay,
-        cost,
+        finalCost,
+        payment,
+        status,
+        Car: new Car({ id: Number(car_id) }),
+        Client: new Client({ id: Number(client_id) }),
     });
 }
 
