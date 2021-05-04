@@ -10,7 +10,7 @@
     <div class="container">
         <div class="rent-options">
             <form action="/agency/rent/car/{{car.id}}" method="POST">
-                <input type="hidden" name="car-id" value={{car.id}} readonly/>
+                <input type="hidden" name="car_id" value={{car.id}} readonly/>
 
                 <div class="content">
                     <div class"search-client">
@@ -42,7 +42,7 @@
                                     <th>
                                         <div class="control">
                                         <label class="radio">
-                                            <input type="radio" name="user-id" value={{client.id}}>
+                                            <input type="radio" name="client_id" value={{client.id}}>
                                         </label>
                                     </div>
                                     </th>                               
@@ -70,7 +70,7 @@
                             <h3 class="title is-5 title-block">Vehiculo</h3>
                             <div>
                                 <img src="/{{car.imageUrl}}" width="256" height="256"/>
-                                <input type="hidden" name="car-image" value="{{car.imageUrl}}" readonly/>
+                                <input type="hidden" value="{{car.imageUrl}}" readonly/>
                             </div>
                             <h3 class="title is-5 title-block">Selecciona la fecha</h3>
 
@@ -82,7 +82,9 @@
                                 <button type="button" id="cost-calculator">Calcular Costo</button>
                                 <h3 class="title is-5 title-block">Costo final</h3>
                                 <p>Cost: </p>
-                                <input type="text" id="rent-cost"  name="cost" value={{car.cost}} readonly>
+                                <input type="text" id="rent-cost"  name="final-cost" value={{car.cost}} readonly>
+                                <input type="hidden" name="payment" value='Cash' readonly/>
+                                <input type="hidden" name="status" value='No' readonly/>
                             </div>
 
                             <div class="confirmation-options">

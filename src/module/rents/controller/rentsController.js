@@ -38,7 +38,7 @@ module.exports = class RentsController extends AbstractController {
 
         // user-reserves
         app.get(`${ROUTE}/reserve/user/selector`, this.user_selector.bind(this));
-        app.get(`${ROUTE}/reserve/:id/list`, isAuthenticated, this.user_reserves.bind(this));
+        app.get(`${ROUTE}/reserve/:id/list`, this.user_reserves.bind(this));
         app.get(`${ROUTE}/reserve/:id/delete`, isAuthenticated, this.delete_reserve.bind(this));
         app.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, this.view_reserve.bind(this));
         app.post(`${ROUTE}/reserve/:id/view`, this.update_reserve.bind(this));
@@ -84,7 +84,6 @@ module.exports = class RentsController extends AbstractController {
      */
     async save_rent(req, res) {
         try {
-            console.log(req.body)
             const reserve = fromDataToEntityReserve(req.body);
             const savedReserve = await this.rentService.rentCar(reserve);
             if (savedReserve.id) {
@@ -151,12 +150,7 @@ module.exports = class RentsController extends AbstractController {
             const user = req.user;
             let currentDate = getCurrentDate();
             const reserve = await this.rentService.getReserveById(id);
-
-            if (reserve.userId === user.id) {
-                res.render('rents/view/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
-            } else {
-                res.status(404).send('Esa reserva no esta registrada para este usuario')
-            }
+            res.render('rents/view/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
         } catch (e) {
             req.flash('viewCarErrorMessage', e);
             res.redirect(`${this.ROUTE_BASE}/car/list`);
@@ -170,6 +164,7 @@ module.exports = class RentsController extends AbstractController {
     async update_reserve(req, res) {
         try {
             const reserve = fromDataToEntityReserve(req.body);
+            console.log(reserve)
             const savedReserve = await this.rentService.rentCar(reserve);
             if (savedReserve.id) {
                 req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
