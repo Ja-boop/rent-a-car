@@ -15,18 +15,6 @@ module.exports = class RentModel extends Model {
                     autoIncrement: true,
                     unique: true,
                 },
-                userId: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false,
-                },
-                carId: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false,
-                },
-                carImage: {
-                    type: DataTypes.STRING,
-                    allowNull: false,
-                },
                 takeDay: {
                     type: DataTypes.STRING,
                     allowNull: false,
@@ -35,8 +23,16 @@ module.exports = class RentModel extends Model {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                cost: {
+                finalCost: {
                     type: DataTypes.INTEGER,
+                    allowNull: false,       
+                },
+                payment: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                status: {
+                    type: DataTypes.BOOLEAN,
                     allowNull: false,
                 },
                 lastUpdated: {
@@ -50,11 +46,23 @@ module.exports = class RentModel extends Model {
             },
             {
                 sequelize: sequelizeInstance,
-                modelName: 'reserves',
+                modelName: 'Reserves',
                 timestamps: false,
             }   
         );
 
         return RentModel;
     }
-}
+
+    /**
+     * @param {import('../../cars/model/carModel')} CarModel
+     */
+    static setupCarAssociations(CarModel) {
+        RentModel.belongsTo(CarModel, { foreignKey: 'car_id' });
+    }
+
+    static setupClientAssociations(ClientModel) {
+        RentModel.belongsTo(ClientModel, { foreignKey: 'client_id' });
+    }
+
+};
