@@ -34,7 +34,7 @@ module.exports = class UserModel extends Model {
             },
             {
                 sequelize: sequelizeInstance,
-                modelName: 'users',
+                modelName: 'Users',
                 timestamps: false,
             }
         );
