@@ -91,7 +91,7 @@ module.exports = class RentsController extends AbstractController {
             } else {
                 req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
             }
-            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.userId}/list`);
+            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.Client.id}/list`);
         } catch (e) {
             console.log(e);
             req.flash('reserveCreationErrorMessage', `${e}`);
@@ -131,7 +131,7 @@ module.exports = class RentsController extends AbstractController {
             const { id } = req.params;
             const reserve = await this.rentService.getReserveById(id);
             await this.rentService.deleteReserve(reserve);
-            res.redirect(`${this.ROUTE_BASE}/reserve/list`)
+            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.Client.id}/list`)
         } catch (e) {
             req.flash('carDeletedErrorMessage', e);
         }
