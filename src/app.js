@@ -1,8 +1,8 @@
 require('dotenv').config()
 const express = require('express');
+const flash = require('connect-flash');
 const nunjucks = require('nunjucks');
 const passport = require('passport');
-const flash = require('connect-flash');
 
 const configureDependecyInjection = require('./config/di'); 
 const { init: initRentsModule } = require('./module/rents/module');
@@ -33,10 +33,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    app.locals.identEmailMessage = req.flash('identEmailMessage');
-    app.locals.userNotDefinedMessage = req.flash('userNotDefinedMessage');
-    app.locals.passwordMessage = req.flash('passwordMessage');
-    app.locals.carCreationErrorMessage = req.flash('carCreationErrorMessage');
     app.locals.user = req.user;
     next();
 });
@@ -49,6 +45,8 @@ initClientsModule(app, container);
 const rentsController = container.get('RentsController');
 app.get('/', rentsController.index.bind(rentsController));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Aplicacion escuchando en el puerto http://localhost:${port}/`);
 });
+
+module.exports = { app, server };

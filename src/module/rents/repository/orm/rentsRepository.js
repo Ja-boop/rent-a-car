@@ -1,5 +1,5 @@
 const AbstractRentRepository = require('../sqlite/abstract/abstractRentRepository');
-const { fromModelToEntity, fromDataToEntityReserve } = require('../../mapper/reserveMapper');
+const { fromModelToEntity } = require('../../mapper/reserveMapper');
 
 module.exports = class RentsRepository extends AbstractRentRepository {
     /**
@@ -25,7 +25,6 @@ module.exports = class RentsRepository extends AbstractRentRepository {
         rentModel = this.rentModel.build(reserve, buildOptions);
         rentModel.setDataValue('car_id', reserve.Car.id);
         rentModel.setDataValue('client_id', reserve.Client.id);
-        console.log(rentModel.toJSON());
         rentModel = await rentModel.save();
 
         return fromModelToEntity(rentModel);
@@ -52,11 +51,17 @@ module.exports = class RentsRepository extends AbstractRentRepository {
             include: [this.carModel, this.clientModel],
         });
 
-
         if (!reserves) {
             throw new Error(`Reserve with id: ${id} was not found`)
         }
 
+        return reserves.map(fromModelToEntity);
+    }
+
+    async getAllReserves() {
+        const reserves = await this.rentModel.findAll({
+            include: [this.carModel, this.clientModel],
+        });
         return reserves.map(fromModelToEntity);
     }
 

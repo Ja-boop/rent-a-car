@@ -49,4 +49,8 @@ module.exports = class RentService {
         return this.rentRepository.deleteReserve(reserve);
     }
 
+    async getAllReserves(){
+        return this.rentRepository.getAllReserves();
+    }
+
 }

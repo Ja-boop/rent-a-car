@@ -86,6 +86,7 @@ module.exports = class RentsController extends AbstractController {
         try {
             const reserve = fromDataToEntityReserve(req.body);
             const savedReserve = await this.rentService.rentCar(reserve);
+            console.log(savedReserve);
             if (savedReserve.id) {
                 req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
             } else {
@@ -116,6 +117,8 @@ module.exports = class RentsController extends AbstractController {
         try {
             const { id } = req.params;
             const reserve = await this.rentService.getUserReserve(id);
+            const allreserve = await this.rentService.getAllReserves();
+            console.log(allreserve);
             res.render('rents/view/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);

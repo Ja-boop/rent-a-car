@@ -30,4 +30,6 @@ module.exports = class AbstractRentRepository {
      * @returns {Array<import('../entity/car')>}
      */
     async getReserveById() {}
+
+    async getAllReserves() {}
 };

@@ -3,6 +3,9 @@
 */
 
 const Car = require('../entity/car');
+const CarNotDefinedError = require('./error/carNotDefinedError');
+const CarIdNotDefinedError = require('./error/carIdNotDefinedError');
+
 
 module.exports = class CarsService {
     /**
@@ -17,7 +20,7 @@ module.exports = class CarsService {
      */
     async saveCar(car) {
         if (car === undefined) {
-            throw new console.error('Car is not defined');
+            throw new CarNotDefinedError();
         }
         return this.carsRepository.saveCar(car)
     }
@@ -27,7 +30,7 @@ module.exports = class CarsService {
      */
     async deleteCar(car) {
         if(!(car instanceof Car)) {
-            throw new console.error();
+            throw new CarNotDefinedError();
         }
 
         return this.carsRepository.deleteCar(car);
@@ -36,7 +39,7 @@ module.exports = class CarsService {
 
     async getCarById(id) {
         if(id === undefined) {
-            throw new console.error('ID not defined');
+            throw new CarIdNotDefinedError();
         }
 
         return this.carsRepository.getCarById(id);
@@ -47,15 +50,5 @@ module.exports = class CarsService {
      */
     async getAllCars() {
         return this.carsRepository.getAllCars();
-    }
-
-    async getUserCars(id) {
-        if(id === undefined) {
-            throw new console.error('ID not defined');
-        }
-
-        return this.carsRepository.getUserCars(id);
-    }
-
-    
+    }  
 };

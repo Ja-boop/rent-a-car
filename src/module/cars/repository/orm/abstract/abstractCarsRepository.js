@@ -30,10 +30,4 @@ module.exports = class AbstractCarsRepository {
      * @returns {Array<import('../entity/car')>}
      */
     async getAllCars() {}
-
-    /**
-     * @param {Number} id
-     * @returns {Array<import('../entity/car')>}
-     */
-    async getUserCars(id) {}
 };
