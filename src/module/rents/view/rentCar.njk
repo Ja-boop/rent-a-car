@@ -37,25 +37,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {%for client in data.client%}
+                                    {%for clients in data.clients%}
                                     <tr>    
                                     <th>
                                         <div class="control">
                                         <label class="radio">
-                                            <input type="radio" name="client_id" value={{client.id}}>
+                                            <input type="radio" name="client_id" value={{clients.id}}>
                                         </label>
                                     </div>
                                     </th>                               
-                                    <td>{{client.id}}</td>
-                                    <td>{{client.name}}</td>
-                                    <td>{{client.lastName}}</td>
-                                    <td>{{client.identifierType}}</td>
-                                    <td>{{client.identifierNumber}}</td>
-                                    <td>{{client.nationality}}</td>
-                                    <td>{{client.address}}</td>
-                                    <td>{{client.phone}}</td>
-                                    <td>{{client.email}}</td>
-                                    <td>{{client.birthday}}</td>
+                                    <td>{{clients.id}}</td>
+                                    <td>{{clients.name}}</td>
+                                    <td>{{clients.lastName}}</td>
+                                    <td>{{clients.identifierType}}</td>
+                                    <td>{{clients.identifierNumber}}</td>
+                                    <td>{{clients.nationality}}</td>
+                                    <td>{{clients.address}}</td>
+                                    <td>{{clients.phone}}</td>
+                                    <td>{{clients.email}}</td>
+                                    <td>{{clients.birthday}}</td>
                                     <td>
                                     </td>
                                     </tr>

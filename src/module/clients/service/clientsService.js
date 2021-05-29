@@ -3,6 +3,8 @@
 */
 
 const Client = require('../entity/client');
+const ClientNotDefinedError = require('./error/clientNotDefinedError');
+const ClientIdNotDefinedError = require('./error/clientIdNotDefinedError');
 
 module.exports = class ClientsService {
     /**
@@ -17,14 +19,14 @@ module.exports = class ClientsService {
      */
     async saveClient(client) {
         if (client === undefined) {
-            throw new console.error('Client is not defined');
+            throw new ClientNotDefinedError();
         }
         return this.clientsRepository.saveClient(client)
     }
 
     async getClientById(id) {
         if (id === undefined) {
-            throw new console.error('ID not defined');
+            throw new ClientIdNotDefinedError();
         }
 
         return this.clientsRepository.getClientById(id);
@@ -35,7 +37,7 @@ module.exports = class ClientsService {
      */
     async deleteClient(client) {
         if(!(client instanceof Client)) {
-            throw new console.error();
+            throw new ClientNotDefinedError();
         }
 
         return this.clientsRepository.deleteClient(client);

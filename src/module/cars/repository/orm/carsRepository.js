@@ -1,5 +1,7 @@
 const { fromModelToEntity } = require('../../mapper/carMapper');
 const AbstractCarsRepository = require('./abstract/abstractCarsRepository');
+const CarNotFoundError = require('./error/carNotFoundError');
+const CarIdNotDefinedError = require('./error/carIdNotDefinedError');
 
 module.exports = class CarsRepository extends AbstractCarsRepository {
     /**
@@ -30,7 +32,7 @@ module.exports = class CarsRepository extends AbstractCarsRepository {
      */
     async deleteCar(car) {
         if(!car || !car.id) {
-            throw new Error('Id not defined')
+            throw new CarIdNotDefinedError();
         }
         return Boolean(await this.carModel.destroy({ where: { id: car.id } }));
     }
@@ -45,7 +47,7 @@ module.exports = class CarsRepository extends AbstractCarsRepository {
         });
 
         if (!carModel) {
-            throw new Error(`Car with id: ${id} was not found`)
+            throw new CarNotFoundError();
         }
 
         return fromModelToEntity(carModel);
@@ -58,14 +60,4 @@ module.exports = class CarsRepository extends AbstractCarsRepository {
         const cars = await this.carModel.findAll();
         return cars.map(fromModelToEntity);
     }
-
-    /**
-     * @return {Promise<Array<import('../../entity/car')>>}
-     */
-    async getUserCars(id) {
-        const cars = await this.carModel.findAll({
-            where: { id } 
-        });
-        return cars.map(fromModelToEntity);
-    }
-} 
+}; 

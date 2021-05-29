@@ -44,22 +44,22 @@
     </tr>
     </tfoot>
     <tbody>
-        {%for car in data.car%}
+        {%for cars in data.cars%}
         <tr>
-        <th>{{car.id}}</th>
-        <td><img src="\{{car.imageUrl}}" width="150" height="250"/></td>
-        <td>{{car.brand}}</td>
-        <td>{{car.model}}</td>
-        <td>{{car.yearManufactured}}</td>
-        <td>{{car.kms}}</td>
-        <td>{{car.color}}</td>
-        <td>{{car.airConditioner}}</td>
-        <td>{{car.passengers}}</td>
-        <td>{{car.transmission}}</td>
-        <td>{{car.cost}}</td>
+        <th>{{cars.id}}</th>
+        <td><img src="\{{cars.imageUrl}}" width="150" height="250"/></td>
+        <td>{{cars.brand}}</td>
+        <td>{{cars.model}}</td>
+        <td>{{cars.yearManufactured}}</td>
+        <td>{{cars.kms}}</td>
+        <td>{{cars.color}}</td>
+        <td>{{cars.airConditioner}}</td>
+        <td>{{cars.passengers}}</td>
+        <td>{{cars.transmission}}</td>
+        <td>{{cars.cost}}</td>
         <td>
           <br>
-          <a href="http://localhost:8080/agency/rent/car/{{car.id}}">Rent!</a>
+          <a href="http://localhost:8080/agency/rent/car/{{cars.id}}">Rent!</a>
         </td>
         </tr>
         {%endfor%}

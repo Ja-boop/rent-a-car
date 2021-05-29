@@ -1,5 +1,7 @@
 const AbstractRentRepository = require('../sqlite/abstract/abstractRentRepository');
-const { fromModelToEntity, fromDataToEntityReserve } = require('../../mapper/reserveMapper');
+const { fromModelToEntity } = require('../../mapper/reserveMapper');
+const ReserveNotFoundError = require('./error/reserveNotFoundError');
+const ReserveIdNotDefinedError = require('./error/reserveIdNotDefinedError');
 
 module.exports = class RentsRepository extends AbstractRentRepository {
     /**
@@ -25,7 +27,6 @@ module.exports = class RentsRepository extends AbstractRentRepository {
         rentModel = this.rentModel.build(reserve, buildOptions);
         rentModel.setDataValue('car_id', reserve.Car.id);
         rentModel.setDataValue('client_id', reserve.Client.id);
-        console.log(rentModel.toJSON());
         rentModel = await rentModel.save();
 
         return fromModelToEntity(rentModel);
@@ -37,7 +38,7 @@ module.exports = class RentsRepository extends AbstractRentRepository {
      */
     async deleteReserve(reserve) {
         if(!reserve || !reserve.id) {
-            throw new Error('Id not defined')
+            throw new ReserveIdNotDefinedError();
         }
         return Boolean(await this.rentModel.destroy({ where: { id: reserve.id } }));
     }
@@ -47,16 +48,24 @@ module.exports = class RentsRepository extends AbstractRentRepository {
      * @returns {Promise<import('../../entity/rent')>}
      */
     async getUserReserve(id) {
+        try {
+            const reserves = await this.rentModel.findAll({
+                where: { client_id: id },
+                include: [this.carModel, this.clientModel],
+            });
+
+            return reserves.map(fromModelToEntity);
+        } catch(e) {
+            console.log(e)
+            throw new ReserveNotFoundError();
+        }
+        
+    }
+
+    async getAllReserves() {
         const reserves = await this.rentModel.findAll({
-            where: { client_id: id },
             include: [this.carModel, this.clientModel],
         });
-
-
-        if (!reserves) {
-            throw new Error(`Reserve with id: ${id} was not found`)
-        }
-
         return reserves.map(fromModelToEntity);
     }
 
@@ -71,7 +80,7 @@ module.exports = class RentsRepository extends AbstractRentRepository {
         });
 
         if (!rentModel) {
-            throw new Error(`Reserve with id: ${id} was not found`)
+            throw new ReserveNotFoundError()
         }
 
         return fromModelToEntity(rentModel);

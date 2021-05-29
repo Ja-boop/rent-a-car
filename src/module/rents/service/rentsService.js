@@ -3,6 +3,8 @@
 */
 
 const Reserve = require('../entity/reserve');
+const ReserveNotDefinedError = require('./error/reserveNotDefinedError');
+const ReserveIdNotDefinedError = require('./error/reserveIdNotDefinedError');
 
 module.exports = class RentService {
     /**
@@ -17,14 +19,14 @@ module.exports = class RentService {
      */
     async rentCar(reserve) {
         if (reserve === undefined) {
-            throw new console.error('Reserve is not defined');
+            throw new ReserveNotDefinedError();
         }
         return this.rentRepository.rentCar(reserve)
     }
 
     async getUserReserve(id) {
         if (id === undefined) {
-            throw new console.error('ID not defined');
+            throw new ReserveIdNotDefinedError();
         }
 
         return this.rentRepository.getUserReserve(id);
@@ -32,7 +34,7 @@ module.exports = class RentService {
 
     async getReserveById(id) {
         if (id === undefined) {
-            throw new console.error('ID not defined');
+            throw new ReserveIdNotDefinedError();
         }
 
         return this.rentRepository.getReserveById(id);
@@ -43,10 +45,14 @@ module.exports = class RentService {
      */
     async deleteReserve(reserve) {
         if(!(reserve instanceof Reserve)) {
-            throw new console.error();
+            throw new ReserveNotDefinedError();
         }
 
         return this.rentRepository.deleteReserve(reserve);
+    }
+
+    async getAllReserves(){
+        return this.rentRepository.getAllReserves();
     }
 
 }

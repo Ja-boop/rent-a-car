@@ -1,5 +1,7 @@
 const AbstractClientsRepository = require('../orm/abstract/abstractClientsRepository');
 const { fromModelToEntity } = require('../../mapper/clientMapper');
+const ClientNotFoundError = require('./error/clientNotFoundError');
+const ClientIdNotDefinedError = require('./error/clientIdNotDefinedError');
 
 module.exports = class ClientsRepository extends AbstractClientsRepository {
     /**
@@ -30,7 +32,7 @@ module.exports = class ClientsRepository extends AbstractClientsRepository {
      */
     async deleteClient(client) {
         if(!client || !client.id) {
-            throw new Error('Id not defined')
+            throw new ClientIdNotDefinedError();
         }
         return Boolean(await this.clientModel.destroy({ where: { id: client.id } }));
     }
@@ -45,7 +47,7 @@ module.exports = class ClientsRepository extends AbstractClientsRepository {
         });
 
         if (!clientModel) {
-            throw new Error(`Reserve with id: ${id} was not found`)
+            throw new ClientNotFoundError()
         }
 
         return fromModelToEntity(clientModel);

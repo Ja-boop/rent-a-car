@@ -2,7 +2,7 @@ const Reserve = require('../entity/reserve');
 const Client = require('../../clients/entity/client');
 const Car = require('../../Cars/entity/car');
 
-function fromDataToEntityReserve({
+function fromDataToEntity({
     id,
     'take-day': takeDay,
     'return-day': returnDay,
@@ -33,6 +33,6 @@ function fromModelToEntity(model) {
 }
 
 module.exports = {
-    fromDataToEntityReserve,
+    fromDataToEntity,
     fromModelToEntity,
 };
