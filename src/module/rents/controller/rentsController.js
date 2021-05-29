@@ -51,7 +51,7 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async index(req, res) {
-        res.render(paths.index.render, resData)
+        res.render(paths.index.render, { resData });
     }
 
     async list(req, res) {

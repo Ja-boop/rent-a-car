@@ -36,7 +36,7 @@ test('controller.index renderea index', async () => {
     await controller.index({}, { render: renderMock });
 
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith(paths.index.render, resData);
+    expect(renderMock).toHaveBeenCalledWith(paths.index.render, { resData });
 });
 
 test('controller.list renderea list', async () => {
