@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express');
-const flash = require('connect-flash');
 const nunjucks = require('nunjucks');
 const passport = require('passport');
 
@@ -28,7 +27,6 @@ nunjucks.configure('src/module', {
 const container = configureDependecyInjection(app);
 app.use(container.get('Session'));
 
-app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
