@@ -1,10 +1,8 @@
 const CarController = require('../carsController');
 const Car = require('../../entity/car');
-const supertest = require('supertest');
-const { app, server } = require('../../../../app');
-const { configureRoutes } = require('../carsController');
 
-const api = supertest(app);
+const { paths } = require('../paths/paths');
+const { resData } = require('../../../data/resData');
 
 const serviceMock = {
     saveCar: jest.fn(),
@@ -15,38 +13,26 @@ const serviceMock = {
 
 const controller = new CarController({}, serviceMock);
 
-afterAll(() => {
-    server.close() // Esto es porque salta un error "1 open handle potentially keeping jest from exiting"
-})
-
-test('find "/agency/car/list" route', async () => {
-    await api
-        .get(`/agency/car/list`)
-        .expect(200)
-});
-
-test('car_list renderea list.njk', async () => {
+test('car_list renderea list', async () => {
     const renderMock = jest.fn();
     const car = [];
     await controller.car_list({}, { render: renderMock });
 
     expect(serviceMock.getAllCars).toHaveBeenCalledTimes(1);
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith('cars/view/list.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    expect(renderMock).toHaveBeenCalledWith(paths.list.render, { data: { car }, resData })
 });
 
-test('car_form renderea form.njk', async () => {
+test('car_form renderea form', async () => {
     const renderMock = jest.fn();
     serviceMock.getAllCars();
     await controller.car_form({}, { render: renderMock });
 
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith('cars/view/form.njk', {
-        logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos"
-    });
+    expect(renderMock).toHaveBeenCalledWith(paths.create.render, { resData });
 });
 
-test('save_car llama al servicio con el body(con ID) y redirecciona a /agency/car/list', async () => {
+test('save_car llama al servicio con el body(con ID) y redirecciona a list', async () => {
     const redirectMock = jest.fn();
     const FAKE_CAR_IMAGE_URL = 'ejemplo/car.png';
     const bodyMock = new Car({
@@ -71,10 +57,10 @@ test('save_car llama al servicio con el body(con ID) y redirecciona a /agency/ca
     expect(serviceMock.saveCar).toHaveBeenCalledTimes(1);
     expect(serviceMock.saveCar).toHaveBeenCalledWith(bodyMock);
     expect(redirectMock).toHaveBeenCalledTimes(1);
-    expect(redirectMock).toHaveBeenCalledWith('/agency/car/list')
+    expect(redirectMock).toHaveBeenCalledWith(paths.list.path)
 });
 
-test('save_car llama al servicio con el body(sin ID) y redirecciona a /agency/car/list', async () => {
+test('save_car llama al servicio con el body(sin ID) y redirecciona a list', async () => {
     const redirectMock = jest.fn();
     const FAKE_CAR_IMAGE_URL = 'ejemplo/car.png';
     const bodyMock = new Car({
@@ -100,10 +86,10 @@ test('save_car llama al servicio con el body(sin ID) y redirecciona a /agency/ca
     expect(serviceMock.saveCar).toHaveBeenCalledTimes(2); // Si pongo que llamo a saveCar 1 vez, falla porque tambien llama en el test anterior, funciona solo si aislamos el test
     expect(serviceMock.saveCar).toHaveBeenCalledWith(bodyMock);
     expect(redirectMock).toHaveBeenCalledTimes(1);
-    expect(redirectMock).toHaveBeenCalledWith('/agency/car/list')
+    expect(redirectMock).toHaveBeenCalledWith(paths.list.path)
 });
 
-test('Llamo a guardar un auto con ID null, da un error y redirecciona a /agency/car/list', async () => {
+test('Llamo a guardar un auto con ID null, da un error y redirecciona a list', async () => {
     const redirectMock = jest.fn();
     const FAKE_CAR_IMAGE_URL = 'ejemplo/car.png';
     const bodyMock = new Car({
@@ -120,22 +106,18 @@ test('Llamo a guardar un auto con ID null, da un error y redirecciona a /agency/
         cost: undefined,
     });
     
-    try {
-        await controller.save_car(
-            { body: bodyMock, file: { path: FAKE_CAR_IMAGE_URL }, session: {} },
-            { redirect: redirectMock }
-        );
-    } catch (e) {
-        expect(e).toEqual({
-            error: TypeError
-        })
-    }
+    
+    await controller.save_car(
+        { body: bodyMock, file: { path: FAKE_CAR_IMAGE_URL }, session: {} },
+        { redirect: redirectMock }
+    );
+    
     
     expect(redirectMock).toHaveBeenCalledTimes(1);
-    expect(redirectMock).toHaveBeenCalledWith('/agency/car/list')
+    expect(redirectMock).toHaveBeenCalledWith(paths.list.path)
 });
 
-test('Delete llama al servicio con el id del body y redirecciona a /agency/car/list', async () => {
+test('Delete llama al servicio con el id del body y redirecciona a list', async () => {
     const FAKE_CAR = new Car({ id: 1 });
     serviceMock.getCarById.mockImplementationOnce(() => Promise.resolve(FAKE_CAR));
     const redirectMock = jest.fn();
@@ -145,10 +127,10 @@ test('Delete llama al servicio con el id del body y redirecciona a /agency/car/l
     expect(serviceMock.deleteCar).toHaveBeenCalledTimes(1);
     expect(serviceMock.deleteCar).toHaveBeenCalledWith(FAKE_CAR);
     expect(redirectMock).toHaveBeenCalledTimes(1);
-    expect(redirectMock).toHaveBeenLastCalledWith('/agency/car/list');
+    expect(redirectMock).toHaveBeenLastCalledWith(paths.list.path);
 });
 
-test('update_car renderea form.njk', async () => {
+test('update_car renderea form', async () => {
     const renderMock = jest.fn();
     const carId = 1;
     const car = new Car({ id: carId });
@@ -159,7 +141,7 @@ test('update_car renderea form.njk', async () => {
     expect(serviceMock.getCarById).toHaveBeenCalledTimes(2);
     expect(serviceMock.getCarById).toHaveBeenCalledWith(carId);
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith('cars/view/form.njk', { data: { car } })
+    expect(renderMock).toHaveBeenCalledWith(paths.create.render, { data: { car } })
 });
 
 test('update_car con id null', async () => {
@@ -170,10 +152,10 @@ test('update_car con id null', async () => {
     }
 });
 
-test('update_car con un getCarById rechazado da error y redirecciona a /agency/car/list', async () => {
+test('update_car con un getCarById rechazado da error y redirecciona a list', async () => {
     const redirectMock = jest.fn();
     const renderMock = jest.fn();
-    const car = new Car({ id: 'a' });
+    const car = new Car({ id: 1 });
     serviceMock.getCarById.mockImplementationOnce(() => Promise.reject(car));
 
     try {
@@ -184,5 +166,5 @@ test('update_car con un getCarById rechazado da error y redirecciona a /agency/c
     }
 
     expect(redirectMock).toHaveBeenCalledTimes(1);
-    expect(redirectMock).toHaveBeenCalledWith('/agency/car/list');
+    expect(redirectMock).toHaveBeenCalledWith(paths.list.path);
 });

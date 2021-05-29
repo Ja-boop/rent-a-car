@@ -1,5 +1,7 @@
 const AbstractRentRepository = require('../sqlite/abstract/abstractRentRepository');
 const { fromModelToEntity } = require('../../mapper/reserveMapper');
+const ReserveNotFoundError = require('./error/reserveNotFoundError');
+const ReserveIdNotDefinedError = require('./error/reserveIdNotDefinedError');
 
 module.exports = class RentsRepository extends AbstractRentRepository {
     /**
@@ -36,7 +38,7 @@ module.exports = class RentsRepository extends AbstractRentRepository {
      */
     async deleteReserve(reserve) {
         if(!reserve || !reserve.id) {
-            throw new Error('Id not defined')
+            throw new ReserveIdNotDefinedError();
         }
         return Boolean(await this.rentModel.destroy({ where: { id: reserve.id } }));
     }
@@ -46,16 +48,18 @@ module.exports = class RentsRepository extends AbstractRentRepository {
      * @returns {Promise<import('../../entity/rent')>}
      */
     async getUserReserve(id) {
-        const reserves = await this.rentModel.findAll({
-            where: { client_id: id },
-            include: [this.carModel, this.clientModel],
-        });
+        try {
+            const reserves = await this.rentModel.findAll({
+                where: { client_id: id },
+                include: [this.carModel, this.clientModel],
+            });
 
-        if (!reserves) {
-            throw new Error(`Reserve with id: ${id} was not found`)
+            return reserves.map(fromModelToEntity);
+        } catch(e) {
+            console.log(e)
+            throw new ReserveNotFoundError();
         }
-
-        return reserves.map(fromModelToEntity);
+        
     }
 
     async getAllReserves() {
@@ -76,7 +80,7 @@ module.exports = class RentsRepository extends AbstractRentRepository {
         });
 
         if (!rentModel) {
-            throw new Error(`Reserve with id: ${id} was not found`)
+            throw new ReserveNotFoundError()
         }
 
         return fromModelToEntity(rentModel);
