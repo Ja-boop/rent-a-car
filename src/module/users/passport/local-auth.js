@@ -41,14 +41,13 @@ passport.use('local-login', new LocalStrategy({
 }, async (req, email, password, done) => {
     const user = req.body;
     const dbUser = await userService.getUserByEmail(user.email)
-
-    if(!dbUser) {
-        return done(null, false)
-    }
     
     const compareResults = await userService.comparePasswords(user.password, dbUser.password);
+    if (dbUser === false) {
+        return done(null, false, req.flash('userNotDefinedMessage', 'Usuario no encontrado'))
+    }
     if (compareResults === false) {
-        return done(null, false, console.log(new Error('La contraseña no coincide')))
+        return done(null, false, req.flash('passwordMessage', 'La contraseña es incorrecta'))
     }
 
     return done(null, dbUser);

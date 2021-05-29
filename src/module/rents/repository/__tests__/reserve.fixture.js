@@ -8,7 +8,7 @@ module.exports = function createTestReserve(id) {
         payment: 'Cash',
         status: 'No',
         finalCost: 60000,
-        Car: { id: 1 },
-        Client: { id: 1 }
+        Car: 1,
+        Client: 1
     })
 }

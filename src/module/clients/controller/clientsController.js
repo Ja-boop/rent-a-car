@@ -1,7 +1,5 @@
 const { fromDataToEntity } = require('../mapper/clientMapper');
 const AbstractController = require('./abstractController');
-const resData = require('./../../data/resData');
-const { paths } = require('./paths/paths');
 
 module.exports = class ClientsController extends AbstractController {
     /**
@@ -9,6 +7,7 @@ module.exports = class ClientsController extends AbstractController {
      */
     constructor(clientsService) {
         super();
+        this.ROUTE_BASE = '/agency';
         this.clientsService = clientsService;
     }
 
@@ -16,8 +15,16 @@ module.exports = class ClientsController extends AbstractController {
      * @param {import('express').Application} app
      */
     configureRoutes(app) {
-        app.get(paths.create.path, this.create.bind(this));  
-        app.post(paths.create.path, this.save.bind(this));
+        const ROUTE = this.ROUTE_BASE;
+        function isAuthenticated(req, res, next) {
+            if (req.isAuthenticated()) {
+                return next();
+            }
+            res.redirect(`${ROUTE}/login`)
+        };
+
+        app.get(`${ROUTE}/create/client`, this.create.bind(this));  
+        app.post(`${ROUTE}/create/client`, this.save.bind(this));
     }
 
     /**
@@ -25,7 +32,7 @@ module.exports = class ClientsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async create(req, res) {
-        res.render(paths.create.render, resData);
+        res.render('clients/view/form.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -34,18 +41,20 @@ module.exports = class ClientsController extends AbstractController {
      */
     async save(req, res) {
         try {
+            console.log( req.body );
             const client = fromDataToEntity(req.body);
             console.log(client)
             const savedClient = await this.clientsService.saveClient(client);
             if (client.id) {
-                console.log(`El cliente con el ID: ${client.id} se actualizo correctamente`);
+                req.flash('updateClientMessage', `El cliente con el ID: ${client.id} se actualizo correctamente`);
             } else {
-                console.log(`Se creo el cliente con ID: ${savedClient.id}`);
+                req.flash('newClientCreatedMessage', `Se creo el cliente con ID: ${savedClient.id}`);
             }
-            res.redirect(paths.index);
+            res.redirect(`${this.ROUTE_BASE}/`);
         } catch (e) {
             console.log(e);
-            res.redirect(paths.index);
+            req.flash('clientCreationErrorMessage', `${e}`);
+            res.redirect(`${this.ROUTE_BASE}/`);
         }
     }
 }

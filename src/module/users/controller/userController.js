@@ -1,11 +1,13 @@
 const AbstractController = require('./abstractController');
 
-const paths = require('./paths/paths');
-const { resData } = require('../../data/resData');
-
 module.exports = class UsersController extends AbstractController {
+    /**
+     * @param {import('../service/rentService')} rentService
+     * @param {import('../../cars/service/carsService')} carsService
+     */
     constructor(authStrategy) {
         super();
+        this.ROUTE_BASE = '/agency';
         this.authStrategy = authStrategy;
     }
 
@@ -13,20 +15,22 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Application} app
      */
     configureRoutes(app) {
-        app.get(paths.signup.path, this.signup.bind(this));
-        app.post(paths.signup.path, this.authStrategy.authenticate('local-signup', {
-            successRedirect: paths.profile.path,
-            failureRedirect: paths.signup.path,
+        const ROUTE = this.ROUTE_BASE;
+
+        app.get(`${ROUTE}/signup`, this.signup.bind(this));
+        app.post(`${ROUTE}/signup`, this.authStrategy.authenticate('local-signup', {
+            successRedirect: `${ROUTE}/profile`,
+            failureRedirect: `${ROUTE}/signup`,
             passReqToCallback: true
         }));
-        app.get(paths.login.path, this.login.bind(this));
-        app.post(paths.login.path, this.authStrategy.authenticate('local-login', {
-            successRedirect: paths.profile.path,
-            failureRedirect: paths.login.path,
+        app.get(`${ROUTE}/login`, this.login.bind(this));
+        app.post(`${ROUTE}/login`, this.authStrategy.authenticate('local-login', {
+            successRedirect: '/agency/profile',
+            failureRedirect: '/agency/login',
             passReqToCallback: true
         }));
-        app.get(paths.profile.path, this.profile.bind(this));
-        app.get(paths.logout.path, this.logout.bind(this));
+        app.get(`${ROUTE}/profile`, this.profile.bind(this));
+        app.get(`${ROUTE}/logout`, this.logout.bind(this));
     }
 
     /**
@@ -34,7 +38,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async signup(req, res) {
-        res.render(paths.signup.render, {resData})
+        res.render('users/view/signup.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     }
 
     /**
@@ -42,7 +46,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async login(req, res) {
-        res.render(paths.login.render, {resData});
+        res.render('users/view/login.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
@@ -50,7 +54,7 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async profile(req, res) {
-        res.render(paths.profile.render, {resData})
+        res.render('users/view/profile.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     };
 
     /**
@@ -59,6 +63,6 @@ module.exports = class UsersController extends AbstractController {
      */
     async logout(req, res) {
         req.logOut();
-        res.redirect(paths.index.path);
+        res.redirect('/')
     };
 }

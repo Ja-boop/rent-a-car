@@ -1,10 +1,6 @@
-const { fromDataToEntity } = require('../mapper/reserveMapper');
+const { fromDataToEntityReserve } = require('../mapper/reserveMapper');
 const getCurrentDate = require('../service/functions')
 const AbstractController = require('./abstractController');
-const CarNotDefinedError = require('../../cars/service/error/carNotDefinedError');
-
-const { paths } = require('./paths/paths');
-const { resData } = require('../../data/resData');
 
 module.exports = class RentsController extends AbstractController {
     /**
@@ -14,6 +10,7 @@ module.exports = class RentsController extends AbstractController {
      */
     constructor(rentService, carsService, clientsService) {
         super();
+        this.ROUTE_BASE = '/agency';
         this.rentService = rentService;
         this.carsService = carsService;
         this.clientsService = clientsService
@@ -23,27 +20,28 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Application} app
      */
     configureRoutes(app) {
+        const ROUTE = this.ROUTE_BASE;
         function isAuthenticated(req, res, next) {
             if (req.isAuthenticated()) {
                 return next();
             }
-            res.redirect(paths.login.path);
+            res.redirect(`${ROUTE}/login`)
         };
 
         // home
-        app.get(paths.index.path, this.index.bind(this));
+        app.get(`${ROUTE}/`, this.index.bind(this));
 
         // rent-a-car
-        app.get(paths.list.path, this.list.bind(this));
-        app.get(paths.create.path, this.form.bind(this));
-        app.post(paths.create.path, this.save.bind(this));
+        app.get(`${ROUTE}/rent/car/list`, this.rent_car_list.bind(this));
+        app.get(`${ROUTE}/rent/car/:id`, this.rent_form.bind(this));
+        app.post(`${ROUTE}/rent/car/:id`, this.save_rent.bind(this));
 
-        // client-reserves
-        app.get(paths.reserve.client.selector.path, this.client_selector.bind(this));
-        app.get(paths.reserve.list.path, this.client_reserves.bind(this));
-        app.get(paths.reserve.delete.path, isAuthenticated, this.delete_reserve.bind(this));
-        app.get(paths.reserve.update.path, isAuthenticated, this.view_reserve.bind(this));
-        app.post(`/agency/reserve/:id/view`, this.update_reserve.bind(this));
+        // user-reserves
+        app.get(`${ROUTE}/reserve/user/selector`, this.user_selector.bind(this));
+        app.get(`${ROUTE}/reserve/:id/list`, this.user_reserves.bind(this));
+        app.get(`${ROUTE}/reserve/:id/delete`, isAuthenticated, this.delete_reserve.bind(this));
+        app.get(`${ROUTE}/reserve/:id/view`, isAuthenticated, this.view_reserve.bind(this));
+        app.post(`${ROUTE}/reserve/:id/view`, this.update_reserve.bind(this));
     }
 
     /**
@@ -51,51 +49,32 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async index(req, res) {
-        res.render(paths.index.render, resData)
+        res.render('views/home.njk', { logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
     }
 
-    async list(req, res) {
-        const cars = await this.carsService.getAllCars();
-        res.render(paths.list.render, { data: { cars }, resData });
+    async rent_car_list(req, res) {
+        const car = await this.carsService.getAllCars();
+        res.render('rents/view/rentList.njk', { data: { car }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
     }
 
     /**
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async form(req, res) {
+    async rent_form(req, res) {
         const { id } = req.params;
         if (!id) {
-            throw new Error('id undefined');
+            throw new Error(`No se encontro el vehículo con el ID: ${id}`)
         }
         try {
             let currentDate = getCurrentDate();
             const car = await this.carsService.getCarById(id);
-            const clients = await this.clientsService.getAllClients();
-            res.render(paths.create.render, { currentDate, data: { car, clients }, resData })
-        } catch (e) {
-            req.session.errors = [e.message];
-            res.redirect(paths.reserve.list.path);
-        }
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async save(req, res) {
-        try {
-            const reserve = fromDataToEntity(req.body);
-            const savedReserve = await this.rentService.rentCar(reserve);
-            if (reserve.id) {
-                console.log(`La reserva N°: ${reserve.id} se actualizó correctamente`);
-            } else {
-                console.log(`La reserva N°: ${savedReserve.id} fue creada`);
-            }
-            res.redirect(paths.reserve.list.redirect(reserve.Client.id));
+            const client = await this.clientsService.getAllClients();
+            res.render('rents/view/rentCar.njk', { currentDate, data: { car, client }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
-            res.redirect(paths.list.path);
+            req.flash('rentCarErrorMessage', `${e}`);
+            res.redirect(`${this.ROUTE_BASE}/rent/car/list`);
         }
     }
 
@@ -103,25 +82,44 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async client_selector(req, res) {
-        const client = await this.clientsService.getAllClients();
-        console.log(client)
-        res.render(paths.reserve.client.selector.render, { data: { client }, resData })
-    }
-
-    /**
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     */
-    async client_reserves(req, res) {
-        const { id } = req.params;
-        if (!id) {
-            throw new Error('id undefined');
-        }
-
+    async save_rent(req, res) {
         try {
-            const reserve = await this.rentService.getUserReserve(id);     
-            res.render(paths.reserve.list.render, { data: { reserve }, resData })
+            const reserve = fromDataToEntityReserve(req.body);
+            const savedReserve = await this.rentService.rentCar(reserve);
+            console.log(savedReserve);
+            if (savedReserve.id) {
+                req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
+            } else {
+                req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
+            }
+            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.Client.id}/list`);
+        } catch (e) {
+            console.log(e);
+            req.flash('reserveCreationErrorMessage', `${e}`);
+            res.redirect(`${this.ROUTE_BASE}/car/list`);
+        }
+    }
+
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async user_selector(req, res) {
+        const client = await this.clientsService.getAllClients();
+        res.render('rents/view/userSelector.njk', { data: { client }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
+    }
+
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async user_reserves(req, res) {
+        try {
+            const { id } = req.params;
+            const reserve = await this.rentService.getUserReserve(id);
+            const allreserve = await this.rentService.getAllReserves();
+            console.log(allreserve);
+            res.render('rents/view/userCars.njk', { data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" })
         } catch (e) {
             console.log(e);
         }
@@ -132,18 +130,13 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async delete_reserve(req, res) {
-        const { id } = req.params;
-        if (!id) {
-            throw new Error('id undefined');
-        }
-
         try {
+            const { id } = req.params;
             const reserve = await this.rentService.getReserveById(id);
             await this.rentService.deleteReserve(reserve);
-            console.log(`La reserva con ID: ${reserve.id} fue eliminada correctamente`)
-            res.redirect(paths.reserve.delete.redirect(reserve.Client.id))
+            res.redirect(`${this.ROUTE_BASE}/reserve/${reserve.Client.id}/list`)
         } catch (e) {
-            console.log(e);
+            req.flash('carDeletedErrorMessage', e);
         }
     }
 
@@ -154,16 +147,16 @@ module.exports = class RentsController extends AbstractController {
     async view_reserve(req, res) {
         const { id } = req.params;
         if (!id) {
-            throw new Error('id undefined');
+            throw new Error(`No se encontro el vehículo con el ID: ${id}`)
         }
-
         try {
+            const user = req.user;
             let currentDate = getCurrentDate();
             const reserve = await this.rentService.getReserveById(id);
-            res.render(paths.reserve.update.render, { currentDate, data: { reserve }, resData });
+            res.render('rents/view/updateReserve.njk', { currentDate, data: { reserve }, logo: "/public/logo/logo-luzny.png", github: "https://github.com/Ja-boop/crud-autos" });
         } catch (e) {
-            console.log(e);
-            res.redirect(paths.list.path);
+            req.flash('viewCarErrorMessage', e);
+            res.redirect(`${this.ROUTE_BASE}/car/list`);
         }
     }
 
@@ -173,13 +166,19 @@ module.exports = class RentsController extends AbstractController {
      */
     async update_reserve(req, res) {
         try {
-            const reserve = fromDataToEntity(req.body);
-            await this.rentService.rentCar(reserve);
-            console.log(`La reserva N°: ${reserve.id} se actualizó correctamente`);
-            res.redirect(paths.reserve.list.redirect(reserve.Client.id));
+            const reserve = fromDataToEntityReserve(req.body);
+            console.log(reserve)
+            const savedReserve = await this.rentService.rentCar(reserve);
+            if (savedReserve.id) {
+                req.flash('updateReserveMessage', `La reserva N°: ${reserve.id} se actualizó correctamente`);
+            } else {
+                req.flash('newReserveCreatedMessage', `La reserva N°: ${savedReserve.id} fue creada`);
+            }
+            res.redirect(`${this.ROUTE_BASE}/reserve/list`);
         } catch (e) {
             console.log(e);
-            res.redirect(paths.reserve.client.selector.path);
+            req.flash('reserveCreationErrorMessage', `${e}`);
+            res.redirect(`${this.ROUTE_BASE}/car/list`);
         }
     }
 }

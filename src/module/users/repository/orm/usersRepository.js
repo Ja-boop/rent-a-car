@@ -1,6 +1,5 @@
 const AbstractUserRepository = require('./abstract/abstractUserRepository');
 const { fromModelToEntity } = require('../../mapper/userMapper');
-const UserNotFoundError = require('./error/userNotFoundError');
 
 module.exports = class UsersRepository extends AbstractUserRepository {
     /**
@@ -28,7 +27,7 @@ module.exports = class UsersRepository extends AbstractUserRepository {
         }, buildOptions);
         userModel = await userModel.save();
 
-        return fromModelToEntity(userModel) ;
+        return user;
     }
 
     /**
@@ -36,16 +35,15 @@ module.exports = class UsersRepository extends AbstractUserRepository {
      * @returns {Promise<import('../../entity/user')>}
      */
     async getUserByEmail(email) {
-        try {
-            const userModel = await this.userModel.findOne({
-                where: { email }
-            });
+        const userModel = await this.userModel.findOne({
+            where: { email }
+        });
 
-            return fromModelToEntity(userModel);
-        } catch(e) {
-            console.log(e);
+        if (userModel == null || userModel === undefined) {
             return false;
         }
+
+        return fromModelToEntity(userModel);
     }
 
     /**
@@ -53,16 +51,15 @@ module.exports = class UsersRepository extends AbstractUserRepository {
      * @returns {Promise<import('../../entity/user')>}
      */
      async getUserById(id) {
-        try {
-            const userModel = await this.userModel.findOne({
-                where: { id }
-            });
+        const userModel = await this.userModel.findOne({
+            where: { id }
+        });
 
-            return fromModelToEntity(userModel);
-        } catch(e) {
-            console.log(e);
-            return false
-        }        
+        if (userModel == null || userModel === undefined) {
+            return false;
+        }
+
+        return fromModelToEntity(userModel);
     }
 
     async comparePasswords(password, hash) {
