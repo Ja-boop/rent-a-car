@@ -8,7 +8,7 @@ const { resData } = require('../../data/resData');
 
 module.exports = class RentsController extends AbstractController {
     /**
-     * @param {import('../service/rentsService')} rentService
+     * @param {import('../service/reserveService')} rentService
      * @param {import('../../cars/service/carsService')} carsService
      * @param {import('../../clients/service/clientsService')} clientsService
      */

@@ -5,7 +5,7 @@ const ReserveIdNotDefinedError = require('./error/reserveIdNotDefinedError');
 
 module.exports = class RentsRepository extends AbstractRentRepository {
     /**
-     * @param {typeof import('../../model/rentModel')} rentModel
+     * @param {typeof import('../../model/reserveModel')} rentModel
      * @param {typeof import('../../../cars/model/carModel')} carModel
      * @param {typeof import('../../../clients/model/clientModel')} clientModel
      */

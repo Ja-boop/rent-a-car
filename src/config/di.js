@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { Sequelize } = require('sequelize');
-const { RentsRepository, RentsService, RentsController, RentModel } = require('../module/rents/module');   
+const { ReserveRepository, ReserveService, ReserveController, ReserveModel } = require('../module/rents/module');   
 const { CarsRepository, CarsService, CarsController, CarModel } = require('../module/cars/module');
 const { UsersRepository, UsersService, UsersController, UserModel } = require('../module/users/module');
 const { ClientsRepository, ClientsService, ClientsController, ClientModel } = require('../module/clients/module');
@@ -51,10 +51,10 @@ function configureCarModel(container) {
 }
 
 function configureRentModel(container) {
-    RentModel.setup(container.get('Sequelize'));
-    RentModel.setupCarAssociations(container.get('CarModel'));
-    RentModel.setupClientAssociations(container.get('ClientModel'))
-    return RentModel;
+    ReserveModel.setup(container.get('Sequelize'));
+    ReserveModel.setupCarAssociations(container.get('CarModel'));
+    ReserveModel.setupClientAssociations(container.get('ClientModel'))
+    return ReserveModel;
 }
 
 function configureUserModel(container) {
@@ -79,14 +79,14 @@ function addCommonDefinitions(container) {
 
 function addModuleDefinitions(container) {
     container.addDefinitions({
-        RentsController: object(RentsController).construct(
-            get('RentService'),
+        ReserveController: object(ReserveController).construct(
+            get('ReserveService'),
             get('CarsService'),
             get('ClientsService'),
             ),
-        RentService: object(RentsService).construct(get('RentRepository')),
-        RentRepository: object(RentsRepository).construct(get('RentModel'), get('CarModel'), get('ClientModel')),
-        RentModel: factory(configureRentModel),
+        ReserveService: object(ReserveService).construct(get('ReserveRepository')),
+        ReserveRepository: object(ReserveRepository).construct(get('ReserveModel'), get('CarModel'), get('ClientModel')),
+        ReserveModel: factory(configureRentModel),
     });
 }
 

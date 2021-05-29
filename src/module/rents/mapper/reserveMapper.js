@@ -25,7 +25,7 @@ function fromDataToEntity({
 }
 
 /**
- * @param {import('../model/rentModel')} model
+ * @param {import('../model/reserveModel')} model
  * @returns {import('../../entity/rent')}
  */
 function fromModelToEntity(model) {

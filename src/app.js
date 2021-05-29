@@ -40,7 +40,7 @@ initCarsModule(app, container);
 initUsersModule(app, container);
 initClientsModule(app, container);
 
-const rentsController = container.get('RentsController');
+const rentsController = container.get('ReserveController');
 app.get('/', rentsController.index.bind(rentsController));
 
 const server = app.listen(port, () => {
