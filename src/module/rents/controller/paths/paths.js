@@ -14,7 +14,7 @@ const paths = {
     },
     create: {
         path: `${ROUTE}/rent/car/:id`,
-        render: 'rents/view/rentCar.njk',
+        render: 'rents/view/reserveCar.njk',
     },
     reserve: {
         client: {
