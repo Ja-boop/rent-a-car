@@ -10,7 +10,7 @@ const paths = {
     },
     list: {
         path: `${ROUTE}/rent/car/list`,
-        render: 'rents/view/rentList.njk',
+        render: 'cars/view/list.njk',
     },
     create: {
         path: `${ROUTE}/rent/car/:id`,
