@@ -7,14 +7,16 @@
                 <div class="level-item has-text-centered">
                     <div class="take-day">
                         <p>Fecha de salida</p>
-                        <input class="input" type="date" id="take-day" name="take-day" min={{ currentDate }} value={{ currentDate }}>
+                        <input class="input" type="date" id="take-day" name="take-day" {% if car %}min={{ currentDate }}{% endif %} 
+                        value={% if car %}{{currentDate}}{% else %}{{reserve.takeDay}}{% endif %}>
                     </div>
                 </div>
 
                 <div class="level-item has-text-centered">
                     <div>
                         <p>Fecha de devolución</p>
-                        <input class="input" type="date" id="return-day" name="return-day" min={{ currentDate }} value={{ currentDate }}>
+                        <input class="input" type="date" id="return-day" name="return-day" {% if car %}min={{ currentDate }}{% endif %} 
+                        value={% if car %}{{currentDate}}{% else %}{{reserve.returnDay}}{% endif %}>
                     </div>
                 </div>
             </div>

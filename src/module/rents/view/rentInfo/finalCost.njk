@@ -2,7 +2,7 @@
     <div class="box container">
         <div class="final-cost">
             <h3>Final Cost</h3>
-            <input class="input" type="number" id="rent-cost"  name="final-cost" value={{car.cost}} readonly>
+            <input class="input" type="number" id="rent-cost"  name="final-cost" value={% if car %}{{car.cost}}{% else %}{{reserve.finalCost}}{% endif %} readonly>
             <input type="hidden" name="payment" value='Cash' readonly/>
             <input type="hidden" name="status" value='No' readonly/>
         </div>

@@ -1,20 +1,21 @@
 {% block carinfo %}
     <div class="box container is-widescreen car-info">
         <h3>Car</h3>
-        <img src="/{{car.imageUrl}}" width="256" height="256"/>
-        <input type="hidden" value="{{car.imageUrl}}" readonly/>
+        <img src="/{% if car %}{{car.imageUrl}}{% else %}{{reserve.Car.imageUrl}}{% endif %}" width="256" height="256"/>
+        <input type="hidden" value="{% if car %}{{car.imageUrl}}{% else %}{{reserve.Car.imageUrl}}{% endif %}" readonly/>
+        <input id="car-cost" type="hidden" value={% if car %}{{car.cost}}{% else %}{{reserve.Car.cost}}{% endif %} readonly/>
         <ul class="fl">
-            <li>Brand: {{car.brand}}</li>
-            <li>Model: {{car.model}}</li>
-            <li>Year: {{car.yearManufactured}}</li>
-            <li>Kms: {{car.kms}}</li>
-            <li>Color: {{car.color}}</li>
+            <li>Brand: {% if car %}{{car.brand}}{% else %}{{reserve.Car.brand}}{% endif %}</li>
+            <li>Model: {% if car %}{{car.model}}{% else %}{{reserve.Car.model}}{% endif %}</li>
+            <li>Year: {% if car %}{{car.yearManufactured}}{% else %}{{reserve.Car.yearManufactured}}{% endif %}</li>
+            <li>Kms: {% if car %}{{car.kms}}{% else %}{{reserve.Car.kms}}{% endif %}</li>
+            <li>Color: {% if car %}{{car.color}}{% else %}{{reserve.Car.color}}{% endif %}</li>
         </ul>
         <ul class="fl2">
-            <li>AC: {{car.airConditioner}}</li>
-            <li>Passengers: {{car.passengers}}</li>
-            <li>Transmission: {{car.transmission}}</li>
-            <li>Cost: {{car.cost}}</li>
+            <li>AC: {% if car %}{{car.airConditioner}}{% else %}{{reserve.Car.airConditioner}}{% endif %}</li>
+            <li>Passengers: {% if car %}{{car.passengers}}{% else %}{{reserve.Car.passengers}}{% endif %}</li>
+            <li>Transmission: {% if car %}{{car.transmission}}{% else %}{{reserve.Car.transmission}}{% endif %}</li>
+            <li>Cost: {% if car %}{{car.cost}}{% else %}{{reserve.Car.cost}}{% endif %}</li>
         </ul>
     </div>
 {% endblock %}

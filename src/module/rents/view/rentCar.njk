@@ -10,8 +10,8 @@
 
     <div class="container">
         <div class="rent-options">
-            <form id="form" action="/agency/rent/car/{{car.id *or* reserve.Car.id}}" method="POST">
-                <input type="hidden" name="car_id" value={{car.id}} readonly/>
+            <form id="form" action="/agency/rent/car/{% if car %}{{car.id}}{% else %}{{reserve.Car.id}}{% endif %}" method="POST">
+                <input type="hidden" name="car_id" value={% if car %}{{car.id}}{% else %}{{reserve.Car.id}}{% endif %} readonly/>
 
                 <div class="content">
                     <div class"rent-options">
@@ -20,7 +20,12 @@
 
                             {% include "./rentInfo/car.njk" %}
 
-                            {% include "./rentInfo/clients.njk" %}
+                            {% if car %}
+                                {% include "./rentInfo/clients.njk" %}
+                            {% else %}
+                                <input type="hidden" name="client_id" value={{reserve.Client.id}}>
+                                <input type="hidden" name="id" value={{reserve.id}}>
+                            {% endif %}
 
                             {% include "./rentInfo/dates.njk" %}
 

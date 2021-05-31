@@ -41,9 +41,9 @@ module.exports = class RentsController extends AbstractController {
         // client-reserves
         app.get(paths.reserve.client.selector.path, this.client_selector.bind(this));
         app.get(paths.reserve.list.path, this.client_reserves.bind(this));
-        app.get(paths.reserve.delete.path, isAuthenticated, this.delete_reserve.bind(this));
-        app.get(paths.reserve.update.path, isAuthenticated, this.view_reserve.bind(this));
-        app.post(`/agency/reserve/:id/view`, this.update_reserve.bind(this));
+        app.get(paths.reserve.delete.path, this.delete_reserve.bind(this));
+        app.get(paths.reserve.update.path, this.view_reserve.bind(this));
+        app.post(paths.create.path, this.update_reserve.bind(this));
     }
 
     /**
@@ -55,8 +55,9 @@ module.exports = class RentsController extends AbstractController {
     }
 
     async list(req, res) {
-        const cars = await this.carsService.getAllCars();
-        res.render(paths.list.render, { data: { cars }, resData });
+        const car = await this.carsService.getAllCars();
+        const reserve = true;
+        res.render(paths.list.render, { data: { car, reserve }, resData });
     }
 
     /**
