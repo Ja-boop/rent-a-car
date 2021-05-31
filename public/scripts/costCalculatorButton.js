@@ -1,6 +1,7 @@
 let takeDay = document.querySelector('#take-day');
 let returnDay = document.querySelector('#return-day');
-let cost = document.querySelector('#rent-cost');
+let cost = document.querySelector('#car-cost');
+let rentCost = document.querySelector('#rent-cost');
 let integer = parseInt(cost.value, 10);
 
 returnDay.addEventListener('blur', () => {
@@ -17,7 +18,8 @@ returnDay.addEventListener('blur', () => {
 });
 
 function changeCostValue(daysDistance) {
-    cost.value = integer * daysDistance;
+    let costValue = cost.value = integer * daysDistance;
+    rentCost.value = costValue;
 }
 
 function getCurrentDate() {
