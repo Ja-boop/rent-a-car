@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const ReserveModel = require('../rentModel');
+const ReserveModel = require('../reserveModel');
 
 const sequelizeInstance = new Sequelize('sqlite::memory');
 

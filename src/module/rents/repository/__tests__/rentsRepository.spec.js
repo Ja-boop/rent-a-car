@@ -1,8 +1,8 @@
 /// <reference types="Jest" />
 
 const { Sequelize } = require('sequelize');
-const ReserveRepository = require('../orm/rentsRepository');
-const ReserveModel = require('../../model/rentModel');
+const ReserveRepository = require('../orm/reserveRepository');
+const ReserveModel = require('../../model/reserveModel');
 const CarModel = require('../../../cars/model/carModel');
 const ClientModel = require('../../../clients/model/clientModel');
 const ReserveNotFoundError = require('../orm/error/reserveNotFoundError');

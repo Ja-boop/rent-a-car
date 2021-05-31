@@ -1,6 +1,6 @@
 /// <reference types="Jest" />
 
-const ReserveService = require('../rentsService');
+const ReserveService = require('../reserveService');
 const Reserve = require('../../entity/reserve');
 const ReserveNotDefinedError = require('../error/reserveNotDefinedError');
 const ReserveIdNotDefinedError = require('../error/reserveIdNotDefinedError');

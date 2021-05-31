@@ -1,4 +1,4 @@
-const ReserveController = require('../rentsController');
+const ReserveController = require('../reserveController');
 const Reserve = require('../../entity/reserve');
 const Car = require('../../../cars/entity/car');
 const Client = require('../../../clients/entity/client');

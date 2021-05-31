@@ -160,7 +160,7 @@ module.exports = class RentsController extends AbstractController {
         try {
             let currentDate = getCurrentDate();
             const reserve = await this.rentService.getReserveById(id);
-            res.render(paths.reserve.update.render, { currentDate, data: { reserve }, resData });
+            res.render(paths.create.render, { currentDate, data: { reserve }, resData });
         } catch (e) {
             console.log(e);
             res.redirect(paths.list.path);
