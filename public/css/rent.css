@@ -1,8 +1,54 @@
 .rent-options {
-    border-style: groove;
     height: 970px;
     width: 1200px;
-    margin-top: 100px;
+    margin-top: 2em;
+}
+
+.dates {
+    margin-top: 2em;
+    padding-bottom: 25px;
+}
+
+.take-day {
+    padding-right: 5em;
+}
+
+.fl {
+    position: absolute;
+    top: 30px;
+    left: 250px;
+}
+
+.content ul {
+    padding-top: 1em;
+    margin-left: 4em;
+}
+
+.clients {
+    padding-bottom: 25px;
+}
+
+.fl2 {
+    position: absolute;
+    top: 30px;
+    left: 400px;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.car-info {
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.final-cost {
+    width: 20%;
 }
 
 .title-block {
@@ -16,5 +62,6 @@
 }
 
 .confirmation-options {
-    margin-top: 100px;
+    margin-top: 2em;
+    
 }
