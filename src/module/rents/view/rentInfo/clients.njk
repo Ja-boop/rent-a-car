@@ -1,0 +1,70 @@
+{% block clients %}
+    <div class="box container is-widescreen clients">
+        <h3>Search Client</h3>
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+
+            <thead>
+                <tr>
+                    <th>
+                        <abbr title="Select">Select</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Id">Id</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Name">Name</abbr>
+                    </th>
+                    <th>
+                        <abbr title="LastName">Last Name</abbr>
+                    </th>
+                    <th>
+                        <abbr title="IdentifierType">Identifier Type</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Identifier Number">Identifier Number</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Nationality">Nationality</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Address">Address</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Phone">Phone</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Email">Email</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Birthday">Birthday</abbr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for clients in data.clients%}
+                    <tr>
+                        <th>
+                            <div class="control">
+                                <label class="radio">
+                                    <input id="client-id" type="radio" name="client_id" value={{clients.id}}>
+                                </label>
+                            </div>
+                        </th>
+                        <td>{{clients.id}}</td>
+                        <td>{{clients.name}}</td>
+                        <td>{{clients.lastName}}</td>
+                        <td>{{clients.identifierType}}</td>
+                        <td>{{clients.identifierNumber}}</td>
+                        <td>{{clients.nationality}}</td>
+                        <td>{{clients.address}}</td>
+                        <td>{{clients.phone}}</td>
+                        <td>{{clients.email}}</td>
+                        <td>{{clients.birthday}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

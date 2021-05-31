@@ -1,0 +1,20 @@
+{% block carinfo %}
+    <div class="box container is-widescreen car-info">
+        <h3>Car</h3>
+        <img src="/{{car.imageUrl}}" width="256" height="256"/>
+        <input type="hidden" value="{{car.imageUrl}}" readonly/>
+        <ul class="fl">
+            <li>Brand: {{car.brand}}</li>
+            <li>Model: {{car.model}}</li>
+            <li>Year: {{car.yearManufactured}}</li>
+            <li>Kms: {{car.kms}}</li>
+            <li>Color: {{car.color}}</li>
+        </ul>
+        <ul class="fl2">
+            <li>AC: {{car.airConditioner}}</li>
+            <li>Passengers: {{car.passengers}}</li>
+            <li>Transmission: {{car.transmission}}</li>
+            <li>Cost: {{car.cost}}</li>
+        </ul>
+    </div>
+{% endblock %}

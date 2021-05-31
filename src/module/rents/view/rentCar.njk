@@ -2,6 +2,7 @@
 
 {% block contenido %}
     {% set car = data.car %}
+    {% set reserve = data.reserve %}
 
     {# NAVBAR #}
     {% include "../../views/layout/navbar.njk" %}
@@ -9,104 +10,29 @@
 
     <div class="container">
         <div class="rent-options">
-            <form id="form" action="/agency/rent/car/{{car.id}}" method="POST">
+            <form id="form" action="/agency/rent/car/{{car.id *or* reserve.Car.id}}" method="POST">
                 <input type="hidden" name="car_id" value={{car.id}} readonly/>
 
                 <div class="content">
-                    <div class"search-client">
-                        <h3>Search Client</h3>
-                        
-                        <div class="contain">
-                            <div class="container">
-                                <div class="clients"> 
-                                <table class="table is-fullwidth">
+                    <div class"rent-options">
 
-                                <thead>
-                                <tr>
-                                <th><abbr title="Select">Select</abbr></th>
-                                <th><abbr title="Id">Id</abbr></th>
-                                <th><abbr title="Name">Name</abbr></th>
-                                <th><abbr title="LastName">Last Name</abbr></th>
-                                <th><abbr title="IdentifierType">Identifier Type</abbr></th>
-                                <th><abbr title="Identifier Number">Identifier Number</abbr></th>
-                                <th><abbr title="Nationality">Nationality</abbr></th>
-                                <th><abbr title="Address">Address</abbr></th>
-                                <th><abbr title="Phone">Phone</abbr></th>
-                                <th><abbr title="Email">Email</abbr></th>
-                                <th><abbr title="Birthday">Birthday</abbr></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {%for clients in data.clients%}
-                                    <tr>    
-                                    <th>
-                                        <div class="control">
-                                        <label class="radio">
-                                            <input type="radio" name="client_id" value={{clients.id}}>
-                                        </label>
-                                    </div>
-                                    </th>                               
-                                    <td>{{clients.id}}</td>
-                                    <td>{{clients.name}}</td>
-                                    <td>{{clients.lastName}}</td>
-                                    <td>{{clients.identifierType}}</td>
-                                    <td>{{clients.identifierNumber}}</td>
-                                    <td>{{clients.nationality}}</td>
-                                    <td>{{clients.address}}</td>
-                                    <td>{{clients.phone}}</td>
-                                    <td>{{clients.email}}</td>
-                                    <td>{{clients.birthday}}</td>
-                                    <td>
-                                    </td>
-                                    </tr>
-                                    {%endfor%}
-                                </tbody>
+                        <div class="container">
 
-                                </table>
-                                </div>
-                            </div>
+                            {% include "./rentInfo/car.njk" %}
 
+                            {% include "./rentInfo/clients.njk" %}
 
-                            <h3 class="title is-5 title-block">Vehiculo</h3>
-                            <div>
-                                <img src="/{{car.imageUrl}}" width="256" height="256"/>
-                                <input type="hidden" value="{{car.imageUrl}}" readonly/>
-                            </div>
-                            <h3 class="title is-5 title-block">Selecciona la fecha</h3>
+                            {% include "./rentInfo/dates.njk" %}
 
-                            <div>
-                                <p>Fecha de salida</p>
-                                <input type="date" id="take-day" name="take-day" min={{ currentDate }} value={{ currentDate }}>
-                                <p>Fecha de devolución</p>
-                                <input type="date" id="return-day" name="return-day" min={{ currentDate }} value={{ currentDate }}>
-                                <button type="button" id="cost-calculator">Calcular Costo</button>
-                                <h3 class="title is-5 title-block">Costo final</h3>
-                                <p>Cost: </p>
-                                <input type="text" id="rent-cost"  name="final-cost" value={{car.cost}} readonly>
-                                <input type="hidden" name="payment" value='Cash' readonly/>
-                                <input type="hidden" name="status" value='No' readonly/>
-                            </div>
-
-                            <div class="confirmation-options">
-                                <div class="field is-grouped">
-                                    <div class="control">
-                                        <button class="button is-link">Submit</button>
-                                    </div>
-                                    <div class="control">
-                                        <button class="button is-link is-light">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-
+                            {% include "./rentInfo/finalCost.njk" %}
 
                         </div>
-                    </div>      
-                </div>
 
-                
-            </form>
+                    </div>
+
+                </form>
+            </div>
         </div>
-    </div>
-    <script src="/public/scripts/costCalculatorButton.js"></script>
-    <script src="/public/scripts/clientFinder.js"></script>
-{% endblock %}
+        <script src="/public/scripts/costCalculatorButton.js"></script>
+        <script src="/public/scripts/validations.js"></script>
+    {% endblock %}

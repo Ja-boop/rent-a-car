@@ -1,6 +1,5 @@
 let takeDay = document.querySelector('#take-day');
 let returnDay = document.querySelector('#return-day');
-let form = document.querySelector('#form');
 let cost = document.querySelector('#rent-cost');
 let integer = parseInt(cost.value, 10);
 
@@ -15,17 +14,6 @@ returnDay.addEventListener('blur', () => {
         changeCostValue(daysDistance);
     }
     
-});
-
-form.addEventListener('submit', (event) => {
-    let daysDistance = getDaysDistance();
-   
-    if (daysDistance <= 0) {
-        alert('La fecha de retiro es mayor a la fecha de entrega')
-        takeDay.select();
-        takeDay.focus();
-        event.preventDefault()
-    }    
 });
 
 function changeCostValue(daysDistance) {
