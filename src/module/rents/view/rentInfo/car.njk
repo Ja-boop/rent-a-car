@@ -15,7 +15,7 @@
             <li>AC: {% if car %}{{car.airConditioner}}{% else %}{{reserve.Car.airConditioner}}{% endif %}</li>
             <li>Passengers: {% if car %}{{car.passengers}}{% else %}{{reserve.Car.passengers}}{% endif %}</li>
             <li>Transmission: {% if car %}{{car.transmission}}{% else %}{{reserve.Car.transmission}}{% endif %}</li>
-            <li>Cost: {% if car %}{{car.cost}}{% else %}{{reserve.Car.cost}}{% endif %}</li>
+            <li id="car-cost">Cost: {% if car %}{{car.cost}}{% else %}{{reserve.Car.cost}}{% endif %}</li>
         </ul>
     </div>
 {% endblock %}

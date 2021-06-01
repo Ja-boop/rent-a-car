@@ -44,6 +44,7 @@ module.exports = class RentsController extends AbstractController {
         app.get(paths.reserve.delete.path, this.delete_reserve.bind(this));
         app.get(paths.reserve.update.path, this.view_reserve.bind(this));
         app.post(paths.create.path, this.update_reserve.bind(this));
+        app.get(paths.reserve.pay.path, this.pay.bind(this));
     }
 
     /**
@@ -183,5 +184,18 @@ module.exports = class RentsController extends AbstractController {
             res.redirect(paths.reserve.client.selector.path);
         }
     }
-}
 
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async pay(req, res) {
+        const { id } = req.params;
+        if (!id) {
+            throw new Error('id undefined');
+        }
+
+        await this.rentService.changePayStatus(id);
+        
+    }
+}

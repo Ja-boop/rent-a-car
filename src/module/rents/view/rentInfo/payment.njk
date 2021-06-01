@@ -1,0 +1,25 @@
+{% block payment %}
+    <div class="box container">
+        <div class="field">
+            <label class="label">Payment</label>
+            <div class="control">
+                <div class="select">
+                    <select id="payment-options" name="payment" value="{{reserve.payment}}">
+                        <option value="Cash">Cash</option>
+                        <option value="Credit Card">Credit Card</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="cuotas-div" class="hidden-div field">
+            <label class="label">Cuotas</label>
+            <div class="control">
+                <div class="select">
+                    <select id="cuotas" name="cuotas">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

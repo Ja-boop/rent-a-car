@@ -102,7 +102,7 @@ module.exports = class CarsController extends AbstractController {
         }
         try {
             const car = await this.carsService.getCarById(id);
-            res.render(paths.create.render, { data: { car } });
+            res.render(paths.create.render, { data: { car }, resData });
         } catch (e) {
             console.log(e);
             res.redirect(paths.list.path);

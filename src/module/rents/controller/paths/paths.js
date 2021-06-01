@@ -40,6 +40,12 @@ const paths = {
             path: `${ROUTE}/reserve/:id/view`,
             render: 'rents/view/updateReserve.njk',
         },
+        pay: {
+            path: `${ROUTE}/reserve/:id/paid`,
+            redirect: (id) => {
+                return `${ROUTE}/reserve/${id}/list`
+            }
+        }
     }
 }
 

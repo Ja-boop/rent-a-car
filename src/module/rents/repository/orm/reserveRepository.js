@@ -85,4 +85,26 @@ module.exports = class RentsRepository extends AbstractRentRepository {
 
         return fromModelToEntity(rentModel);
     }
+
+    async changePayStatus(id) {
+        const rentModel = await this.rentModel.findOne({
+            where: { id },
+            include: [this.carModel, this.clientModel],
+        });
+
+        if (!rentModel) {
+            throw new ReserveNotFoundError()
+        }
+
+        if (rentModel.status === "No") {
+            rentModel.status = "Yes"
+            await rentModel.save();
+        } else {
+            rentModel.status = "No"
+            await rentModel.save();
+        }
+
+        
+        
+    }
 }
