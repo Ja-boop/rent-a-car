@@ -12,7 +12,7 @@ const mainDb = container.get('Sequelize');
 
 
 container.get('CarModel');
-container.get('RentModel');
+container.get('ReserveModel');
 container.get('UserModel');
 container.get('ClientModel');
 
