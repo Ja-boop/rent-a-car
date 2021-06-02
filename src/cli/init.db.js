@@ -6,7 +6,7 @@ const app = express();
 const container = configureDI(app);
 
 /**
- * @type {import('sequelize').Sequelize} mainCarsDb
+ * @type {import('sequelize').Sequelize} mainDb
  */
 const mainDb = container.get('Sequelize');
 
