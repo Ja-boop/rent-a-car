@@ -5,63 +5,66 @@
     {% include "../../views/layout/navbar.njk" %}
     {# NAVBAR #}
 
-<div class="user-table">
-<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-    <thead>
-        <tr>
-            <th>
-                <abbr title="Options">Select</abbr>
-            </th>
-            <th>
-                <abbr title="Id">Id</abbr>
-            </th>
-            <th>
-                <abbr title="Name">Name</abbr>
-            </th>
-            <th>
-                <abbr title="LastName">Last Name</abbr>
-            </th>
-            <th>
-                <abbr title="IdentifierType">Identifier Type</abbr>
-            </th>
-            <th>
-                <abbr title="Identifier Number">Identifier Number</abbr>
-            </th>
-            <th>
-                <abbr title="Nationality">Nationality</abbr>
-            </th>
-            <th>
-                <abbr title="Address">Address</abbr>
-            </th>
-            <th>
-                <abbr title="Phone">Phone</abbr>
-            </th>
-            <th>
-                <abbr title="Email">Email</abbr>
-            </th>
-            <th>
-                <abbr title="Birthday">Birthday</abbr>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        {%for client in data.client%}
-            <tr>
-                <td><a href="http://localhost:8080/agency/reserve/{{client.id}}/list">Select</a></td>
-                <td>{{client.id}}</td>
-                <td>{{client.name}}</td>
-                <td>{{client.lastName}}</td>
-                <td>{{client.identifierType}}</td>
-                <td>{{client.identifierNumber}}</td>
-                <td>{{client.nationality}}</td>
-                <td>{{client.address}}</td>
-                <td>{{client.phone}}</td>
-                <td>{{client.email}}</td>
-                <td>{{client.birthday}}</td>
-            </tr>
-        {%endfor%}
-    </tbody>
+    <div class="user-table-container container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>
+                        <abbr title="Options">Select</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Id">Id</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Name">Name</abbr>
+                    </th>
+                    <th>
+                        <abbr title="LastName">Last Name</abbr>
+                    </th>
+                    <th>
+                        <abbr title="IdentifierType">Identifier Type</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Identifier Number">Identifier Number</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Nationality">Nationality</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Address">Address</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Phone">Phone</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Email">Email</abbr>
+                    </th>
+                    <th>
+                        <abbr title="Birthday">Birthday</abbr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for client in data.client%}
+                    <tr>
+                        <td>
+                            <a href="http://localhost:8080/agency/reserve/{{client.id}}/list">Select</a>
+                        </td>
+                        <td>{{client.id}}</td>
+                        <td>{{client.name}}</td>
+                        <td>{{client.lastName}}</td>
+                        <td>{{client.identifierType}}</td>
+                        <td>{{client.identifierNumber}}</td>
+                        <td>{{client.nationality}}</td>
+                        <td>{{client.address}}</td>
+                        <td>{{client.phone}}</td>
+                        <td>{{client.email}}</td>
+                        <td>{{client.birthday}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
 
-</table>
-</div>
+            </table>
+        </div>
+    </div>
 {% endblock %}

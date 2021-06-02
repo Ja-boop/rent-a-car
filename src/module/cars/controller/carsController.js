@@ -34,8 +34,11 @@ module.exports = class CarsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async car_list(req, res) {
+        const { errors, messages } = req.session;
         const car = await this.carsService.getAllCars();
-        res.render(paths.list.render, { data: { car }, resData });
+        res.render(paths.list.render, { data: { car }, resData, errors, messages });
+        req.session.errors = [];
+        req.session.messages = [];
     }
 
     /**
@@ -60,9 +63,9 @@ module.exports = class CarsController extends AbstractController {
             }
             const savedCar = await this.carsService.saveCar(car);
             if (car.id) {
-                console.log(`El vehículo con el ID: ${car.id} se actualizo correctamente`);
+                req.session.messages = [`El vehículo con el ID: ${car.id} se actualizo correctamente`];
             } else {
-                console.log(`Se creo el vehículo con ID: ${savedCar.id} (${savedCar.brand}, ${savedCar.model})`);
+                req.session.messages = [`Se creo el vehículo con ID: ${savedCar.id} (${savedCar.brand}, ${savedCar.model})`];
             }
             res.redirect(paths.list.path);
         } catch (e) {
@@ -84,9 +87,10 @@ module.exports = class CarsController extends AbstractController {
         try {
             const car = await this.carsService.getCarById(id);
             await this.carsService.deleteCar(car);
-            console.log(`El vehículo con ID: ${car.id} (${car.brand}, ${car.model}) fue eliminado correctamente`);
+            req.session.messages = [`El vehículo con ID: ${car.id} (${car.brand}, ${car.model}) fue eliminado correctamente`];
         } catch (e) {
-            console.log(e);
+            req.session.errors = [e.message, e.stack];
+            res.redirect(paths.list.path);
         }
         res.redirect(paths.list.path);
     }
@@ -104,7 +108,7 @@ module.exports = class CarsController extends AbstractController {
             const car = await this.carsService.getCarById(id);
             res.render(paths.create.render, { data: { car }, resData });
         } catch (e) {
-            console.log(e);
+            req.session.errors = [e.message, e.stack];
             res.redirect(paths.list.path);
         }
     }

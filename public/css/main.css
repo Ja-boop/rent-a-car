@@ -47,18 +47,39 @@ br {
 
 .cuadro-opciones-form {
     height: 900px;
-    margin-top: 50px;
-    margin-right: 500px;
-    margin-left: 500px;
     background-color: white;
     padding: 3em;
+    width: 50em;
+    margin-top: 3em;
+    margin-left: 30%;
+}
+
+.container-create-client {
+    height: 1000px;
+}
+
+.container-lista-vehiculo {
+    height: 1000px;
+    background-color: hsl(171, 100%, 41%);
+    
 }
 
 .lista-vehiculos {
     margin-top: 20px;
+    margin-bottom: 40px;
+    height: 780px;
 }
 
 #register-form {
     padding: 100px;
     width: 800px;
+    height: 1000px;
+    
+}
+
+.login-container {
+    
+    float: left;
+    
+    
 }

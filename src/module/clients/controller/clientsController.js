@@ -25,6 +25,7 @@ module.exports = class ClientsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async create(req, res) {
+        req.session.current_url = paths.create.path;
         res.render(paths.create.render, resData);
     }
 
@@ -38,13 +39,13 @@ module.exports = class ClientsController extends AbstractController {
             console.log(client)
             const savedClient = await this.clientsService.saveClient(client);
             if (client.id) {
-                console.log(`El cliente con el ID: ${client.id} se actualizo correctamente`);
+                req.session.messages = [`El cliente con el ID: ${client.id} se actualizo correctamente`];
             } else {
-                console.log(`Se creo el cliente con ID: ${savedClient.id}`);
+                req.session.messages = [`Se creo el cliente con ID: ${savedClient.id}`];
             }
             res.redirect(paths.index);
         } catch (e) {
-            console.log(e);
+            req.session.errors = [e.message, e.stack];
             res.redirect(paths.index);
         }
     }

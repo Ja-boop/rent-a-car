@@ -12,19 +12,20 @@ module.exports = class UsersController extends AbstractController {
     /**
      * @param {import('express').Application} app
      */
-    configureRoutes(app) {
+    async configureRoutes(app) {
         app.get(paths.signup.path, this.signup.bind(this));
-        app.post(paths.signup.path, this.authStrategy.authenticate('local-signup', {
-            successRedirect: paths.profile.path,
-            failureRedirect: paths.signup.path,
-            passReqToCallback: true
-        }));
+        app.post(paths.signup.path, this.authStrategy.authenticate('local-signup', 
+        { failureRedirect: paths.signup.path}), (req, res) => {
+            let { current_url } = req.session;
+            res.redirect(current_url);
+        }),
         app.get(paths.login.path, this.login.bind(this));
-        app.post(paths.login.path, this.authStrategy.authenticate('local-login', {
-            successRedirect: paths.profile.path,
-            failureRedirect: paths.login.path,
-            passReqToCallback: true
-        }));
+        app.post(paths.login.path, this.authStrategy.authenticate('local-login', 
+        { failureRedirect: paths.login.path}), (req, res) => {
+            let { current_url } = req.session;
+            res.redirect(current_url);
+        }),
+     
         app.get(paths.profile.path, this.profile.bind(this));
         app.get(paths.logout.path, this.logout.bind(this));
     }

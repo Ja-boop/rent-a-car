@@ -141,7 +141,7 @@ test('update_car renderea form', async () => {
     expect(serviceMock.getCarById).toHaveBeenCalledTimes(2);
     expect(serviceMock.getCarById).toHaveBeenCalledWith(carId);
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith(paths.create.render, { data: { car } })
+    expect(renderMock).toHaveBeenCalledWith(paths.create.render, { data: { car }, resData })
 });
 
 test('update_car con id null', async () => {

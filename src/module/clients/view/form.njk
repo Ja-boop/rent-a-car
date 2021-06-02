@@ -1,18 +1,18 @@
 {% extends "../../views/layout/template.njk" %}
 
 {% block contenido %}
-{% set car = data.car %}
+    {% set car = data.car %}
 
-{# NAVBAR #}
-{% include "../../views/layout/navbar.njk" %}
-{# NAVBAR #}
+    {# NAVBAR #}
+    {% include "../../views/layout/navbar.njk" %}
+    {# NAVBAR #}
 
     {# FONDO #}
-    <div class="contain">
+    <div class="container-create-client">
 
-        <div class="cuadro-opciones-form">
+        <div class="box cuadro-opciones-form">
             <form action="/agency/create/client" method="POST">
-            <input type="hidden" name="id" value="{{client.id}}" readonly />
+                <input type="hidden" name="id" value="{{client.id}}" readonly/>
                 <div class="field">
                     <label class="label">Name</label>
                     <div class="control">

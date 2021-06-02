@@ -34,17 +34,17 @@ module.exports = class RentsController extends AbstractController {
         app.get(paths.index.path, this.index.bind(this));
 
         // rent-a-car
-        app.get(paths.list.path, this.list.bind(this));
-        app.get(paths.create.path, this.form.bind(this));
-        app.post(paths.create.path, this.save.bind(this));
+        app.get(paths.list.path,this.list.bind(this));
+        app.get(paths.create.path, isAuthenticated,this.form.bind(this));
+        app.post(paths.create.path, isAuthenticated, this.save.bind(this));
 
         // client-reserves
         app.get(paths.reserve.client.selector.path, this.client_selector.bind(this));
         app.get(paths.reserve.list.path, this.client_reserves.bind(this));
-        app.get(paths.reserve.delete.path, this.delete_reserve.bind(this));
-        app.get(paths.reserve.update.path, this.view_reserve.bind(this));
-        app.post(paths.create.path, this.update_reserve.bind(this));
-        app.get(paths.reserve.pay.path, this.pay.bind(this));
+        app.get(paths.reserve.delete.path, isAuthenticated, this.delete_reserve.bind(this));
+        app.get(paths.reserve.update.path, isAuthenticated, this.view_reserve.bind(this));
+        app.post(paths.create.path, isAuthenticated, this.update_reserve.bind(this));
+        app.get(paths.reserve.pay.path, isAuthenticated, this.pay.bind(this));
     }
 
     /**
@@ -52,10 +52,15 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async index(req, res) {
-        res.render(paths.index.render, { resData });
+        const { errors, messages } = req.session;   
+        res.render(paths.index.render, { resData, errors, messages });
+        req.session.errors = [];
+        req.session.messages = [];
     }
 
     async list(req, res) {
+        req.session.current_url = paths.list.path;
+        console.log(req.session.current_url)
         const car = await this.carsService.getAllCars();
         const reserve = true;
         res.render(paths.list.render, { data: { car, reserve }, resData });
@@ -90,13 +95,13 @@ module.exports = class RentsController extends AbstractController {
             const reserve = fromDataToEntity(req.body);
             const savedReserve = await this.rentService.rentCar(reserve);
             if (reserve.id) {
-                console.log(`La reserva N°: ${reserve.id} se actualizó correctamente`);
+                req.session.messages = [`La reserva N°: ${reserve.id} se actualizó correctamente`];
             } else {
-                console.log(`La reserva N°: ${savedReserve.id} fue creada`);
+                req.session.messages = [`La reserva N°: ${savedReserve.id} fue creada`];
             }
             res.redirect(paths.reserve.list.redirect(reserve.Client.id));
         } catch (e) {
-            console.log(e);
+            req.session.errors = [e.messages, e.tack];
             res.redirect(paths.list.path);
         }
     }
@@ -106,6 +111,7 @@ module.exports = class RentsController extends AbstractController {
      * @param {import('express').Response} res
      */
     async client_selector(req, res) {
+        req.session.current_url = paths.reserve.client.selector.path;
         const client = await this.clientsService.getAllClients();
         console.log(client)
         res.render(paths.reserve.client.selector.render, { data: { client }, resData })
@@ -121,12 +127,18 @@ module.exports = class RentsController extends AbstractController {
             throw new Error('id undefined');
         }
 
+        req.session.current_url = paths.reserve.list.redirect(id);
+        const { errors, messages } = req.session; 
+
         try {
             const reserve = await this.rentService.getUserReserve(id);     
-            res.render(paths.reserve.list.render, { data: { reserve }, resData })
+            res.render(paths.reserve.list.render, { data: { reserve }, resData, errors, messages })
         } catch (e) {
             console.log(e);
         }
+
+        req.session.errors = [];
+        req.session.messages = [];
     }
 
     /**
@@ -142,7 +154,7 @@ module.exports = class RentsController extends AbstractController {
         try {
             const reserve = await this.rentService.getReserveById(id);
             await this.rentService.deleteReserve(reserve);
-            console.log(`La reserva con ID: ${reserve.id} fue eliminada correctamente`)
+            req.session.messages = [`La reserva con ID: ${reserve.id} fue eliminada correctamente`];
             res.redirect(paths.reserve.delete.redirect(reserve.Client.id))
         } catch (e) {
             console.log(e);
@@ -177,7 +189,6 @@ module.exports = class RentsController extends AbstractController {
         try {
             const reserve = fromDataToEntity(req.body);
             await this.rentService.rentCar(reserve);
-            console.log(`La reserva N°: ${reserve.id} se actualizó correctamente`);
             res.redirect(paths.reserve.list.redirect(reserve.Client.id));
         } catch (e) {
             console.log(e);
@@ -195,7 +206,9 @@ module.exports = class RentsController extends AbstractController {
             throw new Error('id undefined');
         }
 
+        const { current_url } = req.session;
         await this.rentService.changePayStatus(id);
+        res.redirect(current_url);
         
     }
 }

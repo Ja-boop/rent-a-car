@@ -6,11 +6,22 @@
   {% include "../../views/layout/navbar.njk" %}
   {# NAVBAR #}
 
-  {% if carCreationErrorMessage %}
-    <div>{{ carCreationErrorMessage }}</div>
-  {% endif %}
+  <div class="container container-lista-vehiculo">
 
-  <div class="container">
+    {% for error in errors %}
+
+      <div class="notification is-danger">
+        {{error}}
+      </div>
+    {% endfor %}
+
+    {% for message in messages %}
+      <div class="container success-message-container">
+        <div class="box notification is-success success-message">
+          {{message}}
+        </div>
+      </div>
+    {% endfor %}
     <div class="lista-vehiculos">
       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 

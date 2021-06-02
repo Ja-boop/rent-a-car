@@ -2,74 +2,93 @@
 
 {% block contenido %}
 
-{# NAVBAR #}
-{% include "../../views/layout/navbar.njk" %}
-{# NAVBAR #}
+  {# NAVBAR #}
+  {% include "../../views/layout/navbar.njk" %}
+  {# NAVBAR #}
 
-<div class="contain">
-<div class="container">
-    <div class="lista-vehiculos"> 
-    <table class="table is-fullwidth">
+  <div class="container client-cars-list">
+    {% for error in errors %}
 
-    <thead>
-    <tr>
-      <th title="Actions">Actions</th>
-      <th title="Id">Reserve Number</th>
-      <th title="Car">Car</th>
-      <th>Image</th>
-      <th title="Client">Client</th>
-      <th title="Cost">Cost</th>
-      <th title="TakeDay">Retire</th>
-      <th title="ReturnDay">Return</th>
-      <th title="FinalCost">Final Cost</th>
-      <th title="Payment">Payment</th>
-      <th title="PayStatus">Pay Status</th>
-    </tr>
-    </thead>
-    <tfoot>
-    <tr>
-      <th title="Actions">Actions</th>
-      <th><abbr title="Id">Reserve Number</abbr></th>
-      <th title="Car">Car</th>
-      <th>Image</th>
-      <th title="Client">Client</th>
-      <th title="Cost">Cost</th>
-      <th><abbr title="TakeDay">Retire</abbr></th>
-      <th><abbr title="ReturnDay">Return</abbr></th>
-      <th><abbr title="FinalCost">Final Cost</abbr></th>
-      <th title="Payment">Payment</th>
-      <th title="PayStatus">Pay Status</th>
-    </tr>
-    </tfoot>
-    <tbody>
-        {% for reserve in data.reserve %} 
-        <tr>
-        <td>
-          <br>
-          <a href="/agency/reserve/{{reserve.id}}/view">View</a>
-          <br>
-          <a href="/agency/reserve/{{reserve.id}}/delete">Delete</a>
-          <br>
-          <a href="/agency/reserve/{{reserve.id}}/paid">Paid</a>
-        </td>
-        <th>{{reserve.id}}</th>
-        <td>{{[reserve.Car.brand,  reserve.Car.model]}}</td>
-        <td><img src="\{{reserve.Car.imageUrl}}" width="150" height="250"/></td>
-        <td>{{[reserve.Client.name, reserve.Client.lastName]}}</td>
-        <td>{{reserve.Car.cost}}</td>
-        <td>{{reserve.takeDay}}</td>
-        <td>{{reserve.returnDay}}</td>
-        <td>{{reserve.finalCost}}</td>
-        <td>{{reserve.payment}}</td>
-        <td>{{reserve.status}}</td>
-        </tr>
-        {% endfor %} 
-        
-    </tbody>
+      <div class="notification is-danger">
+        {{error}}
+      </div>
+    {% endfor %}
+    
+    {% for message in messages %}
+      <div class="container success-message-container">
+        <div class="box notification is-success success-message">
+          {{message}}
+        </div>
+      </div>
+    {% endfor %}
+    <div class="lista-vehiculos">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th title="Actions">Actions</th>
+            <th title="Id">Reserve Number</th>
+            <th title="Car">Car</th>
+            <th>Image</th>
+            <th title="Client">Client</th>
+            <th title="Cost">Cost</th>
+            <th title="TakeDay">Retire</th>
+            <th title="ReturnDay">Return</th>
+            <th title="FinalCost">Final Cost</th>
+            <th title="Payment">Payment</th>
+            <th title="PayStatus">Pay Status</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th title="Actions">Actions</th>
+            <th>
+              <abbr title="Id">Reserve Number</abbr>
+            </th>
+            <th title="Car">Car</th>
+            <th>Image</th>
+            <th title="Client">Client</th>
+            <th title="Cost">Cost</th>
+            <th>
+              <abbr title="TakeDay">Retire</abbr>
+            </th>
+            <th>
+              <abbr title="ReturnDay">Return</abbr>
+            </th>
+            <th>
+              <abbr title="FinalCost">Final Cost</abbr>
+            </th>
+            <th title="Payment">Payment</th>
+            <th title="PayStatus">Pay Status</th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {% for reserve in data.reserve %}
+            <tr>
+              <td>
+                <br>
+                <a href="/agency/reserve/{{reserve.id}}/view">View</a>
+                <br>
+                <a href="/agency/reserve/{{reserve.id}}/delete">Delete</a>
+                <br>
+                <a href="/agency/reserve/{{reserve.id}}/paid">Paid</a>
+              </td>
+              <th>{{reserve.id}}</th>
+              <td>{{[reserve.Car.brand,  reserve.Car.model]}}</td>
+              <td><img src="\{{reserve.Car.imageUrl}}" width="150" height="250"/></td>
+              <td>{{[reserve.Client.name, reserve.Client.lastName]}}</td>
+              <td>{{reserve.Car.cost}}</td>
+              <td>{{reserve.takeDay}}</td>
+              <td>{{reserve.returnDay}}</td>
+              <td>{{reserve.finalCost}}</td>
+              <td>{{reserve.payment}}</td>
+              <td>{{reserve.status}}</td>
+            </tr>
+          {% endfor %}
 
-    </table>
+        </tbody>
+
+      </table>
     </div>
-</div>
-</div>
+  </div>
 
 {% endblock %}

@@ -40,16 +40,19 @@ test('controller.index renderea index', async () => {
 });
 
 test('controller.list renderea list', async () => {
+    const reqMock = { session: {} }
+
     const renderMock = jest.fn();
-    const cars = {
+    const car = {
         firstCar: new Car({ id: 1 }),
         secondCar: new Car({ id: 2 }),
     };
-    carServiceMock.getAllCars.mockImplementationOnce(() => Promise.resolve(cars));
-    await controller.list({}, { render: renderMock });
+    const reserve = true;
+    carServiceMock.getAllCars.mockImplementationOnce(() => Promise.resolve(car));
+    await controller.list(reqMock, { render: renderMock });
 
     expect(renderMock).toHaveBeenCalledTimes(1);
-    expect(renderMock).toHaveBeenCalledWith(paths.list.render, { data: { cars }, resData })
+    expect(renderMock).toHaveBeenCalledWith(paths.list.render, { data: { car, reserve }, resData})
 });
 
 test('controller.form renderea form', async () => {
@@ -214,8 +217,10 @@ test('controller.client_reserves renderea clientList', async () => {
 });
 
 test('controller.client_reserves sin parametros da error', async () => {
+    const reqMock = { session: {}, params: {} }
+
     try {
-        await controller.client_reserves({ params: {} });
+        await controller.client_reserves(reqMock);
     } catch (e) {
         expect(e).toEqual(Error('id undefined'));
     }
@@ -252,12 +257,14 @@ test('controller.view_reserve renderea el update', async () => {
     const resMock = { render: jest.fn() };
     await controller.view_reserve(reqMock, resMock);
     expect(resMock.render).toHaveBeenCalledTimes(1);
-    expect(resMock.render).toHaveBeenCalledWith(paths.reserve.update.render, { currentDate, data: { reserve }, resData });
+    expect(resMock.render).toHaveBeenCalledWith(paths.create.render, { currentDate, data: { reserve }, resData });
 });
 
 test('controller.view_reserve sin parametros da error', async () => {
+    const reqMock = { session: {}, params: {} }
+
     try {
-        await controller.view_reserve({ params: {} });
+        await controller.view_reserve(reqMock);
     } catch (e) {
         expect(e).toEqual(Error('id undefined'));
     }

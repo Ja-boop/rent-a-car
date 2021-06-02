@@ -15,7 +15,8 @@ const controller = new ClientController(serviceMock);
 
 test('create renderea form.njk', async () => {
     const renderMock = jest.fn();
-    await controller.create({}, { render: renderMock });
+    const reqMock = { session: {} }
+    await controller.create(reqMock, { render: renderMock });
 
     expect(renderMock).toHaveBeenCalledTimes(1);
     expect(renderMock).toHaveBeenCalledWith(paths.create.render, resData);

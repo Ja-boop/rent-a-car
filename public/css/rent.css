@@ -1,3 +1,12 @@
+.form-rent-container {
+    height: 1300px;
+}
+
+.client-cars-list {
+    height: 1000px;
+    overflow: auto; 
+}
+
 .rent-options {
     height: 970px;
     width: 1200px;
@@ -68,4 +77,18 @@
 
 .hidden-div {
     display: none;
+}
+
+.success-message-container {
+    float: right;
+    width: 50%;
+    height: 10em;
+}
+
+.success-message {
+    height: 7.5em;
+}
+
+.user-table-container {
+    height: 1000px;
 }
