@@ -15,10 +15,10 @@ The project runs with:
 
 Script | Description
 ------------ | -------------
-npm run dev | run the project in dev mode
+npm run dev | runs the project in dev mode
 npm run schema:sync | sync the database with all the models
 npm run test | run jest tests and obtains the code coverage
-npm run test:dev | run jest tests in watch mode(continuously)
+npm run test:dev | runs jest tests in watch mode(continuously)
 
 # Diagrams:
 
