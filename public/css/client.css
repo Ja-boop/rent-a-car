@@ -1,0 +1,13 @@
+.container-create-client {
+    height: 1000px;
+}
+
+.cuadro-opciones-client {
+    height: 900px;
+    background-color: white;
+    padding: 3em;
+    width: 50em;
+    margin-top: 3em;
+    margin-left: 30%;
+
+}

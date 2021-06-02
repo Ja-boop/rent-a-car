@@ -14,9 +14,13 @@ const serviceMock = {
 const controller = new CarController({}, serviceMock);
 
 test('car_list renderea list', async () => {
+    const reqMock = {
+        session: {}
+    }
+    
     const renderMock = jest.fn();
     const car = [];
-    await controller.car_list({}, { render: renderMock });
+    await controller.car_list(reqMock, { render: renderMock });
 
     expect(serviceMock.getAllCars).toHaveBeenCalledTimes(1);
     expect(renderMock).toHaveBeenCalledTimes(1);

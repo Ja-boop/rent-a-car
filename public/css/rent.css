@@ -92,3 +92,8 @@
 .user-table-container {
     height: 1000px;
 }
+
+.user-table {
+    width: 1400px;
+    margin: 0 auto;
+}

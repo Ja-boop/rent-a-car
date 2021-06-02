@@ -32,8 +32,12 @@ const clientServiceMock = {
 const controller = new ReserveController(reserveServiceMock, carServiceMock, clientServiceMock);
 
 test('controller.index renderea index', async () => {
+    const reqMock = {
+        session: {}
+    };
+
     const renderMock = jest.fn();
-    await controller.index({}, { render: renderMock });
+    await controller.index(reqMock, { render: renderMock });
 
     expect(renderMock).toHaveBeenCalledTimes(1);
     expect(renderMock).toHaveBeenCalledWith(paths.index.render, { resData });
