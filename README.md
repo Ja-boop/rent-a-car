@@ -9,7 +9,11 @@ Unit testing with Jest
 
 Install with **"npm install"**
 
-Once installed, you need to copy the .env.txt file, and paste it with .env only. Then you need to complete the value in DB_PATH=VALUE, this path needs to end with a .db file
+Once installed, you need to copy the .env.txt file, and paste it with .env only. 
+
+Then you need to complete the value in DB_PATH=VALUE, this path needs to end with a .db file
+
+Also in CARIMAGE_UPLOAD_DIR=VALUE, I recommend creating the folder in public
 
 The project runs with:
 
