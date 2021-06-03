@@ -20,6 +20,8 @@ npm run schema:sync | sync the database with all the models
 npm run test | runs jest tests and obtains the code coverage
 npm run test:dev | runs jest tests in watch mode(continuously)
 
+You need to create a user to access some rent functions
+
 # Diagrams:
 
 L1:
