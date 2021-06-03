@@ -3,7 +3,7 @@ Web site for the management of a car rental agency.
 
 Javascript, HTML, CSS, Node.js, SQLite, Sequelize, Nunjucks, Bulma and Passport
 
-Unitesting with Jest
+Unit testing with Jest
 
 # How to install and run this project
 
