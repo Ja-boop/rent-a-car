@@ -9,7 +9,7 @@ Unit testing with Jest
 
 Install with **"npm install"**
 
-Once installed, you need to copy the .env.txt file, and paste it with .env only. Then you need to complete the value in DB_PATH=VALUE
+Once installed, you need to copy the .env.txt file, and paste it with .env only. Then you need to complete the value in DB_PATH=VALUE, this path needs to end with a .db file
 
 The project runs with:
 
