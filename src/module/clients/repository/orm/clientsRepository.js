@@ -55,6 +55,12 @@ module.exports = class ClientsRepository extends AbstractClientsRepository {
 
     async getAllClients() {
         const clients = await this.clientModel.findAll();
-        return clients.map(fromModelToEntity);
+        
+        if(clients.length === 0) {
+            throw new Error('The length of Clients is 0')
+        } else {
+            return clients.map(fromModelToEntity);
+        }
+        
     }
 }

@@ -58,12 +58,19 @@ module.exports = class RentsController extends AbstractController {
         req.session.messages = [];
     }
 
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
     async list(req, res) {
+        const { errors, messages } = req.session;
         req.session.current_url = paths.list.path;
         console.log(req.session.current_url)
         const car = await this.carsService.getAllCars();
         const reserve = true;
-        res.render(paths.list.render, { data: { car, reserve }, resData });
+        res.render(paths.list.render, { data: { car, reserve }, resData, errors, messages });
+        req.session.errors = [];
+        req.session.messages = [];
     }
 
     /**
@@ -81,8 +88,8 @@ module.exports = class RentsController extends AbstractController {
             const clients = await this.clientsService.getAllClients();
             res.render(paths.create.render, { currentDate, data: { car, clients }, resData })
         } catch (e) {
-            req.session.errors = [e.message];
-            res.redirect(paths.reserve.list.path);
+            req.session.errors = [e.message, e.stack];
+            res.redirect(paths.list.path);
         }
     }
 
@@ -101,7 +108,7 @@ module.exports = class RentsController extends AbstractController {
             }
             res.redirect(paths.reserve.list.redirect(reserve.Client.id));
         } catch (e) {
-            req.session.errors = [e.messages, e.tack];
+            req.session.errors = [e.messages, e.stack];
             res.redirect(paths.list.path);
         }
     }
@@ -112,9 +119,15 @@ module.exports = class RentsController extends AbstractController {
      */
     async client_selector(req, res) {
         req.session.current_url = paths.reserve.client.selector.path;
-        const client = await this.clientsService.getAllClients();
-        console.log(client)
-        res.render(paths.reserve.client.selector.render, { data: { client }, resData })
+
+        try {
+            const client = await this.clientsService.getAllClients();
+            res.render(paths.reserve.client.selector.render, { data: { client }, resData })
+        } catch (e) {
+            req.session.errors = [e.messages, e.stack];
+            res.redirect(paths.list.path);
+        }
+        
     }
 
     /**
