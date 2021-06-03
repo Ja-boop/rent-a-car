@@ -1,18 +1,18 @@
 {% extends "../../views/layout/template.njk" %}
 
 {% block contenido %}
-{% set car = data.car %}
+    {% set car = data.car %}
 
-{# NAVBAR #}
-{% include "../../views/layout/navbar.njk" %}
-{# NAVBAR #}
+    {# NAVBAR #}
+    {% include "../../views/layout/navbar.njk" %}
+    {# NAVBAR #}
 
     {# FONDO #}
     <div class="contain">
 
         <div class="box cuadro-opciones-form">
             <form action="/agency/create/car" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="{{car.id}}" readonly />
+                <input type="hidden" name="id" value="{{car.id}}" readonly/>
                 <div class="field">
                     <label class="label">Brand</label>
                     <div class="control">
@@ -27,19 +27,19 @@
                 </div>
                 <label class="label">Car Picture</label>
                 <div class="file has-name is-fullwidth">
-                    <label class="file-label">
-                        <input class="file-input" type="file" name="image-url">
+                    <label id="file-upload" class="file-label">
+                        <input id="file-input" class="file-input" type="file" name="image-url">
                         <span class="file-cta">
                             <span class="file-icon">
                                 <i class="fas fa-upload"></i>
                             </span>
                             <span class="file-label">
-                            Upload a picture of the car
+                                 Upload a picture of the car
+                            </span>
                         </span>
+                        <span id="file-name" class="file-name">
+                            File...
                         </span>
-                        <span class="file-name">
-                        Screen Shot 2017-07-29 at 15.54.25.png
-                    </span>
                     </label>
                 </div>
                 <br>
@@ -103,5 +103,6 @@
 
     </div>
     {# FONDO #}
+    <script src="/public/scripts/fileName.js"></script>
 
 {% endblock %}
