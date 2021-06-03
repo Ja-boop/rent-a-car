@@ -95,7 +95,7 @@ test('controller.form sin parametros da error', async () => {
     await controller.form(mockReq, mockRes);
 
     expect(mockRes.redirect).toHaveBeenCalledTimes(1);
-    expect(mockRes.redirect).toHaveBeenCalledWith(paths.reserve.list.path);
+    expect(mockRes.redirect).toHaveBeenCalledWith(paths.list.path);
 });
 
 test('controller.save llama al servicio con el body(con ID) y redirecciona a list', async () => {
