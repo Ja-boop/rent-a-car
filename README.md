@@ -1,7 +1,7 @@
 # rent-a-car
 Web site for the management of a car rental agency.
 
-Demo in videos: (https://www.youtube.com/playlist?list=PLROIQdlFrORqtQ8P_Y9BN93bJYiNfXH1m)[YouTube]
+Demo in videos: [https://www.youtube.com/playlist?list=PLROIQdlFrORqtQ8P_Y9BN93bJYiNfXH1m](YouTube)
 
 Javascript, HTML, CSS, Node.js, SQLite, Sequelize, Nunjucks, Bulma and Passport
 
