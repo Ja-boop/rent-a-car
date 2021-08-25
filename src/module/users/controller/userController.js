@@ -17,13 +17,13 @@ module.exports = class UsersController extends AbstractController {
         app.post(paths.signup.path, this.authStrategy.authenticate('local-signup', 
         { failureRedirect: paths.signup.path}), (req, res) => {
             let { current_url } = req.session;
-            res.redirect(current_url);
+            res.redirect(current_url || paths.index.path);
         }),
         app.get(paths.login.path, this.login.bind(this));
         app.post(paths.login.path, this.authStrategy.authenticate('local-login', 
         { failureRedirect: paths.login.path}), (req, res) => {
             let { current_url } = req.session;
-            res.redirect(current_url);
+            res.redirect(current_url || paths.index.path);
         }),
      
         app.get(paths.profile.path, this.profile.bind(this));
@@ -35,7 +35,9 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async signup(req, res) {
-        res.render(paths.signup.render, {resData})
+        const { errors } = req.session;
+        res.render(paths.signup.render, {resData, errors});
+        req.session.errors = [];
     }
 
     /**
@@ -43,7 +45,9 @@ module.exports = class UsersController extends AbstractController {
      * @param {import('express').Response} res
      */
     async login(req, res) {
-        res.render(paths.login.render, {resData});
+        const { errors } = req.session;
+        res.render(paths.login.render, {resData, errors});
+        req.session.errors = [];
     }
 
     /**

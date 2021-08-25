@@ -26,7 +26,7 @@ passport.use('local-signup', new LocalStrategy({
     const user = req.body;
     const userEmail = await userService.getUserByEmail(user.email);
     if (userEmail) {
-        done(null, false, req.flash('identEmailMessage', 'El email ya ha sido registrado'));
+        done(null, false, req.session.errors = ['Email already taken']);
     } else {
         const savedUser = await userService.saveUser(user);
         done(null, savedUser);
@@ -48,7 +48,7 @@ passport.use('local-login', new LocalStrategy({
     
     const compareResults = await userService.comparePasswords(user.password, dbUser.password);
     if (compareResults === false) {
-        return done(null, false, console.log(new Error('La contraseña no coincide')))
+        return done(null, false, req.session.errors = ['Password incorrect']);
     }
 
     return done(null, dbUser);

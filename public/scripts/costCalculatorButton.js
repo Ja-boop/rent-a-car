@@ -8,7 +8,7 @@ returnDay.addEventListener('blur', () => {
     let daysDistance = getDaysDistance();
    
     if (daysDistance <= 0) {
-        alert('La fecha de retiro es mayor a la fecha de entrega')
+        alert('Departure day takes after the return date')
         takeDay.select();
         takeDay.focus();
     } else {

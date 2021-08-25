@@ -5,6 +5,14 @@
   {% include "../../views/layout/navbar.njk" %}
   {# NAVBAR #}
 
+  {% for error in errors %}
+
+    <div class="notification is-danger">
+      {{error}}
+    </div>
+    
+  {% endfor %}
+
   <div id="register-form">
     <h1 class="title">Sign Up!</h1>
     <form action="/agency/signup" method="POST">

@@ -1,12 +1,12 @@
 {% block dates %}
     <div class="box container dates">
-        <h3>Selecciona la fecha</h3>
+        <h3>Select Dates</h3>
 
         <nav class="level">
             <div class="level-left">
                 <div class="level-item has-text-centered">
                     <div class="take-day">
-                        <p>Fecha de salida</p>
+                        <p>Departure Date</p>
                         <input class="input" type="date" id="take-day" name="take-day" {% if car %}min={{ currentDate }}{% endif %} 
                         value={% if car %}{{currentDate}}{% else %}{{reserve.takeDay}}{% endif %}>
                     </div>
@@ -14,7 +14,7 @@
 
                 <div class="level-item has-text-centered">
                     <div>
-                        <p>Fecha de devolución</p>
+                        <p>Return Date</p>
                         <input class="input" type="date" id="return-day" name="return-day" {% if car %}min={{ currentDate }}{% endif %} 
                         value={% if car %}{{currentDate}}{% else %}{{reserve.returnDay}}{% endif %}>
                     </div>
