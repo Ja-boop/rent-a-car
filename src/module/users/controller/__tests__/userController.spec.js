@@ -6,21 +6,21 @@ const { resData } = require('../../../data/resData');
 const controller = new UserController({});
 
 test('controller.signup renderea signup', async () => {
-    const reqMock = {};
+    const reqMock = { session: { errors: [] }};
     const resMock = { render: jest.fn() };
     await controller.signup(reqMock, resMock);
 
     expect(resMock.render).toHaveBeenCalledTimes(1);
-    expect(resMock.render).toHaveBeenLastCalledWith(paths.signup.render, {resData});
+    expect(resMock.render).toHaveBeenLastCalledWith(paths.signup.render, {errors: [], resData});
 });
 
 test('controller.login renderea login', async () => {
-    const reqMock = {};
+    const reqMock = { session: { errors: [] }};
     const resMock = { render: jest.fn() };
     await controller.login(reqMock, resMock);
 
     expect(resMock.render).toHaveBeenCalledTimes(1);
-    expect(resMock.render).toHaveBeenLastCalledWith(paths.login.render, {resData});
+    expect(resMock.render).toHaveBeenLastCalledWith(paths.login.render, {errors: [], resData});
 });
 
 test('controller.profile renderea profile', async () => {
